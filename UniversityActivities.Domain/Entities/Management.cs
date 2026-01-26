@@ -9,4 +9,5 @@ public class Management :AuditableEntity
 
     [Required]
     public int ManagementTypeId { get; set; }
+    //test
 }
