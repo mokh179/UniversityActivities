@@ -36,8 +36,7 @@ public class Activity : AuditableEntity
     [Required]
     public int ActivityTypeId { get; set; }
 
-    [Required]
-    public int TargetAudienceId { get; set; }
+
 
     [Required]
     public int AttendanceScopeId { get; set; }
@@ -63,7 +62,7 @@ public class Activity : AuditableEntity
     public DateTime EndDateTime { get; set; }
 
     [Required]
-    public bool Published { get; set; } = false;
+    public bool IsPublished { get; set; } = false;
 
     // 🔗 Activities
     public ICollection<ActivityTargetAudience> ActivityTargetAudiences { get; set; }
