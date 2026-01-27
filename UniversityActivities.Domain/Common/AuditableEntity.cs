@@ -1,4 +1,7 @@
-
+using System;
+using System;
+using System.ComponentModel.DataAnnotations;
+    
 namespace UniversityActivities.Domain.Common;
 
 public abstract class AuditableEntity:BaseEntity

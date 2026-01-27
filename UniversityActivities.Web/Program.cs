@@ -1,3 +1,5 @@
+using Serilog;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,10 +8,18 @@ builder.Services.AddRazorPages();
 builder.Services.AddInfrastructure(builder.Configuration);
 var app = builder.Build();
 
+//Looging 
 if (builder.Configuration.GetValue<bool>("SeedData"))
 {
     await app.SeedDatabaseAsync();
 }
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .WriteTo.Console()
+    .WriteTo.File("Logs/app-.log", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
+
+builder.Host.UseSerilog();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

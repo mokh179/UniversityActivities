@@ -1,11 +1,23 @@
-﻿public class Activity : AuditableEntity
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+
+namespace UniversityActivities.Domain.Entities;
+
+public class Activity : AuditableEntity
 {
     // 🏷️ Basic Info
     [Required, MaxLength(250)]
-    public string TitleAr { get; set; }
+    public string TitleAr { get; set; } = string.Empty;
 
     [Required, MaxLength(250)]
-    public string TitleEn { get; set; }
+    public string TitleEn { get; set; } = string.Empty;
+
+    [Required, MaxLength(1000)]
+    public string DescriptionAr { get; set; } = string.Empty;
+
+    [Required, MaxLength(1000)]
+    public string DescriptionEn { get; set; } = string.Empty;
 
     [MaxLength(500)]
     public string ImageUrl { get; set; }
@@ -52,4 +64,8 @@
 
     [Required]
     public bool Published { get; set; } = false;
+
+    // 🔗 Activities
+    public ICollection<ActivityTargetAudience> ActivityTargetAudiences { get; set; }
+        = new List<ActivityTargetAudience>();
 }
