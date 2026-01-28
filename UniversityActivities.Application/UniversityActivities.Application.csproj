@@ -1,6 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <Compile Remove="UserCases\Activities\Admin\Student\**" />
+    <EmbeddedResource Remove="UserCases\Activities\Admin\Student\**" />
+    <None Remove="UserCases\Activities\Admin\Student\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\UniversityActivities.Domain\UniversityActivities.Domain.csproj" />
   </ItemGroup>
 

@@ -12,26 +12,30 @@ public static class LookupSeed
             context.ManagementTypes.AddRange(
                 new ManagementType { NameAr = "جامعة", NameEn = "University" },
                 new ManagementType { NameAr = "عمادة", NameEn = "Deanship" },
-                new ManagementType { NameAr = "كلية", NameEn = "College" }
+                new ManagementType { NameAr = "كلية", NameEn = "College" },
+                new ManagementType { NameAr = "نادي", NameEn = "Club" },
+                new ManagementType { NameAr = "ادراة عامة", NameEn = "Public Management" },
+                new ManagementType { NameAr = "اخري", NameEn = "Other" }
             );
         }
 
         if (!context.ActivityStatuses.Any())
         {
             context.ActivityStatuses.AddRange(
-                new ActivityStatus { NameAr = "مسودة", NameEn = "Draft" },
-                new ActivityStatus { NameAr = "بانتظار الاعتماد", NameEn = "Pending Approval" },
-                new ActivityStatus { NameAr = "معتمد", NameEn = "Approved" },
-                new ActivityStatus { NameAr = "مرفوض", NameEn = "Rejected" }
+                new ActivityStatus { NameAr = "قيد التنفيذ", NameEn = "In progress" },
+                new ActivityStatus { NameAr = "مكتمل", NameEn = "Completed" },
+                new ActivityStatus { NameAr = "قريباً", NameEn = "Soon" }
             );
         }
 
         if (!context.EvaluationCriteria.Any())
         {
             context.EvaluationCriteria.AddRange(
-                new EvaluationCriteria { NameAr = "التنظيم", NameEn = "Organization" },
-                new EvaluationCriteria { NameAr = "المحتوى", NameEn = "Content" },
-                new EvaluationCriteria { NameAr = "التوقيت", NameEn = "Timing" }
+                new EvaluationCriteria { NameAr = "جوده التنظيم", NameEn = "Organization" },
+                new EvaluationCriteria { NameAr = "جودة المحتوى", NameEn = "Content" },
+                new EvaluationCriteria { NameAr = "معدل الاستفادة من النشاط", NameEn = "Benefits" },
+                new EvaluationCriteria { NameAr = "ملائمة طريقة العرض", NameEn = "Projection" },
+                new EvaluationCriteria { NameAr = "منابة التوقيت", NameEn = "Timing" }
             );
         }
 
