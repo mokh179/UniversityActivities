@@ -26,7 +26,6 @@
 
   <ItemGroup>
     <Folder Include="Authorization\" />
-    <Folder Include="Persistence\Repositories\" />
   </ItemGroup>
 
   <PropertyGroup>
