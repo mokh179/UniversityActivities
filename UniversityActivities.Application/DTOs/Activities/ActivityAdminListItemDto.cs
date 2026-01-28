@@ -6,6 +6,11 @@ public class ActivityAdminListItemDto
 
     public string TitleAr { get; set; } = null!;
     public string TitleEn { get; set; } = null!;
+    public string ActivityTypeNameEn { get; set; } = null!;
+    public string ActivityTypeNameAr { get; set; } = null!;
+    public string AttendanceModeNameEn { get; set; } = null!;
+    public string AttendanceModeNameAr { get; set; } = null!;
+    public string ImageUrl { get; set; } = null!;
 
     public bool IsPublished { get; set; }
 
@@ -20,5 +25,6 @@ public class ActivityAdminListItemDto
 
     public int SupervisorsCount { get; set; }
     public int CoordinatorsCount { get; set; }
+    public int ApproversCount { get; set; }
     public int ViewersCount { get; set; }
 }

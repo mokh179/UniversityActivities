@@ -15,18 +15,23 @@ public static class RoleSeed
             context.ManagementRoles.AddRange(
                 new ManagementRole
                 {
-                    NameAr = "مدير جهة",
-                    NameEn = "Management Admin"
+                    NameAr = "مشرف",
+                    NameEn = "Supervisor"
                 },
                 new ManagementRole
                 {
-                    NameAr = "معتمد",
-                    NameEn = "Approver"
+                    NameAr = "منسق",
+                    NameEn = "Coordinator"
                 },
                 new ManagementRole
                 {
                     NameAr = "مشاهد",
                     NameEn = "Viewer"
+                },
+                new ManagementRole
+                {
+                    NameAr = "معتمد",
+                    NameEn = "Approver"
                 }
             );
         }

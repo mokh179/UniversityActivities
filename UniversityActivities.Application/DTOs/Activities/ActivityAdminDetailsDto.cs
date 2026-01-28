@@ -32,6 +32,7 @@ public class ActivityAdminDetailsDto
 
     public List<string> TargetAudiencesAr { get; set; } = new();
     public List<string> TargetAudiencesEn { get; set; } = new();
+    public string ImageUrl { get; set; } 
 
     public List<ActivityUserViewDto> Supervisors { get; set; } = new();
     public List<ActivityUserViewDto> Coordinators { get; set; } = new();

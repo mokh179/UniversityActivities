@@ -2,6 +2,7 @@
 
 public class ActivityAdminFilter
 {
+    public string Title { get; set; }
     public bool? IsPublished { get; set; }
 
     public int? ManagementId { get; set; }
