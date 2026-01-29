@@ -93,8 +93,8 @@ namespace UniversityActivities.Infrastructure.Persistence.Repositories.Activitie
                 TitleEn = x.Activity.TitleEn,
                 ImageUrl = x.Activity.ImageUrl,
                 IsPublished = x.Activity.IsPublished,
-                StartDate = x.Activity.StartDate,
-                EndDate = x.Activity.EndDate,
+                StartDate = x.Activity.StartDateTime,
+                EndDate = x.Activity.EndDateTime,
 
                 ManagementNameAr = x.Management.NameAr,
                 ManagementNameEn = x.Management.NameEn,

@@ -6,6 +6,7 @@ using UniversityActivities.Application.Interfaces.Repositories;
 using UniversityActivities.Application.Interfaces.Repositories.Activies.AdminActivies;
 using UniversityActivities.Application.Interfaces.Repositories.Activies.StudentActivies;
 using UniversityActivities.Infrastructure.Persistence.Repositories.Activities.Admin;
+using UniversityActivities.Infrastructure.Persistence.Repositories.Activities.Students;
 
 namespace UniversityActivities.Infrastructure.Persistence
 {
@@ -23,11 +24,7 @@ namespace UniversityActivities.Infrastructure.Persistence
         public IAdminActivityRepository AdminActivities
             => new AdminActivityRepository(_context);
 
-        public IActivityTargetAudienceRepository ActivityTargetAudiences => throw new NotImplementedException();
 
-        public IActivityAssignmentRepository ActivityAssignments => throw new NotImplementedException();
-
-        public IStudentActivityRepository StudentActivities => throw new NotImplementedException();
 
         public IStudentActivityQueryRepository StudentActivityQueries => throw new NotImplementedException();
 
@@ -35,17 +32,17 @@ namespace UniversityActivities.Infrastructure.Persistence
 
         public IAdminActivityEvaluationQueryRepository AdminActivityEvaluations => throw new NotImplementedException();
 
-        //public IActivityTargetAudienceRepository ActivityTargetAudiences
-        //    => new ActivityTargetAudienceRepository(_context);
+        public IActivityTargetAudienceRepository ActivityTargetAudiences
+            => new ActivityTargetAudienceRepository(_context);
 
-        //public IActivityAssignmentRepository ActivityAssignments
-        //    => new ActivityAssignmentRepository(_context);
+        public IActivityAssignmentRepository ActivityAssignments
+            => new ActivityAssignmentRepository(_context);
 
         //// =========================
         //// Student Activity
         //// =========================
-        //public IStudentActivityRepository StudentActivities
-        //    => new StudentActivityRepository(_context);
+        public IStudentActivityRepository StudentActivities
+            => new StudentActivityRepository(_context);
 
         //public IStudentActivityQueryRepository StudentActivityQueries
         //    => new StudentActivityQueryRepository(_context);
