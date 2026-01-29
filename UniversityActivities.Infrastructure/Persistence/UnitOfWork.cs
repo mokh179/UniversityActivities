@@ -6,6 +6,7 @@ using UniversityActivities.Application.Interfaces.Repositories;
 using UniversityActivities.Application.Interfaces.Repositories.Activies.AdminActivies;
 using UniversityActivities.Application.Interfaces.Repositories.Activies.StudentActivies;
 using UniversityActivities.Infrastructure.Persistence.Repositories.Activities.Admin;
+using UniversityActivities.Infrastructure.Persistence.Repositories.Activities.Evaluation;
 using UniversityActivities.Infrastructure.Persistence.Repositories.Activities.Students;
 
 namespace UniversityActivities.Infrastructure.Persistence
@@ -26,11 +27,8 @@ namespace UniversityActivities.Infrastructure.Persistence
 
 
 
-        public IStudentActivityQueryRepository StudentActivityQueries => throw new NotImplementedException();
 
-        public IStudentActivityEvaluationRepository StudentActivityEvaluations => throw new NotImplementedException();
 
-        public IAdminActivityEvaluationQueryRepository AdminActivityEvaluations => throw new NotImplementedException();
 
         public IActivityTargetAudienceRepository ActivityTargetAudiences
             => new ActivityTargetAudienceRepository(_context);
@@ -44,17 +42,17 @@ namespace UniversityActivities.Infrastructure.Persistence
         public IStudentActivityRepository StudentActivities
             => new StudentActivityRepository(_context);
 
-        //public IStudentActivityQueryRepository StudentActivityQueries
-        //    => new StudentActivityQueryRepository(_context);
+        public IStudentActivityQueryRepository StudentActivityQueries
+            => new StudentActivityQueryRepository(_context);
 
         //// =========================
         //// Evaluation
         //// =========================
-        //public IStudentActivityEvaluationRepository StudentActivityEvaluations
-        //    => new StudentActivityEvaluationRepository(_context);
+        public IStudentActivityEvaluationRepository StudentActivityEvaluations
+            => new StudentActivityEvaluationRepository(_context);
 
-        //public IAdminActivityEvaluationQueryRepository AdminActivityEvaluations
-        //    => new AdminActivityEvaluationQueryRepository(_context);
+        public IAdminActivityEvaluationQueryRepository AdminActivityEvaluations
+            => new AdminActivityEvaluationQueryRepository(_context);
 
         // =========================
         // Save

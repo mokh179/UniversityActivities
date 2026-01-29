@@ -10,6 +10,6 @@ namespace UniversityActivities.Application.UserCases.Activities.Student
         Task ExecuteAsync(
             int studentId,
             int activityId,
-            List<EvaluationItemDto> items);
+            SubmitActivityEvaluationDto items);
     }
 }

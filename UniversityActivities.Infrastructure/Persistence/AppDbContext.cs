@@ -41,7 +41,7 @@ namespace UniversityActivities.Infrastructure.Persistence
         // =========================
         public DbSet<StudentActivity> StudentActivities { get; set; }
         public DbSet<ActivityEvaluation> ActivityEvaluations { get; set; }
-        public DbSet<EvaluationScore> EvaluationScores { get; set; }
+        public DbSet<ActivityEvaluationComment> ActivityEvaluationComments { get; set; }
         public DbSet<EvaluationCriteria> EvaluationCriteria { get; set; }
 
         // =========================

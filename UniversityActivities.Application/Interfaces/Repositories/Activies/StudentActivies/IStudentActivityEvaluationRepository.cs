@@ -15,5 +15,9 @@ namespace UniversityActivities.Application.Interfaces.Repositories.Activies.Stud
         Task<bool> HasEvaluatedAsync(
             int studentId,
             int activityId);
+        Task SubmitCommentAsync(
+        int studentId,
+        int activityId,
+        string comment);
     }
 }

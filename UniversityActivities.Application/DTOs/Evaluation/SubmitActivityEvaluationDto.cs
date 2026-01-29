@@ -8,5 +8,6 @@ namespace UniversityActivities.Application.DTOs.Evaluation
     {
         public int ActivityId { get; set; }
         public List<EvaluationItemDto> Items { get; set; } = new();
+        public string? Comment { get; set; }
     }
 }
