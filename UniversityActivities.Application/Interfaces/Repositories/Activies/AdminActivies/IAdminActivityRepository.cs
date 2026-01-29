@@ -22,5 +22,6 @@ namespace UniversityActivities.Application.Interfaces.Repositories.Activies.Admi
             PagedRequest paging);
 
         Task<ActivityAdminDetailsDto?> GetDetailsAsync(int activityId);
+        Task<Activity?> GetEntityAsync(int activityId);
     }
 }

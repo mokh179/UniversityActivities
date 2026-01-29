@@ -161,7 +161,8 @@ namespace UniversityActivities.Infrastructure.Persistence.Repositories.Activitie
                     StartDate = a.StartDateTime,
                     EndDate = a.EndDateTime,
 
-                    Location = a.LocationEn,
+                    LocationEn = a.LocationEn,
+                    LocationAr = a.LocationAr,
                     OnlineLink = a.OnlineLink,
 
                     ManagementNameAr = m.NameAr,
@@ -174,6 +175,14 @@ namespace UniversityActivities.Infrastructure.Persistence.Repositories.Activitie
                     ActivityTypeNameEn = at.NameEn
                 }
             ).FirstOrDefaultAsync();
+        }
+
+        public async Task<Activity?> GetEntityAsync(int activityId)
+        {
+            return await _context.Activities
+                .FirstOrDefaultAsync(x =>
+                    x.Id == activityId &&
+                    !x.IsDeleted);
         }
     }
 }

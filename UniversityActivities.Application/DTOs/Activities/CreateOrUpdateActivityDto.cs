@@ -20,7 +20,9 @@ public class CreateOrUpdateActivityDto
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
 
-    public string? Location { get; set; }
+    public string? LocationAr { get; set; }
+    public string ImageUrl { get; set; }
+    public string? LocationEn { get; set; }
     public string? OnlineLink { get; set; }
 
     public bool IsPublished { get; set; }
