@@ -9,14 +9,21 @@ namespace UniversityActivities.Application.ApplyUseCases.Evaluations
 {
     public class ViewActivityEvaluationUseCase : IAdminActivityEvaluationQueryRepository
     {
-        public Task<List<ActivityEvaluationCriteriaAverageDto>> GetCriteriaAveragesAsync(int activityId)
+        private readonly IAdminActivityEvaluationQueryRepository _evaluationQueryRepository;
+
+        public ViewActivityEvaluationUseCase(
+            IAdminActivityEvaluationQueryRepository evaluationQueryRepository)
         {
-            throw new NotImplementedException();
+            _evaluationQueryRepository = evaluationQueryRepository;
+        }
+        public async Task<List<ActivityEvaluationCriteriaAverageDto>> GetCriteriaAveragesAsync(int activityId)
+        {
+            return await _evaluationQueryRepository.GetCriteriaAveragesAsync(activityId);
         }
 
-        public Task<ActivityEvaluationSummaryDto> GetSummaryAsync(int activityId)
+        public async Task<ActivityEvaluationSummaryDto> GetSummaryAsync(int activityId)
         {
-            throw new NotImplementedException();
+            return await _evaluationQueryRepository.GetSummaryAsync(activityId);
         }
     }
 }
