@@ -12,12 +12,12 @@ namespace UniversityActivities.Application.ApplyUseCases.AdminActivties
     public class AssignManagementSupervisorUseCase:IAssignManagementSupervisorUseCase
     {
         private readonly IAuthorizationService _authorizationService;
-        private readonly IIdentityRoleMangment _identityService;
+        private readonly IIdentityMangment _identityService;
         private readonly IUnitOfWork _unitOfWork;
 
         public AssignManagementSupervisorUseCase(
             IAuthorizationService authorizationService,
-            IIdentityRoleMangment identityService,
+            IIdentityMangment identityService,
             IUnitOfWork unitOfWork)
         {
             _authorizationService = authorizationService;

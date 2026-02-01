@@ -6,12 +6,14 @@ using System;
 using UniversityActivities.Application.ApplyUseCases.AdminActivties;
 using UniversityActivities.Application.ApplyUseCases.Evaluations;
 using UniversityActivities.Application.ApplyUseCases.StudentActivties;
+using UniversityActivities.Application.ApplyUseCases.StudentAuth;
 using UniversityActivities.Application.AuthorizationModule.Services.Interfaces;
 using UniversityActivities.Application.Interfaces.IUnitOfWork;
 using UniversityActivities.Application.Interfaces.Repositories.Activies.StudentActivies;
 using UniversityActivities.Application.Interfaces.Repositories.Roles;
 using UniversityActivities.Application.UserCases.Activities.Admin;
 using UniversityActivities.Application.UserCases.Activities.Student;
+using UniversityActivities.Application.UserCases.Student.Auth;
 using UniversityActivities.Infrastructure.Identity;
 using UniversityActivities.Infrastructure.Identity.Services;
 using UniversityActivities.Infrastructure.Persistence;
@@ -48,7 +50,7 @@ public static class InfrastructureServiceRegistration
         .AddEntityFrameworkStores<AppDbContext>()
         .AddDefaultTokenProviders();
 
-        services.AddScoped<IIdentityRoleMangment, IdentityRoleMangment>();
+        services.AddScoped<IIdentityMangment, IdentityMangment>();
         services.AddScoped<IUnitOfWork,UnitOfWork>();
 
         // =========================
@@ -107,6 +109,8 @@ public static class InfrastructureServiceRegistration
                            MarkStudentAttendanceUseCase>();
 
         services.AddScoped<IViewStudentActivitiesUseCase,ViewStudentUseCase>();
+        services.AddScoped<IStudentSignUpUseCase, StudentSignUpUseCase>();
+        services.AddScoped<ILoginUseCase, LoginUseCase>();
 
         // =========================
         // Use Cases - Evaluation
