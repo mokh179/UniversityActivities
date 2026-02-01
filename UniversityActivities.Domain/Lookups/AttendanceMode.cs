@@ -1,3 +1,5 @@
+using UniversityActivities.Domain.Entities;
+
 public class AttendanceMode : BaseEntity
 {
     [Required, MaxLength(150)]
@@ -5,4 +7,6 @@ public class AttendanceMode : BaseEntity
 
     [Required, MaxLength(150)]
     public string NameEn { get; set; }
+    public ICollection<Activity> Activities { get; set; }
+    = new List<Activity>();
 }

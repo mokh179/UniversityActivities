@@ -35,14 +35,19 @@ public class Activity : AuditableEntity
 
     [Required]
     public int ActivityTypeId { get; set; }
+    public ActivityType ActivityType { get; set; } = null!;
 
 
 
     [Required]
     public int AttendanceScopeId { get; set; }
+    public AttendanceScope AttendanceScope { get; set; } = null!;
+
 
     [Required]
     public int AttendanceModeId { get; set; }
+    public AttendanceMode AttendanceMode { get; set; } = null!;
+
 
     //  Location / Online
     [MaxLength(300)]
@@ -64,7 +69,19 @@ public class Activity : AuditableEntity
     [Required]
     public bool IsPublished { get; set; } = false;
 
-    // 🔗 Activities
+
+
+
+    // Navigation
     public ICollection<ActivityTargetAudience> ActivityTargetAudiences { get; set; }
-        = new List<ActivityTargetAudience>();
+          = new List<ActivityTargetAudience>();
+
+    public ICollection<ActivityUser> ActivityUsers { get; set; }
+        = new List<ActivityUser>();
+
+    public ICollection<StudentActivity> StudentActivities { get; set; }
+        = new List<StudentActivity>();
+
+    public ICollection<ActivityEvaluation> Evaluations { get; set; }
+        = new List<ActivityEvaluation>();
 }

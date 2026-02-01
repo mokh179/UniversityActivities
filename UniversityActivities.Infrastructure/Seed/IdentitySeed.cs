@@ -19,6 +19,13 @@ public static class IdentitySeed
             user = new ApplicationUser
             {
                 UserName = superAdminEmail,
+                FirstName="Mohammed",
+                MiddleName= "Khaled",
+                LastName="Ahmed",
+                Gender=Application.AuthorizationModule.Models.AuthModels.Gender.Male,
+                ManagementId=1,
+                NationalId="2628",
+                TargetaudienceId=1,
                 Email = superAdminEmail,
                 EmailConfirmed = true
             };

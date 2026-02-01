@@ -53,6 +53,7 @@ namespace UniversityActivities.Infrastructure.Persistence
         public DbSet<AttendanceMode> AttendanceModes { get; set; }
         public DbSet<AttendanceScope> AttendanceScopes { get; set; }
         public DbSet<ClubDomain> ClubDomains { get; set; }
+        public DbSet<Club> Clubs { get; set; }
 
 
         // =========================
@@ -118,6 +119,14 @@ namespace UniversityActivities.Infrastructure.Persistence
             modelBuilder.Entity<ClubMember>()
                 .HasIndex(x => new { x.UserId, x.StudentClubId })
                 .IsUnique();
+
+
+            modelBuilder.Entity<ActivityUser>()
+                .HasKey(x => new { x.ActivityId, x.UserId });
+
+
+            modelBuilder.Entity<ActivityTargetAudience>()
+                .HasKey(x => new { x.ActivityId, x.TargetAudienceId });
         }
 
         // =====================================================

@@ -1,4 +1,6 @@
 
+using UniversityActivities.Domain.Entities;
+
 public class Management :AuditableEntity
 {
     [Required, MaxLength(200)]
@@ -9,5 +11,9 @@ public class Management :AuditableEntity
 
     [Required]
     public int ManagementTypeId { get; set; }
-    //test
+
+    // Navigation
+    public ICollection<Activity> Activities { get; set; } = new List<Activity>();
+    public ICollection<Club> Clubs { get; set; } = new List<Club>();
+
 }
