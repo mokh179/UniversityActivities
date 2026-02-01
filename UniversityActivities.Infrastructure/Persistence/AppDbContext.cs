@@ -54,25 +54,11 @@ namespace UniversityActivities.Infrastructure.Persistence
         public DbSet<AttendanceScope> AttendanceScopes { get; set; }
         public DbSet<ClubDomain> ClubDomains { get; set; }
 
-        // =========================
-        // RBAC - Definitions
-        // =========================
-        public DbSet<Permission> Permissions { get; set; }
-        public DbSet<ManagementRole> ManagementRoles { get; set; }
-        public DbSet<ClubRole> ClubRoles { get; set; }
-        public DbSet<ActivityRole> ActivityRoles { get; set; }
-
-        // =========================
-        // RBAC - Links
-        // =========================
-        public DbSet<ManagementRolePermission> ManagementRolePermissions { get; set; }
-        public DbSet<ClubRolePermission> ClubRolePermissions { get; set; }
-        public DbSet<ActivityRolePermission> ActivityRolePermissions { get; set; }
 
         // =========================
         // Runtime User Roles
         // =========================
-        public DbSet<UserManagementRole> UserManagementRoles { get; set; }
+        public DbSet<ManagementSupervisors> ManagementSupervisors { get; set; }
 
         // =====================================================
         // Model Creating

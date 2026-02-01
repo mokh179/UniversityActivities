@@ -18,12 +18,12 @@ namespace UniversityActivities.Infrastructure.Persistence.Repositories.Activitie
         int activityId,
         List<ActivityAssignmentDto> assignments)
         {
-            // 🔹 Remove existing assignments
+            //  Remove existing assignments
             await _context.ActivityUsers
                 .Where(x => x.ActivityId == activityId)
                 .ExecuteDeleteAsync();
 
-            // 🔹 Add new assignments
+            //  Add new assignments
             if (assignments == null || assignments.Count == 0)
                 return;
             var entities = assignments

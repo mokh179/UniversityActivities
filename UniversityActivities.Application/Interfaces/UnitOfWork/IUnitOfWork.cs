@@ -4,6 +4,7 @@ using System.Text;
 using UniversityActivities.Application.Interfaces.Repositories;
 using UniversityActivities.Application.Interfaces.Repositories.Activies.AdminActivies;
 using UniversityActivities.Application.Interfaces.Repositories.Activies.StudentActivies;
+using UniversityActivities.Application.Interfaces.Repositories.Roles;
 
 namespace UniversityActivities.Application.Interfaces.IUnitOfWork
 {
@@ -28,6 +29,11 @@ namespace UniversityActivities.Application.Interfaces.IUnitOfWork
         // =========================
         IStudentActivityEvaluationRepository StudentActivityEvaluations { get; }
         IAdminActivityEvaluationQueryRepository AdminActivityEvaluations { get; }
+
+        // =========================
+        // Roles
+        // =========================
+        IManagementSupervisorRepository ManagementSupervisors {  get; }
 
         // =========================
         // Persistence

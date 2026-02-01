@@ -6,4 +6,5 @@ public enum ActivityRoles
     Coordinator = 2,
     Viewer = 3,
     Approver = 4,
+
 }

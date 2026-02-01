@@ -28,27 +28,8 @@ public static class IdentitySeed
                 throw new Exception("Failed to create Super Admin user");
         }
 
-        // =========================
-        // Attach Management Role
-        // =========================
-        var adminRole = context.ManagementRoles.FirstOrDefault(r => r.NameEn == "Management Admin");
-        if (adminRole == null)
-            throw new Exception("Management Admin role not found");
+       
+        await context.SaveChangesAsync();
 
-        var hasRole = context.UserManagementRoles.Any(x =>
-            x.UserId == user.Id &&
-            x.ManagementRoleId == adminRole.Id);
-
-        if (!hasRole)
-        {
-            context.UserManagementRoles.Add(new UserManagementRole
-            {
-                UserId = user.Id,
-                ManagementRoleId = adminRole.Id,
-                ManagementId = context.Managements.First().Id // الجامعة
-            });
-
-            await context.SaveChangesAsync();
-        }
     }
 }

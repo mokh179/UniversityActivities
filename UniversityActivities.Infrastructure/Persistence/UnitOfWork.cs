@@ -5,9 +5,11 @@ using UniversityActivities.Application.Interfaces.IUnitOfWork;
 using UniversityActivities.Application.Interfaces.Repositories;
 using UniversityActivities.Application.Interfaces.Repositories.Activies.AdminActivies;
 using UniversityActivities.Application.Interfaces.Repositories.Activies.StudentActivies;
+using UniversityActivities.Application.Interfaces.Repositories.Roles;
 using UniversityActivities.Infrastructure.Persistence.Repositories.Activities.Admin;
 using UniversityActivities.Infrastructure.Persistence.Repositories.Activities.Evaluation;
 using UniversityActivities.Infrastructure.Persistence.Repositories.Activities.Students;
+using UniversityActivities.Infrastructure.Persistence.Repositories.Roles;
 
 namespace UniversityActivities.Infrastructure.Persistence
 {
@@ -24,12 +26,6 @@ namespace UniversityActivities.Infrastructure.Persistence
         // =========================
         public IAdminActivityRepository AdminActivities
             => new AdminActivityRepository(_context);
-
-
-
-
-
-
         public IActivityTargetAudienceRepository ActivityTargetAudiences
             => new ActivityTargetAudienceRepository(_context);
 
@@ -53,6 +49,11 @@ namespace UniversityActivities.Infrastructure.Persistence
 
         public IAdminActivityEvaluationQueryRepository AdminActivityEvaluations
             => new AdminActivityEvaluationQueryRepository(_context);
+        //// =========================
+        //// Role
+        //// =========================
+        public IManagementSupervisorRepository ManagementSupervisors
+            => new ManagementSupervisorRepository(_context);
 
         // =========================
         // Save
