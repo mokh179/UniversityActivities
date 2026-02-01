@@ -8,7 +8,9 @@ using UniversityActivities.Application.ApplyUseCases.Evaluations;
 using UniversityActivities.Application.ApplyUseCases.StudentActivties;
 using UniversityActivities.Application.ApplyUseCases.StudentAuth;
 using UniversityActivities.Application.AuthorizationModule.Services.Interfaces;
+using UniversityActivities.Application.AuthorizationModule.Services.Services;
 using UniversityActivities.Application.Interfaces.IUnitOfWork;
+using UniversityActivities.Application.Interfaces.Repositories.Activies.AdminActivies;
 using UniversityActivities.Application.Interfaces.Repositories.Activies.StudentActivies;
 using UniversityActivities.Application.Interfaces.Repositories.Roles;
 using UniversityActivities.Application.UserCases.Activities.Admin;
@@ -50,8 +52,9 @@ public static class InfrastructureServiceRegistration
         .AddEntityFrameworkStores<AppDbContext>()
         .AddDefaultTokenProviders();
 
-        services.AddScoped<IIdentityMangment, IdentityMangment>();
-        services.AddScoped<IUnitOfWork,UnitOfWork>();
+        services.AddScoped<IIdentityMangment, IdentityMangment>(); // depends on RoleManager/UserManager
+        services.AddScoped<IAuthorizationService, AuthorizationService>();
+        services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 
         // =========================
         // Repositories
@@ -70,6 +73,10 @@ public static class InfrastructureServiceRegistration
 
         services.AddScoped<IStudentActivityEvaluationRepository,
                            StudentActivityEvaluationRepository>();
+       services.AddScoped<IUserAccessQueryRepository,UserAccessQueryRepository>();
+
+        services.AddScoped<IAdminActivityRepository, AdminActivityRepository>();
+        services.AddScoped<IActivityTargetAudienceRepository, ActivityTargetAudienceRepository>();
 
         // =========================
         // Unit Of Work
