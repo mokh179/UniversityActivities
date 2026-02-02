@@ -17,6 +17,7 @@ builder.Services.AddRazorPages(options =>
     // Account
     options.Conventions.AddAreaPageRoute("Auth", "/Login", "login");
     options.Conventions.AddAreaPageRoute("Auth", "/Register", "register");
+    options.Conventions.AddAreaPageRoute("Auth", "/Logout", "logout");
 });
 
 builder.Services.AddInfrastructure(builder.Configuration);

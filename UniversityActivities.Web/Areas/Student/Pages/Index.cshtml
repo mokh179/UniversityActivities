@@ -6,55 +6,62 @@
 @{
     ViewData["Title"] = "Dashboard";
 }
-
-<h4 class="fw-semibold mb-1">
-    Welcome 👋
-</h4>
-
-<p class="text-muted small mb-4">
-    This is your student dashboard
-</p>
-
-<div class="row g-3">
-
-    <div class="col-md-6 col-lg-4">
-        <div class="card border-0 shadow-sm">
-            <div class="card-body">
-                <div class="text-muted small mb-1">
-                    User Id
-                </div>
-                <h5 class="fw-semibold mb-0">
-                    @Model.CurrentUserId
-                </h5>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-6 col-lg-4">
-        <div class="card border-0 shadow-sm">
-            <div class="card-body">
-                <div class="text-muted small mb-1">
-                    Management
-                </div>
-                <h5 class="fw-semibold mb-0">
-                    @(Model.ManagementId?.ToString() ?? "—")
-                </h5>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-6 col-lg-4">
-        <div class="card border-0 shadow-sm">
-            <div class="card-body">
-                <div class="text-muted small mb-1">
-                    Gender
-                </div>
-                <h5 class="fw-semibold mb-0">
-                    @(Model.Gender ?? "—")
-                </h5>
-            </div>
-        </div>
-    </div>
-
+<link href="~/css/areas/student/student-filters.css" rel="stylesheet" />
+<div class="vibe-header mb-4">
+    <h2 class="fw-bold">Find Your Vibe</h2>
+    <p class="text-muted">
+        Discover local events perfectly matched to your interests
+    </p>
 </div>
-</div>
+
+<form method="get">
+
+    <div class="filter-accordion" onclick="toggleSection('whenSection')">
+        <div class="filter-title">
+            <span> Filters</span>
+            <span class="arrow">⌄</span>
+        </div>
+    </div>
+
+    <div id="whenSection" class="filter-body d-none">
+        <div class="row g-3">
+
+            <!-- Date -->
+            <div class="col-md-6">
+                <label class="form-label small text-muted">
+                    Select date
+                </label>
+                <input type="date"
+                       name="SelectedDate"
+                       class="form-control" />
+            </div>
+
+            <!-- Range -->
+            <div class="col-md-6">
+                <label class="form-label small text-muted">
+                    Time range
+                </label>
+                <select name="DateRange"
+                        class="form-select">
+                    <option value="">Any time</option>
+                    <option value="Today">Today</option>
+                    <option value="Week">This week</option>
+                    <option value="Month">This month</option>
+                </select>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Apply -->
+    <button type="submit" class="btn apply-filters-btn mt-4">
+        🔍 Apply Filters
+    </button>
+
+</form>
+
+<script>
+    function toggleSection(id) {
+        document.getElementById(id).classList.toggle("d-none");
+    }
+</script>
