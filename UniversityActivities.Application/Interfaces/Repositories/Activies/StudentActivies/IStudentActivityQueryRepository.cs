@@ -18,5 +18,7 @@ namespace UniversityActivities.Application.Interfaces.Repositories.Activies.Stud
         Task<StudentActivityDetailsDto?> GetDetailsAsync(
             int activityId,
             int studentId);
+
+        Task<StudentActivityCertificateDto?> GetCertificateDetails(int activityId, int studentId);
     }
 }

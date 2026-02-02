@@ -11,5 +11,6 @@ namespace UniversityActivities.Application.Interfaces.Repositories.Activies.Stud
         Task MarkAttendanceAsync(int studentId, int activityId);
 
         Task<bool> IsRegisteredAsync(int studentId, int activityId);
+        Task<bool> HasAttendedAsync(int studentId, int activityId);
     }
 }

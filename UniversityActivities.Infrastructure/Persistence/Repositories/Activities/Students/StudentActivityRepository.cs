@@ -43,6 +43,13 @@ namespace UniversityActivities.Infrastructure.Persistence.Repositories.Activitie
                     x.StudentId == studentId &&
                     x.ActivityId == activityId);
         }
+        public async Task<bool> HasAttendedAsync(int studentId, int activityId)
+        {
+            return await _context.StudentActivities
+                .AnyAsync(x =>
+                    x.StudentId == studentId &&
+                    x.ActivityId == activityId && x.AttendedAt != null);
+        }
 
     }
 }

@@ -39,9 +39,27 @@ namespace UniversityActivities.Infrastructure.Persistence.Repositories.Activitie
 
                 ManagementNameAr = m.NameAr,
                 ManagementNameEn = m.NameEn
-            }
-        ).FirstOrDefaultAsync();
+            }).FirstOrDefaultAsync();
         }
+
+
+        public async Task<StudentActivityCertificateDto?> GetCertificateDetails(int activityId, int studentId)
+        {
+            return await (
+            from a in _context.Activities.AsNoTracking()
+            join m in _context.Managements on a.ManagementId equals m.Id
+            join AU in _context.ActivityUsers on a.Id equals AU.ActivityId
+            join u in _context.Users on AU.UserId equals u.Id
+            where a.Id == activityId && a.IsPublished
+            select new StudentActivityCertificateDto
+            {
+                StudentName = u.FirstName +'\t'+u.MiddleName + '\t'+u.LastName,
+                ActivityTitle = a.TitleEn,
+                ManagementName = m.NameEn,
+                ActivityDate = a.StartDateTime.ToString("MMMM dd, yyyy")
+            }).FirstOrDefaultAsync();
+        }
+
 
         public async Task<PagedResult<StudentActivityListItemDto>> GetPublishedActivitiesAsync(int studentId, int studentManagementId, List<int> studentTargetAudienceIds, StudentActivityFilter filter, PagedRequest paging)
         {
