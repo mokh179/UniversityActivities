@@ -11,9 +11,11 @@ public static class SeedExtensions
 
         var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
         var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+        var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<int>>>();
 
         await LookupSeed.SeedAsync(context);
 
         await IdentitySeed.SeedAsync(userManager, context);
+        await RolesSeed.SeedAsync(context, roleManager);
     }
 }

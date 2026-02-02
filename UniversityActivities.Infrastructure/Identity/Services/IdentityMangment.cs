@@ -2,49 +2,66 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Security.Claims;
 using System.Text;
 using UniversityActivities.Application.AuthorizationModule.Models;
 using UniversityActivities.Application.AuthorizationModule.Models.AuthModels;
 using UniversityActivities.Application.AuthorizationModule.Services.Interfaces;
-using System.Security.Claims;
+using UniversityActivities.Application.Exceptions;
 namespace UniversityActivities.Infrastructure.Identity.Services
 {
     public class IdentityMangment : IIdentityMangment
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole<int>> _roleManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
         public IdentityMangment(
             UserManager<ApplicationUser> userManager,
-            RoleManager<IdentityRole<int>> roleManager)
+            RoleManager<IdentityRole<int>> roleManager,
+            SignInManager<ApplicationUser> signInManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _signInManager = signInManager;
         }
 
         public async Task<int> CreateUserAsync(RegisterDto registerDto)
         {
-            var isExistBefore = _userManager.FindByNameAsync(registerDto.UserName);
-            if (isExistBefore == null)
+            var isexisting = await _userManager.FindByEmailAsync(registerDto.UserName);
+            if (isexisting == null)
             {
-                var user = new ApplicationUser
+                try
                 {
-                    UserName = registerDto.UserName,
-                    Email = registerDto.Email,
-                    ManagementId = registerDto.ManagmentId,
-                    Gender = registerDto.Gender
-                };
-                var result =await _userManager.CreateAsync(user, registerDto.Password);
+                    var user = new ApplicationUser
+                    {
+                        UserName = registerDto.UserName,
+                        FirstName= registerDto.FirstName,
+                        LastName= registerDto.LastName,
+                        MiddleName= registerDto.LastName,
+                        Email = registerDto.Email,
+                        ManagementId = registerDto.ManagmentId,
+                        Gender = registerDto.Gender,
+                        TargetaudienceId = 1,
+                        NationalId = registerDto.NationalId,
+                    };
+                    var result = await _userManager.CreateAsync(user, registerDto.Password);
 
-                if (!result.Succeeded)
-                    throw new Exception(string.Join(", ",
-                        result.Errors.Select(e => e.Description)));
+                    if (!result.Succeeded)
+                        throw new BusinessException(string.Join(", ",
+                            result.Errors.Select(e => e.Description)));
 
-                await _userManager.AddToRoleAsync(user, SystemRoles.Student);
+                    await _userManager.AddToRoleAsync(user, SystemRoles.Student);
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    return user.Id;
+                }
+                catch (Exception ex)
+                {
 
-                return user.Id;
+                    new BusinessException("An error occured try again later.");
+                }
             }
-            throw new Exception("User already exists.");
+            throw new BusinessException("User already exists.");
         }
 
         public async Task EnsureUserInRoleAsync(int userId, string roleName)
@@ -62,7 +79,7 @@ namespace UniversityActivities.Infrastructure.Identity.Services
                 await _userManager.AddToRoleAsync(user, roleName);
         }
 
-        public async Task<(int UserId, string UserName, List<Claim> Claims)>GenerateClaimsAsync(int userId)
+        public  async Task<(int UserId, string UserName, List<Claim> Claims)>GenerateClaimsAsync(int userId)
         {
             var user = await _userManager.FindByIdAsync(userId.ToString())
                 ?? throw new Exception("User not found");
@@ -73,8 +90,8 @@ namespace UniversityActivities.Infrastructure.Identity.Services
                     {
                         new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                         new Claim(ClaimTypes.Name, user.UserName!),
-                        new Claim("management_id", user.ManagementId.ToString()),
-                        new Claim("gender", user.Gender.ToString()),
+                        new Claim("Management_id", user.ManagementId.ToString()),
+                        new Claim("Gender", user.Gender.ToString()),
                         new Claim("TargetAudience", user.Gender.ToString()),
                     };
 
@@ -84,6 +101,8 @@ namespace UniversityActivities.Infrastructure.Identity.Services
             return (userId, user.UserName!, claims);
         }
 
+
+    
         public async Task<(int UserId, string UserName)> LoginAsync(LoginDto loginDto)
         {
             var user = await _userManager.FindByNameAsync(loginDto.UserNameOrEmail) ?? await _userManager.FindByEmailAsync(loginDto.UserNameOrEmail);
@@ -91,10 +110,19 @@ namespace UniversityActivities.Infrastructure.Identity.Services
             if (user == null)
                 throw new Exception("Invalid username/email or password.");
 
-            var valid = await _userManager.CheckPasswordAsync(user, loginDto.Password);
-            if (!valid)
+            var result = await _signInManager.PasswordSignInAsync(
+                  user,
+                  loginDto.Password,
+                  isPersistent: false,
+                  lockoutOnFailure: false
+              );
+            if (result==null)
                 throw new Exception("Invalid username/email or password.");
             return (user.Id, user.UserName!);
+        }
+        public async Task  LogoutAsync()
+        {
+            await _signInManager.SignOutAsync();
         }
     }
 }

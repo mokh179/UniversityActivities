@@ -16,11 +16,11 @@ namespace UniversityActivities.Application.AuthorizationModule.Models.AuthModels
         public string UserName { get; set; } = string.Empty;
 
 
-        [Required(ErrorMessage = "Password is required")]
-        [MinLength(8, ErrorMessage = "Password must be at least 8 characters")]
-        [RegularExpression(
-       @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&^_])[A-Za-z\d@$!%*#?&^_]{8,}$",
-       ErrorMessage = "Password must contain upper, lower, number, and special character")]
+       // [Required(ErrorMessage = "Password is required")]
+       // [MinLength(8, ErrorMessage = "Password must be at least 8 characters")]
+       // [RegularExpression(
+       //@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&^_])[A-Za-z\d@$!%*#?&^_]{8,}$",
+       //ErrorMessage = "Password must contain upper, lower, number, and special character")]
         public string Password { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Confirm Password is required")]

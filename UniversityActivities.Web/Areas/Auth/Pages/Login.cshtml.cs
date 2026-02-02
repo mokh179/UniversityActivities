@@ -3,12 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;
 using UniversityActivities.Application.AuthorizationModule.Models.AuthModels;
+using UniversityActivities.Application.Exceptions;
 using UniversityActivities.Application.UserCases.Student.Auth;
 using UniversityActivities.Web.Common;
 
 namespace UniversityActivities.Web.Areas.Auth.Pages
 {
-    public class LoginModel : BaseModel
+    public class LoginModel : PageModel
     {
         private readonly ILoginUseCase _loginUseCase;
 
@@ -22,21 +23,25 @@ namespace UniversityActivities.Web.Areas.Auth.Pages
 
         public async Task<IActionResult> OnPostAsync()
         {
-            var result = await _loginUseCase.ExecuteAsync(Input);
 
-            var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.NameIdentifier, result.UserId.ToString()),
-            new Claim(ClaimTypes.Name, result.UserName),
-            new Claim(ClaimTypes.Role, "Student")
-        };
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
+            try
+            {
+                var result = await _loginUseCase.ExecuteAsync(Input);
 
-            var identity = new ClaimsIdentity(claims, "Cookies");
-            await HttpContext.SignInAsync(
-                "Cookies",
-                new ClaimsPrincipal(identity));
+                return RedirectToPage("/Index", new { area = "Student" });
+            }
+            catch (BusinessException ex)
 
-            return RedirectToPage("/Index", new { area = "Student" });
+            {
+
+                ModelState.AddModelError(string.Empty, ex.Message);
+                return Page();
+            }
+
         }
     }
 }

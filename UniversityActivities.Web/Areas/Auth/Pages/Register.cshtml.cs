@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;
 using UniversityActivities.Application.AuthorizationModule.Models.AuthModels;
+using UniversityActivities.Application.Exceptions;
 using UniversityActivities.Application.lookup.Dto;
 using UniversityActivities.Application.lookup.Interface;
 using UniversityActivities.Application.UserCases.Student.Auth;
@@ -10,7 +11,7 @@ using UniversityActivities.Web.Common;
 
 namespace UniversityActivities.Web.Areas.Auth.Pages
 {
-    public class RegisterModel : BaseModel
+    public class RegisterModel : PageModel
     {
         private readonly IStudentSignUpUseCase _signUpUseCase;
         private readonly IUiLookupsQuery _lookupsQuery;
@@ -35,23 +36,25 @@ namespace UniversityActivities.Web.Areas.Auth.Pages
 
         public async Task<IActionResult> OnPostAsync()
         {
-            var result = await _signUpUseCase.ExecuteAsync(Input);
+            if (!ModelState.IsValid)
+            {
+               await OnGetAsync(); // important to reload dropdown
+                return Page();
+            }
+            try
 
-            var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.NameIdentifier, result.UserId.ToString()),
-            new Claim(ClaimTypes.Name, result.UserName),
-            new Claim(ClaimTypes.Role, "Student"),
-            new Claim("management_id", Input.ManagmentId.ToString()),
-            new Claim("gender", Input.Gender.ToString())
-        };
+            {
+                    var result = await _signUpUseCase.ExecuteAsync(Input);
+                    return RedirectToPage("/Index", new { area = "Student" });
+            }
+	        catch (BusinessException ex)
 
-            var identity = new ClaimsIdentity(claims, "Cookies");
-            await HttpContext.SignInAsync(
-                "Cookies",
-                new ClaimsPrincipal(identity));
+            {
 
-            return RedirectToPage("/Index", new { area = "Student" });
+                ModelState.AddModelError(string.Empty, ex.Message);
+                await OnGetAsync();
+                return Page();
+            }
         }
     }
 }

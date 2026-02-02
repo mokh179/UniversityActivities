@@ -1,0 +1,60 @@
+﻿@page
+@model UniversityActivities.Web.Areas.Student.Pages.IndexModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<h4 class="fw-semibold mb-1">
+    Welcome 👋
+</h4>
+
+<p class="text-muted small mb-4">
+    This is your student dashboard
+</p>
+
+<div class="row g-3">
+
+    <div class="col-md-6 col-lg-4">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="text-muted small mb-1">
+                    User Id
+                </div>
+                <h5 class="fw-semibold mb-0">
+                    @Model.CurrentUserId
+                </h5>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="text-muted small mb-1">
+                    Management
+                </div>
+                <h5 class="fw-semibold mb-0">
+                    @(Model.ManagementId?.ToString() ?? "—")
+                </h5>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="text-muted small mb-1">
+                    Gender
+                </div>
+                <h5 class="fw-semibold mb-0">
+                    @(Model.Gender ?? "—")
+                </h5>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>

@@ -4,18 +4,38 @@
     ViewData["Title"] = "Login";
 }
 
-<div class="auth-card">
-    <h2>Login</h2>
+<h5 class="fw-semibold mb-1">Login</h5>
+<p class="text-muted small mb-4">
+    Sign in to continue
+</p>
 
-    <form method="post">
-        <input asp-for="Input.UserNameOrEmail" placeholder="Email" />
-        <input asp-for="Input.Password" type="password" placeholder="Password" />
+<form method="post">
 
-        <button type="submit">Login</button>
+    <div asp-validation-summary="ModelOnly"
+         class="text-danger small mb-3"></div>
 
-        <p>
-            Don’t have an account?
-            <a asp-area="Auth" asp-page="/SignUp">Sign Up</a>
-        </p>
-    </form>
+    <div class="mb-3">
+        <label class="form-label small text-muted">Username</label>
+        <input asp-for="Input.UserNameOrEmail"
+               class="form-control form-control-sm"
+               placeholder="Enter username" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label small text-muted">Password</label>
+        <input asp-for="Input.Password"
+               type="password"
+               class="form-control form-control-sm"
+               placeholder="••••••••" />
+    </div>
+
+    <button type="submit"
+            class="btn btn-primary w-100 py-2">
+        Login
+    </button>
+</form>
+
+<div class="text-center mt-3 small">
+    Don’t have an account?
+    <a asp-page="/Register" asp-area="Auth">Sign Up</a>
 </div>

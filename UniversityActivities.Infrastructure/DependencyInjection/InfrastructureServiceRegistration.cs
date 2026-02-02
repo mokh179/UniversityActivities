@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Text;
 using UniversityActivities.Application.ApplyUseCases.AdminActivties;
 using UniversityActivities.Application.ApplyUseCases.Evaluations;
 using UniversityActivities.Application.ApplyUseCases.lookup;
@@ -55,6 +58,47 @@ public static class InfrastructureServiceRegistration
         })
         .AddEntityFrameworkStores<AppDbContext>()
         .AddDefaultTokenProviders();
+
+
+        // =========================
+        // JWT
+        // =========================
+        services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultSignInScheme = IdentityConstants.ApplicationScheme;
+
+        })
+           .AddJwtBearer(options =>
+           {
+               options.TokenValidationParameters = new TokenValidationParameters
+               {
+                   ValidateIssuer = true,
+                   ValidateAudience = true,
+                   ValidateLifetime = true,
+                   ValidateIssuerSigningKey = true,
+                   ValidIssuer = configuration["Jwt:Issuer"],
+                   ValidAudience = configuration["Jwt:Audience"],
+                   IssuerSigningKey = new SymmetricSecurityKey(
+                       Encoding.UTF8.GetBytes(configuration["Jwt:Key"]))
+               };
+           });
+
+
+        services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
+            options.DefaultSignInScheme = IdentityConstants.ApplicationScheme;
+            options.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
+        });
+        services.AddAuthorization();
+
+
+
+
+
+
 
         services.AddScoped<IIdentityMangment, IdentityMangment>(); // depends on RoleManager/UserManager
         services.AddScoped<IAuthorizationService, AuthorizationService>();
@@ -131,7 +175,12 @@ public static class InfrastructureServiceRegistration
         services.AddScoped<ISubmitActivityEvaluationUseCase,
                            SubmitActivityEvaluationUseCase>();
 
+        services.AddScoped<
+    IUserClaimsPrincipalFactory<ApplicationUser>,
+    AppClaimsPrincipalFactory>();
 
+
+        services.AddScoped<ILogOutUseCase, LogOutUseCase>();
         return services;
     }
 }

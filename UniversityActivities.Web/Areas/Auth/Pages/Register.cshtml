@@ -1,47 +1,102 @@
 ﻿@page
 @model UniversityActivities.Web.Areas.Auth.Pages.RegisterModel
 @{
-    ViewData["Title"] = "Sign Up";
+    ViewData["Title"] = "Register";
 }
-<link href="~/css/areas/auth/signup.css" rel="stylesheet" />
-<div class="auth-card">
-    <h2>Student Sign Up</h2>
 
-    <form method="post">
-        <input asp-for="Input.FirstName" placeholder="Firstname" />
-        <input asp-for="Input.MiddleName" placeholder="MiddleName" />
-        <input asp-for="Input.LastName" placeholder="LastName" />
-        <input asp-for="Input.UserName" placeholder="Username" />
-        <input asp-for="Input.NationalId" placeholder="NationalId" />
-        <input asp-for="Input.Email" placeholder="Email" />
+<h5 class="fw-semibold mb-1">Create Account</h5>
+<p class="text-muted small mb-4">
+    Join university activities easily
+</p>
 
-        <input asp-for="Input.Password" type="password" placeholder="Password" />
-        <input asp-for="Input.ConfirmPassword" type="password" placeholder="Confirm Password" />
+<form method="post" novalidate>
 
-        <!-- Gender buttons -->
-        <div>
-            <label>
-                <input type="radio" asp-for="Input.Gender" value="Male" /> Male
-            </label>
-            <label>
-                <input type="radio" asp-for="Input.Gender" value="Female" /> Female
-            </label>
+    <div asp-validation-summary="ModelOnly"
+         class="text-danger small mb-3"></div>
+
+    <div class="mb-3">
+        <label class="form-label small text-muted">Email</label>
+        <input asp-for="Input.Email" class="form-control" />
+        <span asp-validation-for="Input.Email" class="text-danger small"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label small text-muted">Username</label>
+        <input asp-for="Input.UserName" class="form-control" />
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <label class="form-label small text-muted">First name</label>
+            <input asp-for="Input.FirstName" class="form-control" />
         </div>
+        <div class="col-md-4 mb-3">
+            <label class="form-label small text-muted">Middle</label>
+            <input asp-for="Input.MiddleName" class="form-control" />
+        </div>
+        <div class="col-md-4 mb-3">
+            <label class="form-label small text-muted">Last name</label>
+            <input asp-for="Input.LastName" class="form-control" />
+        </div>
+    </div>
 
-        <!-- Management / College -->
-        <select asp-for="Input.ManagmentId">
-            <option value="">Select College</option>
-            @foreach (var m in Model.Managements)
-            {
-                <option value="@m.Id">@m.NameEn</option>
-            }
+    <div class="mb-3">
+        <label class="form-label small text-muted">National ID</label>
+        <input asp-for="Input.NationalId" class="form-control" />
+        <span asp-validation-for="Input.NationalId" class="text-danger small"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label small text-muted d-block">Gender</label>
+        <div class="d-flex gap-4">
+            <div class="form-check">
+                <input class="form-check-input" type="radio"
+                       asp-for="Input.Gender" value="1" />
+                <label class="form-check-label">Male</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio"
+                       asp-for="Input.Gender" value="2" />
+                <label class="form-check-label">Female</label>
+            </div>
+        </div>
+        <span asp-validation-for="Input.Gender" class="text-danger small"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label small text-muted">Management</label>
+        <select asp-for="Input.ManagmentId"
+                asp-items="@(new SelectList(Model.Managements, "Id", "NameEn"))"
+                class="form-select">
+            <option value="">Select Management</option>
         </select>
+        <span asp-validation-for="Input.ManagmentId" class="text-danger small"></span>
+    </div>
 
-        <button type="submit">Create Account</button>
+    <div class="mb-3">
+        <label class="form-label small text-muted">Password</label>
+        <input asp-for="Input.Password" type="password" class="form-control" />
+        <span asp-validation-for="Input.Password" class="text-danger small"></span>
+    </div>
 
-        <p>
-            Already have an account?
-            <a asp-area="Auth" asp-page="/Login">Login</a>
-        </p>
-    </form>
+    <div class="mb-3">
+        <label class="form-label small text-muted">Confirm Password</label>
+        <input asp-for="Input.ConfirmPassword" type="password" class="form-control" />
+        <span asp-validation-for="Input.ConfirmPassword" class="text-danger small"></span>
+    </div>
+
+    <button type="submit"
+            class="btn btn-primary w-100 py-2 mt-2">
+        Create Account
+    </button>
+
+</form>
+
+<div class="text-center mt-3 small">
+    Already have an account?
+    <a asp-page="/Login" asp-area="Auth">Login</a>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
