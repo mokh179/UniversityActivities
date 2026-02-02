@@ -9,6 +9,7 @@ builder.Host.UseSerilog((context, services, configuration) =>
         .Enrich.FromLogContext();
 });
 
+
 // Add services to the container.
 builder.Services.AddRazorPages();
 
@@ -21,14 +22,7 @@ if (builder.Configuration.GetValue<bool>("SeedData"))
     await app.SeedDatabaseAsync();
 }
 
-builder.Services.AddAuthentication("Cookies")
-    .AddCookie("Cookies", options =>
-    {
-        options.LoginPath = "/Auth/Login";
-        options.AccessDeniedPath = "/Auth/Login";
-    });
 
-builder.Services.AddAuthorization();
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()

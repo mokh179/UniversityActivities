@@ -1,4 +1,21 @@
 ﻿@page
-@model UniversityActivities.Web.Areas.Auth.LoginModel
+@model UniversityActivities.Web.Areas.Auth.Pages.LoginModel
 @{
+    ViewData["Title"] = "Login";
 }
+
+<div class="auth-card">
+    <h2>Login</h2>
+
+    <form method="post">
+        <input asp-for="Input.UserNameOrEmail" placeholder="Email" />
+        <input asp-for="Input.Password" type="password" placeholder="Password" />
+
+        <button type="submit">Login</button>
+
+        <p>
+            Don’t have an account?
+            <a asp-area="Auth" asp-page="/SignUp">Sign Up</a>
+        </p>
+    </form>
+</div>

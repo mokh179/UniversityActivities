@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using UniversityActivities.Application.ApplyUseCases.AdminActivties;
 using UniversityActivities.Application.ApplyUseCases.Evaluations;
+using UniversityActivities.Application.ApplyUseCases.lookup;
 using UniversityActivities.Application.ApplyUseCases.StudentActivties;
 using UniversityActivities.Application.ApplyUseCases.StudentAuth;
 using UniversityActivities.Application.AuthorizationModule.Services.Interfaces;
@@ -13,11 +14,14 @@ using UniversityActivities.Application.Interfaces.IUnitOfWork;
 using UniversityActivities.Application.Interfaces.Repositories.Activies.AdminActivies;
 using UniversityActivities.Application.Interfaces.Repositories.Activies.StudentActivies;
 using UniversityActivities.Application.Interfaces.Repositories.Roles;
+using UniversityActivities.Application.lookup.Interface;
 using UniversityActivities.Application.UserCases.Activities.Admin;
 using UniversityActivities.Application.UserCases.Activities.Student;
+using UniversityActivities.Application.UserCases.Lookup;
 using UniversityActivities.Application.UserCases.Student.Auth;
 using UniversityActivities.Infrastructure.Identity;
 using UniversityActivities.Infrastructure.Identity.Services;
+using UniversityActivities.Infrastructure.Lookup;
 using UniversityActivities.Infrastructure.Persistence;
 using UniversityActivities.Infrastructure.Persistence.Repositories.Activities.Admin;
 using UniversityActivities.Infrastructure.Persistence.Repositories.Activities.Evaluation;
@@ -118,6 +122,8 @@ public static class InfrastructureServiceRegistration
         services.AddScoped<IViewStudentActivitiesUseCase,ViewStudentUseCase>();
         services.AddScoped<IStudentSignUpUseCase, StudentSignUpUseCase>();
         services.AddScoped<ILoginUseCase, LoginUseCase>();
+        services.AddScoped<IUiLookupsQuery, UiLookupsQuery>();
+        services.AddScoped<IGetUiLookupsUseCase, GetUiLookupsUseCase >();
 
         // =========================
         // Use Cases - Evaluation
