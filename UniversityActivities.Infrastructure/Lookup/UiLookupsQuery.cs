@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using UniversityActivities.Application.lookup.Dto;
 using UniversityActivities.Application.lookup.Interface;
+using UniversityActivities.Domain.Lookups;
 using UniversityActivities.Infrastructure.Persistence;
 
 namespace UniversityActivities.Infrastructure.Lookup
@@ -28,14 +29,14 @@ namespace UniversityActivities.Infrastructure.Lookup
 
             var data = new UiLookupsDto
             {
-                Managements = await _context.Managements
+                Managements = await _context.Managements.AsNoTracking()
                     .Select(x => new LookupDto
                     {
                         Id = x.Id,
                         NameAr = x.NameAr,
                         NameEn = x.NameEn
                     }).ToListAsync(),
-                ActivityTypes = await _context.ActivityTypes
+                ActivityTypes = await _context.ActivityTypes.AsNoTracking()
                 .Select(x => new LookupDto
                 {
                     Id = x.Id,
@@ -43,14 +44,23 @@ namespace UniversityActivities.Infrastructure.Lookup
                     NameEn = x.NameEn
                 }).ToListAsync(),
 
-                AttendanceScopes = await _context.AttendanceScopes
+                AttendanceScopes = await _context.AttendanceScopes.AsNoTracking()
                 .Select(x => new LookupDto
                 {
                     Id = x.Id,
                     NameAr = x.NameAr,
                     NameEn = x.NameEn
-                }).ToListAsync()
+                }).ToListAsync(),
+
+                ManagementTypes = await _context.ManagementTypes.AsNoTracking()
+                                    .Select(x => new LookupDto
+                                    {
+                                        Id = x.Id,
+                                        NameAr = x.NameAr,
+                                        NameEn = x.NameEn
+                                    }).ToListAsync()
             };
+
 
             _cache.Set(CacheKey, data, TimeSpan.FromHours(6));
             return data;

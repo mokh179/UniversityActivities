@@ -1,4 +1,60 @@
 ﻿@page
 @model UniversityActivities.Web.Areas.Admin.Pages.IndexModel
 @{
+    ViewData["Title"] = "Admin Dashbord";
 }
+<h4 class="fw-semibold mb-4">Dashboard</h4>
+
+<!-- Stats Cards -->
+<div class="row g-3 mb-4">
+
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="text-muted small">Total Activities</div>
+                <h4 class="fw-bold">@Model.Stats.TotalActivities</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="text-muted small">Active Activities</div>
+                <h4 class="fw-bold">@Model.Stats.ActiveActivities</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="text-muted small">Inprogress Activities</div>
+                <h4 class="fw-bold">@Model.Stats.InProgressActivities</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="text-muted small">Students Joined</div>
+                <h4 class="fw-bold">@Model.Stats.TotalStudents</h4>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Activities List -->
+<div class="card border-0 shadow-sm">
+    <div class="card-body">
+        <h6 class="fw-semibold mb-3">
+            Latest Activities
+        </h6>
+
+        <div class="text-muted small">
+            (Data will be added later)
+        </div>
+    </div>
+</div>

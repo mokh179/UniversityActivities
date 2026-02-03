@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Text;
 using UniversityActivities.Application.ApplyUseCases.AdminActivties;
+using UniversityActivities.Application.ApplyUseCases.AdminDashboard;
 using UniversityActivities.Application.ApplyUseCases.Evaluations;
 using UniversityActivities.Application.ApplyUseCases.lookup;
 using UniversityActivities.Application.ApplyUseCases.StudentActivties;
@@ -16,10 +17,12 @@ using UniversityActivities.Application.AuthorizationModule.Services.Services;
 using UniversityActivities.Application.Interfaces.IUnitOfWork;
 using UniversityActivities.Application.Interfaces.Repositories.Activies.AdminActivies;
 using UniversityActivities.Application.Interfaces.Repositories.Activies.StudentActivies;
+using UniversityActivities.Application.Interfaces.Repositories.Admin;
 using UniversityActivities.Application.Interfaces.Repositories.Roles;
 using UniversityActivities.Application.lookup.Interface;
 using UniversityActivities.Application.UserCases.Activities.Admin;
 using UniversityActivities.Application.UserCases.Activities.Student;
+using UniversityActivities.Application.UserCases.Admin;
 using UniversityActivities.Application.UserCases.Lookup;
 using UniversityActivities.Application.UserCases.Student.Auth;
 using UniversityActivities.Infrastructure.Identity;
@@ -29,6 +32,7 @@ using UniversityActivities.Infrastructure.Persistence;
 using UniversityActivities.Infrastructure.Persistence.Repositories.Activities.Admin;
 using UniversityActivities.Infrastructure.Persistence.Repositories.Activities.Evaluation;
 using UniversityActivities.Infrastructure.Persistence.Repositories.Activities.Students;
+using UniversityActivities.Infrastructure.Persistence.Repositories.Admin;
 using UniversityActivities.Infrastructure.Persistence.Repositories.Roles;
 
 public static class InfrastructureServiceRegistration
@@ -180,7 +184,15 @@ public static class InfrastructureServiceRegistration
     AppClaimsPrincipalFactory>();
 
 
+        services.AddScoped<IAdminDashboardUseCase,
+                   AdminDashboardUseCase>();
+
+        services.AddScoped<IDashboardQueryRepository,
+                           AdminDashboardQueryRepository>();
+
+
         services.AddScoped<ILogOutUseCase, LogOutUseCase>();
+        services.AddScoped<IfilterLookupQuery, FilterLookupQuery>();
         return services;
     }
 }

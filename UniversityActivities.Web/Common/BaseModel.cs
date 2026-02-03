@@ -16,5 +16,9 @@ namespace UniversityActivities.Web.Common
 
         public string? Gender =>
             User.FindFirst("Gender")?.Value;
+
+        public bool isSuperAdmin => User.FindFirstValue(ClaimTypes.Role) == "SuperAdmin";
+
+
     }
 }

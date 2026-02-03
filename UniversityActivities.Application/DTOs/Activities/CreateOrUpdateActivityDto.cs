@@ -13,6 +13,7 @@ public class CreateOrUpdateActivityDto
 
     public int ActivityTypeId { get; set; }
     public int AttendanceModeId { get; set; }
+    public int AttendanceScopeId { get; set; }
 
     // 🔴 Multiple Target Audiences
     public List<int> TargetAudienceIds { get; set; } = new();
