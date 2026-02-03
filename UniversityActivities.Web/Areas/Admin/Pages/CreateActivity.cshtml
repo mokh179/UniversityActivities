@@ -6,8 +6,6 @@
 
 <h4 class="fw-semibold mb-4">Create Activity</h4>
 
-<h2>Create Activity</h2>
-
 <form method="post">
 
     <!-- ================= Basic Information ================= -->
@@ -71,21 +69,30 @@
     <!-- ================= Management ================= -->
     <div class="card border-0 shadow-sm mb-4">
         <div class="card-body">
+            <h6 class="fw-semibold mb-3">Management Type</h6>
+
+            <select id="managementTypeSelect"
+                    class="form-select">
+                <option value="">Select Management Type</option>
+                @foreach (var type in Model.Lookups.ManagementTypes)
+                {
+                    <option value="@type.Id">@type.NameEn</option>
+                }
+            </select>
+        </div>
+    </div>
+    <!-- ================= Management & Club ================= -->
+    <div class="card border-0 shadow-sm mb-4 auto-hide">
+        <!-- Skeleton -->
+        <div class="card-body skeleton">
+            <div class="skeleton-line"></div>
+            <div class="skeleton-line"></div>
+        </div>
+        <div class="card-body">
             <h6 class="fw-semibold mb-3">Management</h6>
 
             <div class="row g-3">
-                <div class="col-md-4">
-                    <select id="managementTypeSelect"
-                            class="form-select">
-                        <option value="">Select Management Type</option>
-                        @foreach (var type in Model.Lookups.ManagementTypes)
-                        {
-                            <option value="@type.Id">@type.NameEn</option>
-                        }
-                    </select>
-                </div>
-
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <select asp-for="Input.ManagementId"
                             id="managementSelect"
                             class="form-select">
@@ -93,7 +100,7 @@
                     </select>
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <select asp-for="Input.ClubId"
                             id="clubSelect"
                             class="form-select">
@@ -104,12 +111,16 @@
         </div>
     </div>
 
+
+
     <!-- ================= Settings ================= -->
     <div class="card border-0 shadow-sm mb-4">
         <div class="card-body">
             <h6 class="fw-semibold mb-3">Settings</h6>
 
-            <div class="row g-3">
+            <div class="row g-4">
+
+                <!-- Activity Type -->
                 <div class="col-md-4">
                     <select asp-for="Input.ActivityTypeId"
                             class="form-select">
@@ -121,27 +132,43 @@
                     </select>
                 </div>
 
-                <div class="col-md-4">
-                    <select asp-for="Input.AttendanceModeId"
-                            class="form-select">
-                        <option value="">Attendance Mode</option>
-                        @foreach (var item in Model.Lookups.ActivityTypes)
+                <!-- Attendance Mode (Radio) -->
+                <div class="col-md-8">
+                    <div class="fw-semibold mb-2">Attendance Mode</div>
+                    <div class="d-flex gap-4 flex-wrap">
+                        @foreach (var item in Model.Lookups.AttendanceModes)
                         {
-                            <option value="@item.Id">@item.NameEn</option>
+                            <label class="form-check d-flex align-items-center gap-2">
+                                <input type="radio"
+                                       class="form-check-input"
+                                       asp-for="Input.AttendanceModeId"
+                                       value="@item.Id" />
+                                @item.NameEn
+                            </label>
                         }
-                    </select>
+                    </div>
                 </div>
 
-                <div class="col-md-4">
-                    <select asp-for="Input.AttendanceScopeId"
-                            class="form-select">
-                        <option value="">Attendance Scope</option>
-                        @foreach (var item in Model.Lookups.AttendanceScopes)
-                        {
-                            <option value="@item.Id">@item.NameEn</option>
-                        }
-                    </select>
-                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= Attendance Scope ================= -->
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body">
+            <h6 class="fw-semibold mb-3">Attendance Scope</h6>
+
+            <div class="d-flex flex-wrap gap-3">
+                @foreach (var item in Model.Lookups.AttendanceScopes)
+                {
+                    <label class="form-check d-flex align-items-center gap-2">
+                        <input type="checkbox"
+                               class="form-check-input"
+                               name="Input.AttendanceScopeId"
+                               value="@item.Id" />
+                        @item.NameEn
+                    </label>
+                }
             </div>
         </div>
     </div>
@@ -185,73 +212,9 @@
 
 </form>
 
-
+<!-- ===== JavaScript (UNCHANGED ❗) ===== -->
 <script>
-    // const typeSelect = document.getElementById("managementTypeSelect");
-    // const managementSelect = document.getElementById("managementSelect");
-
-    // const clubSelect = document.getElementById("clubtSelect");
-
-    // typeSelect.addEventListener("change", async function () {
-
-    //     const typeId = this.value;
-
-    //     managementSelect.innerHTML =
-    //         '<option value="">Loading...</option>';
-
-    //     if (!typeId) {
-    //         managementSelect.innerHTML =
-    //             '<option value="">Select Management</option>';
-    //         return;
-    //     }
-
-    //     const response = await fetch(
-    //         `?handler=ManagementsByType&managementTypeId=${typeId}`
-    //     );
-
-    //     const data = await response.json();
-
-    //     managementSelect.innerHTML =
-    //         '<option value="">Select Management</option>';
-
-    //     data.forEach(item => {
-    //         const option = document.createElement("option");
-    //         option.value = item.id;
-    //         option.text = item.nameEn;
-    //         managementSelect.appendChild(option);
-    //     });
-    // });
-
-    //   managementSelect.addEventListener("change", async function () {
-    //     const managementId = this.value;
-    //     console.log(managementId)
-
-    //     clubSelect.innerHTML =
-    //         '<option value="">Loading...</option>';
-
-    //     if (!managementId) {
-    //         clubSelect.innerHTML =
-    //             '<option value="">Select Club</option>';
-    //         return;
-    //     }
-
-    //     const response = await fetch(
-    //         `?handler=ClubsByManagement&managementId=${managementId}`
-    //     );
-
-    //     const data = await response.json();
-
-    //     clubSelect.innerHTML =
-    //         '<option value="">Select Club</option>';
-
-    //     data.forEach(item => {
-    //         const option = document.createElement("option");
-    //         option.value = item.id;
-    //         option.text = item.nameEn;
-    //         clubSelect.appendChild(option);
-    //     });
-    // });
-      const typeSelect = document.getElementById("managementTypeSelect");
+    const typeSelect = document.getElementById("managementTypeSelect");
     const managementSelect = document.getElementById("managementSelect");
     const clubSelect = document.getElementById("clubSelect");
 
@@ -268,7 +231,6 @@
         select.disabled = false;
     }
 
-    // Type ➜ Management
     typeSelect.addEventListener("change", async function () {
 
         clubSelect.innerHTML = '<option value="">Select Club</option>';
@@ -284,14 +246,12 @@
             "Select Management"
         );
 
-        // اختار أول Management وشغّل change
         if (managementSelect.options.length > 1) {
             managementSelect.selectedIndex = 1;
             managementSelect.dispatchEvent(new Event("change"));
         }
     });
 
-    // Management ➜ Club
     managementSelect.addEventListener("change", async function () {
 
         if (!this.value) {
@@ -305,9 +265,4 @@
             "Select Club"
         );
     });
-
-</script>
-<script>
-
-   
 </script>

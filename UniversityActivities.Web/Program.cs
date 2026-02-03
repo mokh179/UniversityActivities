@@ -18,7 +18,17 @@ builder.Services.AddRazorPages(options =>
     options.Conventions.AddAreaPageRoute("Auth", "/Login", "login");
     options.Conventions.AddAreaPageRoute("Auth", "/Register", "register");
     options.Conventions.AddAreaPageRoute("Auth", "/Logout", "logout");
+
+
+
+
     options.Conventions.AddAreaPageRoute("Admin", "/Index", "AdminDashboard");
+    options.Conventions.AddAreaPageRoute("Admin", "/CreateActivity", "createactivity");
+    options.Conventions.AddAreaPageRoute("Admin", "/AllActivties", "activties");
+    options.Conventions.AddAreaPageRoute("Admin", "/EditActivity", "editactivity");
+    options.Conventions.AddAreaPageRoute("Admin", "/ViewActivity", "viewactivity");
+
+
 });
 
 builder.Services.AddInfrastructure(builder.Configuration);

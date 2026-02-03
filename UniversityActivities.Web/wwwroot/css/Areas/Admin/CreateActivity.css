@@ -1,0 +1,115 @@
+﻿/* =========================================================
+   Auto Hide Sections (Management / Club / Scope / Audience)
+   ========================================================= */
+
+/* hidden by default */
+.auto-hide {
+    display: none;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity .25s ease, transform .25s ease;
+}
+
+    /* show when Management has data */
+    .auto-hide:has(#managementSelect option:not([value=""])),
+    .auto-hide:has(#clubSelect option:not([value=""])) {
+        display: block;
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+/* Target Audience & Attendance Scope (lists) */
+.target-audience,
+.attendance-scope {
+    display: none;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity .25s ease, transform .25s ease;
+}
+
+    .target-audience:has(input[type="checkbox"]),
+    .attendance-scope:has(input[type="checkbox"]) {
+        display: block;
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+/* =========================================================
+   Skeleton Loading
+   ========================================================= */
+
+.skeleton {
+    display: block;
+}
+
+.real-content {
+    display: none;
+}
+
+/* when data arrives */
+.auto-hide:has(#managementSelect option:not([value=""])) .skeleton {
+    display: none;
+}
+
+.auto-hide:has(#managementSelect option:not([value=""])) .real-content {
+    display: block;
+}
+
+/* skeleton look */
+.skeleton-line {
+    height: 38px;
+    border-radius: 6px;
+    background: linear-gradient( 90deg, #e5e7eb 25%, #f3f4f6 37%, #e5e7eb 63% );
+    background-size: 400% 100%;
+    animation: shimmer 1.4s infinite;
+    margin-bottom: 12px;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 100% 0;
+    }
+
+    100% {
+        background-position: -100% 0;
+    }
+}
+
+/* =========================================================
+   Validation Visibility (Smart UX)
+   ========================================================= */
+
+/* hide validation by default */
+.auto-hide .field-validation-error,
+.auto-hide .text-danger {
+    display: none;
+}
+
+/* show validation only when section visible */
+.auto-hide:has(#managementSelect option:not([value=""]))
+.field-validation-error,
+.auto-hide:has(#managementSelect option:not([value=""]))
+.text-danger {
+    display: block;
+}
+
+/* =========================================================
+   Admin Create Activity – Minor UI Polish
+   ========================================================= */
+
+.card h6 {
+    letter-spacing: .3px;
+}
+
+.form-check-input {
+    cursor: pointer;
+}
+
+.form-select:disabled {
+    background-color: #f3f4f6;
+    opacity: .7;
+}
+
+button.btn-success {
+    min-width: 160px;
+}

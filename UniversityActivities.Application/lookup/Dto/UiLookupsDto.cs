@@ -9,15 +9,12 @@ namespace UniversityActivities.Application.lookup.Dto
         public List<LookupDto> Managements { get; set; } = new();
         public List<LookupDto> ActivityTypes { get; set; } = new();
         public List<LookupDto> AttendanceScopes { get; set; } = new();
+        public List<LookupDto> AttendanceModes { get; set; } = new();
         public List<LookupDto> TargetAudiences { get; set; } = new();
         public List<LookupDto> ManagementTypes { get; set; } = new();
 
     }
 
-    public class LookupDto
-    {
-        public int Id { get; set; }
-        public string NameAr { get; set; } = string.Empty;
-        public string NameEn { get; set; } = string.Empty;
-    }
+
+
 }

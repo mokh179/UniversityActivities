@@ -36,6 +36,7 @@ namespace UniversityActivities.Infrastructure.Lookup
                         NameAr = x.NameAr,
                         NameEn = x.NameEn
                     }).ToListAsync(),
+
                 ActivityTypes = await _context.ActivityTypes.AsNoTracking()
                 .Select(x => new LookupDto
                 {
@@ -45,6 +46,22 @@ namespace UniversityActivities.Infrastructure.Lookup
                 }).ToListAsync(),
 
                 AttendanceScopes = await _context.AttendanceScopes.AsNoTracking()
+                .Select(x => new LookupDto
+                {
+                    Id = x.Id,
+                    NameAr = x.NameAr,
+                    NameEn = x.NameEn
+                }).ToListAsync(),
+
+                AttendanceModes = await _context.AttendanceModes.AsNoTracking()
+                .Select(x => new LookupDto
+                {
+                    Id = x.Id,
+                    NameAr = x.NameAr,
+                    NameEn = x.NameEn
+                }).ToListAsync(),
+
+                TargetAudiences = await _context.TargetAudiences.AsNoTracking()
                 .Select(x => new LookupDto
                 {
                     Id = x.Id,
@@ -65,5 +82,7 @@ namespace UniversityActivities.Infrastructure.Lookup
             _cache.Set(CacheKey, data, TimeSpan.FromHours(6));
             return data;
         }
+
+       
     }
 }

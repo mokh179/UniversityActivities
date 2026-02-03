@@ -193,6 +193,7 @@ public static class InfrastructureServiceRegistration
 
         services.AddScoped<ILogOutUseCase, LogOutUseCase>();
         services.AddScoped<IfilterLookupQuery, FilterLookupQuery>();
+        services.AddScoped<IGetUserManagmentQuery, GetUserManagmentQuery>();
         return services;
     }
 }

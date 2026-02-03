@@ -38,6 +38,32 @@ public static class LookupSeed
                 new EvaluationCriteria { NameAr = "منابة التوقيت", NameEn = "Timing" }
             );
         }
+        if (!context.AttendanceModes.Any())
+        {
+            context.AttendanceModes.AddRange(
+                new AttendanceMode { NameAr = "افتراضي", NameEn = "On line" },
+                new AttendanceMode { NameAr = "حضوري", NameEn = "On site" }
+               
+            );
+        }
+        if (!context.AttendanceScopes.Any())
+        {
+            context.AttendanceScopes.AddRange(
+                new AttendanceScope { NameAr = "الكل", NameEn = "All" },
+                new AttendanceScope { NameAr = "طلاب", NameEn = "Male Students" },
+                new AttendanceScope { NameAr = "طالبات", NameEn = "Female Students" }
+               
+            );
+        }
+        if (!context.TargetAudiences.Any())
+        {
+            context.TargetAudiences.AddRange(
+                new TargetAudience { NameAr = "طلاب", NameEn = "Students" },
+                new TargetAudience { NameAr = "موظفبن", NameEn = "Employees" },
+                new TargetAudience { NameAr = "اعضاء هيئة تدريس", NameEn = "Teaching Members" },
+                new TargetAudience { NameAr = "اخري", NameEn = "Other" }
+            );
+        }
 
         await context.SaveChangesAsync();
     }
