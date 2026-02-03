@@ -1,115 +1,181 @@
-﻿/* =========================================================
-   Auto Hide Sections (Management / Club / Scope / Audience)
-   ========================================================= */
-
-/* hidden by default */
-.auto-hide {
-    display: none;
-    opacity: 0;
-    transform: translateY(8px);
-    transition: opacity .25s ease, transform .25s ease;
+﻿.chips-dropdown {
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 10px;
 }
 
-    /* show when Management has data */
-    .auto-hide:has(#managementSelect option:not([value=""])),
-    .auto-hide:has(#clubSelect option:not([value=""])) {
-        display: block;
-        opacity: 1;
-        transform: translateY(0);
-    }
-
-/* Target Audience & Attendance Scope (lists) */
-.target-audience,
-.attendance-scope {
-    display: none;
-    opacity: 0;
-    transform: translateY(8px);
-    transition: opacity .25s ease, transform .25s ease;
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 6px;
 }
 
-    .target-audience:has(input[type="checkbox"]),
-    .attendance-scope:has(input[type="checkbox"]) {
-        display: block;
-        opacity: 1;
-        transform: translateY(0);
+.chip {
+    background: #d1fae5;
+    color: #065f46;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: .75rem;
+    display: flex;
+    gap: 6px;
+}
+
+    .chip button {
+        border: none;
+        background: transparent;
+        cursor: pointer;
     }
 
-/* =========================================================
-   Skeleton Loading
-   ========================================================= */
+.dropdown-list {
+    list-style: none;
+    margin: 6px 0 0;
+    padding: 0;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    max-height: 160px;
+    overflow-y: auto;
+}
 
-.skeleton {
+    .dropdown-list li {
+        padding: 8px 10px;
+        cursor: pointer;
+    }
+
+        .dropdown-list li:hover {
+            background: #f3f4f6;
+        }
+
+/* ===============================
+   ROLES SECTION
+   =============================== */
+
+.chips-dropdown {
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 10px 12px;
+    background: #fff;
+    transition: border .2s, box-shadow .2s;
+}
+
+    .chips-dropdown:focus-within {
+        border-color: #22c55e;
+        box-shadow: 0 0 0 3px rgba(34,197,94,.15);
+    }
+
+/* ===============================
+   CHIPS
+   =============================== */
+
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    background: #ecfdf5;
+    color: #065f46;
+    border-radius: 999px;
+    font-size: .8rem;
+    font-weight: 500;
+    border: 1px solid #a7f3d0;
+}
+
+    .chip button {
+        border: none;
+        background: #d1fae5;
+        color: #065f46;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        font-size: 14px;
+        line-height: 1;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .chip button:hover {
+            background: #86efac;
+        }
+
+/* ===============================
+   SEARCH INPUT
+   =============================== */
+
+.role-search {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: .85rem;
+    padding: 6px 4px;
+    margin-top: 4px;
+}
+
+    .role-search::placeholder {
+        color: #9ca3af;
+    }
+
+/* ===============================
+   DROPDOWN LIST
+   =============================== */
+
+.dropdown-list {
+    list-style: none;
+    margin: 6px 0 0;
+    padding: 6px;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    background: #fff;
+    max-height: 220px; /* مهم */
+    overflow-y: auto; /* مهم */
+    box-shadow: 0 10px 25px rgba(0,0,0,.08);
+}
+
+    /* Scrollbar (optional but nice) */
+    .dropdown-list::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .dropdown-list::-webkit-scrollbar-thumb {
+        background: #d1d5db;
+        border-radius: 10px;
+    }
+
+    .dropdown-list li {
+        padding: 8px 10px;
+        border-radius: 8px;
+        font-size: .85rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+    }
+
+        .dropdown-list li:hover {
+            background: #f3f4f6;
+        }
+
+        .dropdown-list li:active {
+            background: #e5e7eb;
+        }
+
+/* ===============================
+   ROLE BLOCK SPACING
+   =============================== */
+
+.admin-section .mb-4 {
+    margin-bottom: 24px !important;
+}
+
+.admin-section label {
+    font-weight: 600;
+    margin-bottom: 6px;
     display: block;
-}
-
-.real-content {
-    display: none;
-}
-
-/* when data arrives */
-.auto-hide:has(#managementSelect option:not([value=""])) .skeleton {
-    display: none;
-}
-
-.auto-hide:has(#managementSelect option:not([value=""])) .real-content {
-    display: block;
-}
-
-/* skeleton look */
-.skeleton-line {
-    height: 38px;
-    border-radius: 6px;
-    background: linear-gradient( 90deg, #e5e7eb 25%, #f3f4f6 37%, #e5e7eb 63% );
-    background-size: 400% 100%;
-    animation: shimmer 1.4s infinite;
-    margin-bottom: 12px;
-}
-
-@keyframes shimmer {
-    0% {
-        background-position: 100% 0;
-    }
-
-    100% {
-        background-position: -100% 0;
-    }
-}
-
-/* =========================================================
-   Validation Visibility (Smart UX)
-   ========================================================= */
-
-/* hide validation by default */
-.auto-hide .field-validation-error,
-.auto-hide .text-danger {
-    display: none;
-}
-
-/* show validation only when section visible */
-.auto-hide:has(#managementSelect option:not([value=""]))
-.field-validation-error,
-.auto-hide:has(#managementSelect option:not([value=""]))
-.text-danger {
-    display: block;
-}
-
-/* =========================================================
-   Admin Create Activity – Minor UI Polish
-   ========================================================= */
-
-.card h6 {
-    letter-spacing: .3px;
-}
-
-.form-check-input {
-    cursor: pointer;
-}
-
-.form-select:disabled {
-    background-color: #f3f4f6;
-    opacity: .7;
-}
-
-button.btn-success {
-    min-width: 160px;
 }

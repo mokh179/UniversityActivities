@@ -3,40 +3,27 @@
 @{
     ViewData["Title"] = "Create Activity";
 }
+<link href="~/css/areas/admin/createactivity.css" rel="stylesheet" />
+<form method="post" class="container-lg" id="createActivityForm">
 
-<h4 class="fw-semibold mb-4">Create Activity</h4>
-
-<form method="post">
-
-    <!-- ================= Basic Information ================= -->
-    <div class="card border-0 shadow-sm mb-4">
+    <!-- ================= Basic Info ================= -->
+    <div class="card shadow-sm mb-4">
         <div class="card-body">
-            <h6 class="fw-semibold mb-3">Basic Information</h6>
+            <h5 class="mb-3">Basic Information</h5>
 
             <div class="row g-3">
                 <div class="col-md-6">
-                    <input asp-for="Input.TitleAr"
-                           class="form-control"
-                           placeholder="Title (Arabic)" />
+                    <input asp-for="Input.TitleAr" class="form-control" placeholder="Title (Arabic)" />
                 </div>
-
                 <div class="col-md-6">
-                    <input asp-for="Input.TitleEn"
-                           class="form-control"
-                           placeholder="Title (English)" />
+                    <input asp-for="Input.TitleEn" class="form-control" placeholder="Title (English)" />
                 </div>
-
                 <div class="col-md-6">
-                    <textarea asp-for="Input.DescriptionAr"
-                              class="form-control"
-                              rows="4"
+                    <textarea asp-for="Input.DescriptionAr" class="form-control" rows="4"
                               placeholder="Description (Arabic)"></textarea>
                 </div>
-
                 <div class="col-md-6">
-                    <textarea asp-for="Input.DescriptionEn"
-                              class="form-control"
-                              rows="4"
+                    <textarea asp-for="Input.DescriptionEn" class="form-control" rows="4"
                               placeholder="Description (English)"></textarea>
                 </div>
             </div>
@@ -44,225 +31,133 @@
     </div>
 
     <!-- ================= Schedule ================= -->
-    <div class="card border-0 shadow-sm mb-4">
+    <div class="card shadow-sm mb-4">
         <div class="card-body">
-            <h6 class="fw-semibold mb-3">Schedule</h6>
+            <h5 class="mb-3">Schedule</h5>
 
             <div class="row g-3">
                 <div class="col-md-6">
                     <label class="form-label">Start Date</label>
-                    <input asp-for="Input.StartDate"
-                           type="datetime-local"
-                           class="form-control" />
+                    <input asp-for="Input.StartDate" type="datetime-local" class="form-control" />
                 </div>
-
                 <div class="col-md-6">
                     <label class="form-label">End Date</label>
-                    <input asp-for="Input.EndDate"
-                           type="datetime-local"
-                           class="form-control" />
+                    <input asp-for="Input.EndDate" type="datetime-local" class="form-control" />
                 </div>
             </div>
         </div>
     </div>
 
     <!-- ================= Management ================= -->
-    <div class="card border-0 shadow-sm mb-4">
+    <div class="card shadow-sm mb-4">
         <div class="card-body">
-            <h6 class="fw-semibold mb-3">Management Type</h6>
-
-            <select id="managementTypeSelect"
-                    class="form-select">
-                <option value="">Select Management Type</option>
-                @foreach (var type in Model.Lookups.ManagementTypes)
-                {
-                    <option value="@type.Id">@type.NameEn</option>
-                }
-            </select>
-        </div>
-    </div>
-    <!-- ================= Management & Club ================= -->
-    <div class="card border-0 shadow-sm mb-4 auto-hide">
-        <!-- Skeleton -->
-        <div class="card-body skeleton">
-            <div class="skeleton-line"></div>
-            <div class="skeleton-line"></div>
-        </div>
-        <div class="card-body">
-            <h6 class="fw-semibold mb-3">Management</h6>
+            <h5 class="mb-3">Management</h5>
 
             <div class="row g-3">
-                <div class="col-md-6">
-                    <select asp-for="Input.ManagementId"
-                            id="managementSelect"
-                            class="form-select">
-                        <option value="">Select Management</option>
+                <div class="col-md-4">
+                    <select id="managementTypeSelect" class="form-select">
+                        <option value="">Management Type</option>
+                        @foreach (var t in Model.Lookups.ManagementTypes)
+                        {
+                            <option value="@t.Id">@t.NameEn</option>
+                        }
                     </select>
                 </div>
 
-                <div class="col-md-6">
-                    <select asp-for="Input.ClubId"
-                            id="clubSelect"
-                            class="form-select">
-                        <option value="">Select Club</option>
+                <div class="col-md-4">
+                    <select asp-for="Input.ManagementId" id="managementSelect" class="form-select">
+                        <option value="">Management</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <select asp-for="Input.ClubId" id="clubSelect" class="form-select">
+                        <option value="">Club</option>
                     </select>
                 </div>
             </div>
         </div>
     </div>
 
-
-
     <!-- ================= Settings ================= -->
-    <div class="card border-0 shadow-sm mb-4">
+    <div class="card shadow-sm mb-4">
         <div class="card-body">
-            <h6 class="fw-semibold mb-3">Settings</h6>
+            <h5 class="mb-3">Settings</h5>
 
             <div class="row g-4">
-
-                <!-- Activity Type -->
                 <div class="col-md-4">
-                    <select asp-for="Input.ActivityTypeId"
-                            class="form-select">
+                    <select asp-for="Input.ActivityTypeId" class="form-select">
                         <option value="">Activity Type</option>
-                        @foreach (var item in Model.Lookups.ActivityTypes)
+                        @foreach (var a in Model.Lookups.ActivityTypes)
                         {
-                            <option value="@item.Id">@item.NameEn</option>
+                            <option value="@a.Id">@a.NameEn</option>
                         }
                     </select>
                 </div>
 
-                <!-- Attendance Mode (Radio) -->
                 <div class="col-md-8">
-                    <div class="fw-semibold mb-2">Attendance Mode</div>
-                    <div class="d-flex gap-4 flex-wrap">
-                        @foreach (var item in Model.Lookups.AttendanceModes)
+                    <label class="fw-semibold mb-2 d-block">Attendance Mode</label>
+                    <div class="d-flex gap-4">
+                        @foreach (var m in Model.Lookups.AttendanceModes)
                         {
-                            <label class="form-check d-flex align-items-center gap-2">
-                                <input type="radio"
-                                       class="form-check-input"
-                                       asp-for="Input.AttendanceModeId"
-                                       value="@item.Id" />
-                                @item.NameEn
+                            <label class="form-check">
+                                <input type="radio" asp-for="Input.AttendanceModeId"
+                                       class="form-check-input" value="@m.Id" />
+                                @m.NameEn
                             </label>
                         }
                     </div>
                 </div>
-
-            </div>
-        </div>
-    </div>
-
-    <!-- ================= Attendance Scope ================= -->
-    <div class="card border-0 shadow-sm mb-4">
-        <div class="card-body">
-            <h6 class="fw-semibold mb-3">Attendance Scope</h6>
-
-            <div class="d-flex flex-wrap gap-3">
-                @foreach (var item in Model.Lookups.AttendanceScopes)
-                {
-                    <label class="form-check d-flex align-items-center gap-2">
-                        <input type="checkbox"
-                               class="form-check-input"
-                               name="Input.AttendanceScopeId"
-                               value="@item.Id" />
-                        @item.NameEn
-                    </label>
-                }
             </div>
         </div>
     </div>
 
     <!-- ================= Target Audience ================= -->
-    <div class="card border-0 shadow-sm mb-4">
+    <div class="card shadow-sm mb-4">
         <div class="card-body">
-            <h6 class="fw-semibold mb-3">Target Audience</h6>
+            <h5 class="mb-3">Target Audience</h5>
 
             <div class="d-flex flex-wrap gap-3">
-                @foreach (var audience in Model.Lookups.TargetAudiences)
+                @foreach (var t in Model.Lookups.TargetAudiences)
                 {
-                    <label class="form-check d-flex align-items-center gap-2">
+                    <label class="form-check">
                         <input type="checkbox"
-                               class="form-check-input"
                                name="Input.TargetAudienceIds"
-                               value="@audience.Id" />
-                        @audience.NameEn
+                               value="@t.Id"
+                               class="form-check-input" />
+                        @t.NameEn
                     </label>
                 }
             </div>
         </div>
     </div>
 
+    <!-- ================= Roles ================= -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h5>Roles & Responsibilities</h5>
+            <p class="text-muted">Assign coordinators, reviewers and participants</p>
+
+            @Html.Partial("_RolePicker", ("coordinators", 0, 1, "Activity Coordinators"))
+            @Html.Partial("_RolePicker", ("reviewers", 1, 2, "Reviewers"))
+            @Html.Partial("_RolePicker", ("participants", 2, 3, "Participants"))
+        </div>
+    </div>
+
     <!-- ================= Publish ================= -->
-    <div class="card border-0 shadow-sm mb-4">
+    <div class="card shadow-sm">
         <div class="card-body d-flex justify-content-between align-items-center">
-            <label class="form-check d-flex align-items-center gap-2">
-                <input type="checkbox"
-                       class="form-check-input"
-                       asp-for="Input.IsPublished" />
+            <label class="form-check">
+                <input asp-for="Input.IsPublished" class="form-check-input" />
                 Publish Activity
             </label>
+            <input type="hidden" id="AssignmentsJson" name="AssignmentsJson" />
 
-            <button type="submit"
-                    class="btn btn-success px-4">
+            <button type="submit" class="btn btn-success px-4">
                 Create Activity
             </button>
         </div>
     </div>
 
 </form>
-
-<!-- ===== JavaScript (UNCHANGED ❗) ===== -->
-<script>
-    const typeSelect = document.getElementById("managementTypeSelect");
-    const managementSelect = document.getElementById("managementSelect");
-    const clubSelect = document.getElementById("clubSelect");
-
-    async function fillSelect(select, url, defaultText) {
-        select.innerHTML = `<option value="">Loading...</option>`;
-        select.disabled = true;
-
-        const response = await fetch(url);
-        const data = await response.json();
-
-        select.innerHTML = `<option value="">${defaultText}</option>`;
-        data.forEach(x => select.append(new Option(x.nameEn, x.id)));
-
-        select.disabled = false;
-    }
-
-    typeSelect.addEventListener("change", async function () {
-
-        clubSelect.innerHTML = '<option value="">Select Club</option>';
-
-        if (!this.value) {
-            managementSelect.innerHTML = '<option value="">Select Management</option>';
-            return;
-        }
-
-        await fillSelect(
-            managementSelect,
-            `?handler=ManagementsByType&managementTypeId=${this.value}`,
-            "Select Management"
-        );
-
-        if (managementSelect.options.length > 1) {
-            managementSelect.selectedIndex = 1;
-            managementSelect.dispatchEvent(new Event("change"));
-        }
-    });
-
-    managementSelect.addEventListener("change", async function () {
-
-        if (!this.value) {
-            clubSelect.innerHTML = '<option value="">Select Club</option>';
-            return;
-        }
-
-        await fillSelect(
-            clubSelect,
-            `?handler=ClubsByManagement&managementId=${this.value}`,
-            "Select Club"
-        );
-    });
-</script>
+<script src="~/js/areas/admin/createactvity.js"></script>

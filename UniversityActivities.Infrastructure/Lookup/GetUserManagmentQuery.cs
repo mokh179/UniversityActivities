@@ -37,8 +37,8 @@ namespace UniversityActivities.Infrastructure.Lookup
             {
                 var roles = await _userManager.GetRolesAsync(user);
 
-                if (roles.Contains("Student") || roles.Contains("SuperAdmin"))
-                    continue;
+                //if (roles.Contains("Student") || roles.Contains("SuperAdmin"))
+                //    continue;
 
                 result.Add(new ManagementUsersDto
                 {

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Security.Claims;
+using System.Text.Json;
 using UniversityActivities.Application.DTOs.Activities;
 using UniversityActivities.Application.lookup.Dto;
 using UniversityActivities.Application.lookup.Interface;
@@ -9,25 +10,39 @@ using UniversityActivities.Web.Common;
 
 namespace UniversityActivities.Web.Areas.Admin.Pages
 {
+    public class ActivityAssignmentRequestDto
+    {
+        public int RoleId { get; set; }
+        public int ActivityId { get; set; }
+        public List<int> UserIds { get; set; } = new();
+    }
     public class CreateActivityModel : BaseModel
     {
         private readonly ICreateActivityUseCase _createUseCase;
         private readonly IUiLookupsQuery _lookupsQuery;
         private readonly IfilterLookupQuery _lookupsfilterQuery;
+        private readonly IGetUserManagmentQuery _getUserManagmentQuery;
+        [BindProperty]
+
+        public string AssignmentsJson { get; set; } = string.Empty;
+
 
         [BindProperty]
         public CreateOrUpdateActivityDto Input { get; set; } = new();
 
         public UiLookupsDto Lookups { get; private set; } = new();
+        //public ManagementUsersDto Lookups { get; private set; } = new();
 
         public CreateActivityModel(
             ICreateActivityUseCase createUseCase,
             IUiLookupsQuery lookupsQuery,
-            IfilterLookupQuery lookupsfilterQuery)
+            IfilterLookupQuery lookupsfilterQuery,
+            IGetUserManagmentQuery getUserManagmentQuery)
         {
             _createUseCase = createUseCase;
             _lookupsQuery = lookupsQuery;
             _lookupsfilterQuery = lookupsfilterQuery;
+            _getUserManagmentQuery = getUserManagmentQuery;
         }
         public async Task OnGetAsync()
         {
@@ -35,6 +50,13 @@ namespace UniversityActivities.Web.Areas.Admin.Pages
         }
         public async Task<IActionResult> OnPostAsync()
         {
+            var data = JsonSerializer.Deserialize<List<ActivityAssignmentRequestDto>>(
+                            AssignmentsJson,
+                            new JsonSerializerOptions
+                            {
+                                PropertyNameCaseInsensitive = true
+                            });
+            Input.Assignments= data.SelectMany(x => x.UserIds.Select(userId => new ActivityAssignmentDto{UserId = userId,ActivityRoleId = x.RoleId})).ToList();
             if (!ModelState.IsValid)
             {
                 Lookups = await _lookupsQuery.GetAllAsync();
@@ -75,6 +97,15 @@ namespace UniversityActivities.Web.Areas.Admin.Pages
 
             return new JsonResult(result);
         }
+        public async Task<JsonResult> OnGetUsersByManagementAsync(int managementId)
+        {
+            if (managementId <= 0)
+                return new JsonResult(new List<LookupDto>());
 
+            var result = await _getUserManagmentQuery
+                .GetUsersinManagement(managementId);
+
+            return new JsonResult(result);
+        }
     }
 }
