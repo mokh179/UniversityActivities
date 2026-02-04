@@ -8,7 +8,7 @@ using UniversityActivities.Application.lookup.Dto;
 using UniversityActivities.Application.lookup.Interface;
 using UniversityActivities.Web.Common;
 
-namespace UniversityActivities.Web.Areas.Admin.Pages
+namespace UniversityActivities.Web.Areas.Admin.Pages.Activities
 {
     public class ActivityAssignmentRequestDto
     {

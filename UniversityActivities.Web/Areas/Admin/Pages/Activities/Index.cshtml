@@ -1,0 +1,187 @@
+﻿@page
+@model UniversityActivities.Web.Areas.Admin.Pages.Activities.IndexModel
+@{
+}
+<style>
+    .form-control,
+    .form-select {
+        height: 44px;
+        border-radius: 8px;
+    }
+</style>
+<h3 class="mb-3">Activities Management</h3>
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card shadow-sm">
+            <div class="card-body text-center">
+                <h6 class="text-muted">Total Activities</h6>
+                <h3 class="fw-bold">@Model.adminStatistics.TotalActivities</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow-sm">
+            <div class="card-body text-center">
+                <h6 class="text-muted">Upcoming</h6>
+                <h3 class="fw-bold text-primary">@Model.adminStatistics.UpcomingActivities</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow-sm">
+            <div class="card-body text-center">
+                <h6 class="text-muted">In Progress</h6>
+                <h3 class="fw-bold text-warning">@Model.adminStatistics.InProgressActivities</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow-sm">
+            <div class="card-body text-center">
+                <h6 class="text-muted">Completed</h6>
+                <h3 class="fw-bold text-success">@Model.adminStatistics.CompletedActivities</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form id="activityFilterForm" class="card shadow-sm p-4 mb-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="mb-0">البحث والفلاتر المتقدمة</h5>
+        <span class="badge bg-success">2 فعال</span>
+    </div>
+
+    <div class="row g-3">
+
+        <!-- Activity Name -->
+        <div class="col-md-4">
+            <label class="form-label">البحث باسم النشاط</label>
+            <input type="text" class="form-control" name="ActivityName" placeholder="ابحث عن نشاط...">
+        </div>
+
+        <!-- Activity Date -->
+        <div class="col-md-4">
+            <label class="form-label">تاريخ النشاط</label>
+            <input type="date" class="form-control" name="ActivityDate">
+        </div>
+
+        <!-- Organization -->
+        <div class="col-md-4">
+            <label class="form-label">الجهة المنظمة</label>
+            <select class="form-select" name="OrganizationId">
+                <option value="">كل الجهات</option>
+                <option value="1">جهة 1</option>
+                <option value="2">جهة 2</option>
+            </select>
+        </div>
+
+        <!-- Status -->
+        <div class="col-md-4">
+            <label class="form-label">حالة النشاط</label>
+            <select class="form-select" name="Status">
+                <option value="">الكل</option>
+                <option value="Running">قيد التنفيذ</option>
+                <option value="Completed">مكتمل</option>
+            </select>
+        </div>
+
+        <!-- Participant -->
+        <div class="col-md-4">
+            <label class="form-label">المشارك</label>
+            <select class="form-select" name="ParticipantId">
+                <option value="">الكل</option>
+                <option value="1">ريم أحمد</option>
+            </select>
+        </div>
+
+        <!-- Activity Type -->
+        <div class="col-md-4">
+            <label class="form-label">نوع النشاط</label>
+            <select class="form-select" name="ActivityType">
+                <option value="">الكل</option>
+                <option value="Sport">رياضي</option>
+                <option value="Cultural">ثقافي</option>
+            </select>
+        </div>
+
+        <!-- Target Group -->
+        <div class="col-md-4">
+            <label class="form-label">الفئة المستفيدة</label>
+            <select class="form-select" name="TargetGroup">
+                <option value="">جميع الفئات</option>
+            </select>
+        </div>
+
+        <!-- Department -->
+        <div class="col-md-4">
+            <label class="form-label">نوع الشطر</label>
+            <select class="form-select" name="Department">
+                <option value="">جميع الأقسام</option>
+            </select>
+        </div>
+
+        <!-- Page Size -->
+        <div class="col-md-4">
+            <label class="form-label">عرض</label>
+            <select class="form-select" name="PageSize">
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mt-4">
+        <button type="button" id="resetFilters" class="btn btn-danger">
+            مسح الكل
+        </button>
+
+        <button type="submit" class="btn btn-success px-4">
+            تطبيق الفلاتر
+        </button>
+    </div>
+
+</form>
+
+<!-- Results -->
+<div id="activitiesResult">
+    @await Html.PartialAsync("_ActivitiesTable", Model.Result)
+</div>
+
+
+
+
+
+
+<script src="~/js/areas/admin/indexactivity.js"></script>
+
+<script>
+    document.getElementById("activityFilterForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const form = this;
+        const formData = new FormData(form);
+
+        fetch("?handler=Filter", {
+            method: "POST",
+            body: formData,
+            headers: {
+                "RequestVerificationToken":
+                    document.querySelector('input[name="__RequestVerificationToken"]').value
+            }
+        })
+        .then(res => res.text())
+        .then(html => {
+            document.getElementById("activitiesResult").innerHTML = html;
+        })
+        .catch(err => console.error(err));
+    });
+
+    document.getElementById("resetFilters").addEventListener("click", function () {
+        document.getElementById("activityFilterForm").reset();
+    });
+</script>

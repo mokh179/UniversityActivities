@@ -122,7 +122,7 @@ namespace UniversityActivities.Infrastructure.Persistence
 
 
             modelBuilder.Entity<ActivityUser>()
-                .HasKey(x => new { x.ActivityId, x.UserId });
+                .HasKey(x => new { x.ActivityId, x.UserId,x.ActivityRoleId });
 
 
             modelBuilder.Entity<ActivityTargetAudience>()

@@ -10,7 +10,7 @@ using UniversityActivities.Application.UserCases.Activities.Student;
 
 namespace UniversityActivities.Application.ApplyUseCases.Evaluations
 {
-    public class ViewActivityEvaluationUseCase : IViewAdminActivitiesUseCase
+    public class ViewActivityEvaluationUseCase : IViewActivityEvaluationUseCase
     {
         private readonly IAdminActivityEvaluationQueryRepository _evaluationQueryRepository;
 
@@ -20,12 +20,9 @@ namespace UniversityActivities.Application.ApplyUseCases.Evaluations
             _evaluationQueryRepository = evaluationQueryRepository;
         }
 
-        public Task<PagedResult<ActivityAdminListItemDto>> ExecuteAsync(ActivityAdminFilter filter, PagedRequest paging)
-        {
-            throw new NotImplementedException();
-        }
 
-        public async Task<List<ActivityEvaluationCriteriaAverageDto>> GetCriteriaAveragesAsync(int activityId)
+
+        public async Task<List<ActivityEvaluationCriteriaAverageDto>> GetCriteriaAsync(int activityId)
         {
             return await _evaluationQueryRepository.GetCriteriaAveragesAsync(activityId);
         }
@@ -34,5 +31,15 @@ namespace UniversityActivities.Application.ApplyUseCases.Evaluations
         {
             return await _evaluationQueryRepository.GetSummaryAsync(activityId);
         }
+
+        //public async Task<List<ActivityEvaluationCriteriaAverageDto>> GetCriteriaAveragesAsync(int activityId)
+        //{
+        //    return await _evaluationQueryRepository.GetCriteriaAveragesAsync(activityId);
+        //}
+
+        //public async Task<ActivityEvaluationSummaryDto> GetSummaryAsync(int activityId)
+        //{
+        //    return await _evaluationQueryRepository.GetSummaryAsync(activityId);
+        //}
     }
 }

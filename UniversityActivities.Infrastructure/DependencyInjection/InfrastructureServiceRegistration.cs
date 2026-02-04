@@ -156,6 +156,7 @@ public static class InfrastructureServiceRegistration
         services.AddScoped<IPublishActivityUseCase,
                            PublishActivityUseCase>();
 
+        services.AddScoped<IViewAdminActivitiesUseCase, ViewAdminActivitiesUseCase>();
         //services.AddScoped<IViewActivityEvaluationUseCase,ViewActivityEvaluationUseCase>();
 
         // =========================

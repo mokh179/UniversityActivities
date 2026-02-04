@@ -11,5 +11,7 @@ namespace UniversityActivities.Application.UserCases.Activities.Admin
         Task<PagedResult<ActivityAdminListItemDto>> ExecuteAsync(
         ActivityAdminFilter filter,
         PagedRequest paging);
+
+        Task<AdminStatistics> GetAdminStatisticsAsync(int? mangementId);
     }
 }

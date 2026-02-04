@@ -23,5 +23,7 @@ namespace UniversityActivities.Application.Interfaces.Repositories.Activies.Admi
 
         Task<ActivityAdminDetailsDto?> GetDetailsAsync(int activityId);
         Task<Activity?> GetEntityAsync(int activityId);
+
+        Task<AdminStatistics> GetAdminStatisticsAsync(int? mangementId);
     }
 }

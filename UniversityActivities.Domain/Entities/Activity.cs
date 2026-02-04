@@ -51,13 +51,13 @@ public class Activity : AuditableEntity
 
     //  Location / Online
     [MaxLength(300)]
-    public string LocationAr { get; set; }
+    public string? LocationAr { get; set; }
 
     [MaxLength(300)]
-    public string LocationEn { get; set; }
+    public string? LocationEn { get; set; }
 
     [MaxLength(500)]
-    public string OnlineLink { get; set; }
+    public string? OnlineLink { get; set; }
 
     // ⏱️ Time
     [Required]

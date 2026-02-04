@@ -26,12 +26,16 @@ namespace UniversityActivities.Application.ApplyUseCases.AdminActivties
 
         public async Task<int> ExecuteAsync(CreateOrUpdateActivityDto dto)
         {
+            int status = 0;
             // =========================
             // 1️⃣ Validation (basic)
             // =========================
             if (dto.StartDate >= dto.EndDate)
-                throw new InvalidOperationException(
-                    "Activity start date must be before end date.");
+                throw new InvalidOperationException("Activity start date must be before end date.");
+            if (dto.StartDate == DateTime.Now)
+                status = 1;
+            if (dto.StartDate > DateTime.Now)
+                status = 2;
 
             // =========================
             // 2️⃣ Create Activity Entity
@@ -51,11 +55,10 @@ namespace UniversityActivities.Application.ApplyUseCases.AdminActivties
                 LocationAr = dto.LocationAr,
                 LocationEn = dto.LocationEn,
                 OnlineLink = dto.OnlineLink,
-
+                ActivityStatusId=status,
                 ManagementId = dto.ManagementId,
                 ActivityTypeId = dto.ActivityTypeId,
                 AttendanceModeId = dto.AttendanceModeId,
-
                 IsPublished = dto.IsPublished
             };
 

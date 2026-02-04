@@ -23,10 +23,10 @@ builder.Services.AddRazorPages(options =>
 
 
     options.Conventions.AddAreaPageRoute("Admin", "/Index", "AdminDashboard");
-    options.Conventions.AddAreaPageRoute("Admin", "/CreateActivity", "createactivity");
-    options.Conventions.AddAreaPageRoute("Admin", "/AllActivties", "activties");
-    options.Conventions.AddAreaPageRoute("Admin", "/EditActivity", "editactivity");
-    options.Conventions.AddAreaPageRoute("Admin", "/ViewActivity", "viewactivity");
+    options.Conventions.AddAreaPageRoute("Admin", "/Activities/CreateActivity", "createactivity");
+    options.Conventions.AddAreaPageRoute("Admin", "/Activities/Index", "activties");
+    options.Conventions.AddAreaPageRoute("Admin", "/Activities/EditActivity", "editactivity");
+    options.Conventions.AddAreaPageRoute("Admin", "/Activities/ViewActivity", "viewactivity");
 
 
 });

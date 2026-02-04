@@ -1,9 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using UniversityActivities.Application.Common.Models;
 using UniversityActivities.Application.DTOs.Activities;
+using UniversityActivities.Application.Exceptions;
 using UniversityActivities.Application.Interfaces.Repositories.Activies.AdminActivies;
 using UniversityActivities.Domain.Entities;
 using UniversityActivities.Domain.Enums;
@@ -21,9 +23,18 @@ namespace UniversityActivities.Infrastructure.Persistence.Repositories.Activitie
 
         public async Task<int> CreateAsync(Activity activity)
         {
-            _context.Activities.Add(activity);
-            await _context.SaveChangesAsync();
-            return activity.Id;
+            try
+            {
+                _context.Activities.Add(activity);
+                await _context.SaveChangesAsync();
+                return activity.Id;
+            }
+            catch (Exception ex)
+            {
+
+                throw new BusinessException("Error occured");
+            }
+           
         }
 
         public async Task UpdateAsync(Activity activity)
@@ -64,22 +75,25 @@ namespace UniversityActivities.Infrastructure.Persistence.Repositories.Activitie
                AttendanceMode = am,
                ActivityType = at
            };
-            if (!string.IsNullOrWhiteSpace(filter.Title))
+            if (filter != null) 
             {
-                query = query.Where(x =>
-                    x.Activity.TitleAr.Contains(filter.Title) ||
-                    x.Activity.TitleEn.Contains(filter.Title));
-            }
+                if (!string.IsNullOrWhiteSpace(filter.Title))
+                {
+                    query = query.Where(x =>
+                        x.Activity.TitleAr.Contains(filter.Title) ||
+                        x.Activity.TitleEn.Contains(filter.Title));
+                }
 
-            if (filter.ManagementId.HasValue)
-            {
-                query = query.Where(x =>
-                    x.Activity.ManagementId == filter.ManagementId);
-            }
-            if (filter.IsPublished.HasValue)
-            {
-                query = query.Where(x =>
-                    x.Activity.IsPublished == filter.IsPublished);
+                if (filter.ManagementId.HasValue)
+                {
+                    query = query.Where(x =>
+                        x.Activity.ManagementId == filter.ManagementId);
+                }
+                if (filter.IsPublished.HasValue)
+                {
+                    query = query.Where(x =>
+                        x.Activity.IsPublished == filter.IsPublished);
+                }
             }
             var totalCount = await query.CountAsync();
             var items = await query
@@ -184,5 +198,28 @@ namespace UniversityActivities.Infrastructure.Persistence.Repositories.Activitie
                     x.Id == activityId &&
                     !x.IsDeleted);
         }
+
+
+
+        public async Task<AdminStatistics> GetAdminStatisticsAsync(int? mangementId)
+        {
+            var Allactivities=new List<Activity>();
+            if (mangementId == 0|| mangementId==null) 
+                 Allactivities= await _context.Activities.ToListAsync();
+            else
+                 Allactivities = await  _context.Activities.Where(x => x.ManagementId == mangementId).ToListAsync();
+            return new AdminStatistics
+                {
+                    TotalActivities =  Allactivities.Count(),
+                    UpcomingActivities =  Allactivities.Count(x => x.ActivityStatusId == 3),
+                    CompletedActivities =  Allactivities.Count(x => x.ActivityStatusId == 2),
+                    InProgressActivities =  Allactivities.Count(x => x.ActivityStatusId == 1),
+                };
+
+           
+        }
+
+
+    
     }
 }

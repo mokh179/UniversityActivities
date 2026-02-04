@@ -25,5 +25,10 @@ namespace UniversityActivities.Application.ApplyUseCases.AdminActivties
             return await _adminActivityRepository
                 .GetAllAsync(filter, paging);
         }
+
+        public async Task<AdminStatistics> GetAdminStatisticsAsync(int? mangementId)
+        {
+                return await _adminActivityRepository.GetAdminStatisticsAsync(mangementId);
+        }
     }
 }
