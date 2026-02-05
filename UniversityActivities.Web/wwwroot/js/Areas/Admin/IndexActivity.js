@@ -45,11 +45,7 @@ function rebuildTable(result) {
                 <td>${((result.pageNumber - 1) * result.pageSize) + i + 1}</td>
                 <td>${item.titleEn ?? item.titleEn}</td>
                 <td>${item.managementNameEn}</td>
-                <td>
-                    <span class="badge bg-success">
-                        ${item.statusText ?? item.status}
-                    </span>
-                </td>
+                <td>${getStatusBadge(item.status ?? item.statusId)}</td>
                 <td>${item.startDate?.substring(0, 10)}</td>
                 <td class="text-end">
                     <div class="d-inline-flex gap-2">
@@ -190,4 +186,84 @@ function loadDefaultActivities(pageNumber) {
             rebuildInfo(data);
         });
 }
+function loadParticipants(e, activityId) {
+    e.preventDefault();
+
+    fetch(`${window.participantsUrl}&activityId=${activityId}`)
+        .then(res => res.json())
+        .then(data => {
+
+            console.log("DATA:", data);
+
+            fillParticipants("coordinatorsList", data.coordinators);
+            fillParticipants("supervisorsList", data.supervisors);
+            fillParticipants("viewersList", data.viewer);
+
+            const modalEl = document.getElementById("participantsModal");
+            const modal = new bootstrap.Modal(modalEl);
+            modal.show();
+        })
+        .catch(err => console.error(err));
+
+    return false;
+}
+
+
+function fillParticipants(listId, items) {
+
+    const list = document.getElementById(listId);
+    if (!list) return;
+
+    list.innerHTML = "";
+
+    if (!items || items.length === 0) {
+        list.innerHTML = `
+            <li class="list-group-item text-muted">
+                No participants
+            </li>`;
+        return;
+    }
+
+    items.forEach(p => {
+
+        const fullName = p.fullname ?? p.fullName ?? '';
+        const userName = p.username ?? p.useraname ?? p.userName ?? '';
+        const participantId = p.id;
+
+        list.innerHTML += `
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="fw-semibold">${fullName}</div>
+                    <div class="text-muted small">${userName}</div>
+                </div>
+
+                <a href="?handler=Certificate&participantId=${participantId}"
+                   class="btn btn-sm btn-outline-success"
+                   title="View Certificate"
+                   onclick="return loadCertificate(event, ${participantId})">
+                    <i class="bi bi-patch-check-fill"></i>
+                </a>
+            </li>`;
+    });
+}
+function getStatusBadge(status) {
+
+    switch (status) {
+        case 1:
+            return `<span class="badge bg-success">In Progress</span>`;
+        case 2:
+            return `<span class="badge bg-primary">Completed</span>`;
+        case 3:
+            return `<span class="badge bg-danger">Upcoming</span>`;
+
+    }
+}
+
+
+
+
+
+
+
+
 

@@ -13,5 +13,6 @@ namespace UniversityActivities.Application.UserCases.Activities.Admin
         PagedRequest paging);
 
         Task<AdminStatistics> GetAdminStatisticsAsync(int? mangementId);
+        Task<ActivityParticipants> getActivitypaticipants(int activityId);
     }
 }

@@ -30,5 +30,9 @@ namespace UniversityActivities.Application.ApplyUseCases.AdminActivties
         {
                 return await _adminActivityRepository.GetAdminStatisticsAsync(mangementId);
         }
+        public async Task<ActivityParticipants> getActivitypaticipants(int activityId)
+        {
+            return await _adminActivityRepository.GetActivityParticipants(activityId);
+        }
     }
 }

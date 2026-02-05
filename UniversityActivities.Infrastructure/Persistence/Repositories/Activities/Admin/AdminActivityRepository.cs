@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using UniversityActivities.Application.AuthorizationModule.Models;
 using UniversityActivities.Application.Common.Models;
 using UniversityActivities.Application.DTOs.Activities;
 using UniversityActivities.Application.DTOs.Enums;
@@ -221,6 +222,57 @@ namespace UniversityActivities.Infrastructure.Persistence.Repositories.Activitie
         }
 
 
-    
+
+        public async Task<ActivityParticipants> GetActivityParticipants(int activityId)
+        {
+            var Result = new ActivityParticipants();
+            try
+            {
+                var query =
+                        from a in _context.Activities
+                        join AU in _context.ActivityUsers on a.Id equals AU.ActivityId
+                        join U in _context.Users on AU.UserId equals U.Id
+                        where a.Id == activityId && !a.IsDeleted
+                        select new
+                        {
+                            ActivityUser = AU,
+                            User = U
+                        };
+
+                Result.Coordinators = await query.Where(x => x.ActivityUser.ActivityRoleId == (int)ActivityRoles.Coordinator).Select(a => new ParticipantsDto
+                {
+                    Id = a.User.Id,
+                    RoleName = ActivityRoles.Coordinator.ToString(),
+                    Useraname = a.User.UserName,
+                    Fullname = a.User.FirstName + " " + a.User.LastName
+                }).ToListAsync();
+                Result.Viewer = await query.Where(x => x.ActivityUser.ActivityRoleId == (int)ActivityRoles.Viewer).Select(a => new ParticipantsDto
+                {
+                    Id = a.User.Id,
+                    RoleName = ActivityRoles.Coordinator.ToString(),
+                    Useraname = a.User.UserName,
+                    Fullname = a.User.FirstName + " " + a.User.LastName
+                }).ToListAsync();
+                Result.Supervisors = await query.Where(x => x.ActivityUser.ActivityRoleId == (int)ActivityRoles.Supervisor).Select(a => new ParticipantsDto
+                {
+                    Id = a.User.Id,
+                    RoleName = ActivityRoles.Coordinator.ToString(),
+                    Useraname = a.User.UserName,
+                    Fullname = a.User.FirstName + " " + a.User.LastName
+                }).ToListAsync();
+
+                return Result;
+            }
+            catch (Exception ex)
+            {
+
+                throw new BusinessException("An error occured ...");
+            }
+                
+                
+        }
+
+
+
     }
 }

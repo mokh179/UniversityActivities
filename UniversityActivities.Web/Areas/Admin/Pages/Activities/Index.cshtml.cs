@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using UniversityActivities.Application.Common.Models;
@@ -28,8 +29,6 @@ namespace UniversityActivities.Web.Areas.Admin.Pages.Activities
         [BindProperty(SupportsGet = true)]
         public ActivityAdminFilter Filter { get; set; } = new();
         public AdminStatistics adminStatistics { get; private set; }
-
-
         public UiLookupsDto Lookups { get; private set; } = new();
 
         public IndexModel(IViewAdminActivitiesUseCase useCase, IUiLookupsQuery lookupsQuery, IfilterLookupQuery lookupsfilterQuery)
@@ -101,5 +100,15 @@ namespace UniversityActivities.Web.Areas.Admin.Pages.Activities
 
             return new JsonResult(result);
         }
+
+        [AllowAnonymous]
+        public async Task<JsonResult> OnGetParticipantsAsync([FromQuery]int activityId)
+        {
+
+            var result = await _useCase.getActivitypaticipants(activityId);
+
+            return new JsonResult(result);
+        }
+    
     }
 }

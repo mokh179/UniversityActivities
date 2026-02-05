@@ -46,16 +46,27 @@
     .bg-red {
         background: #e74a3b;
     }
+
+    .btn-success {
+        transition: all .2s ease-in-out;
+    }
+
+        .btn-success:hover {
+            transform: translateY(-1px);
+        }
 </style>
 
 <div class="container mt-4">
+   
     <div class="row g-3">
 
         <div class="col-md-3 col-sm-6">
             <div class="stat-card bg-blue">
                 <div class="stat-title">Total Activities</div>
                 <div class="stat-number">@Model.adminStatistics.TotalActivities</div>
-</div>
+                </div>
+
+          
         </div>
 
         <div class="col-md-3 col-sm-6">
@@ -80,6 +91,14 @@
         </div>
 
     </div>
+    <br />
+<div class="d-flex justify-content-end mb-3">
+    <a href="/Admin/Activities/CreateActivity"
+       class="btn btn-success d-flex align-items-center gap-2 shadow-sm">
+        <i class="bi bi-plus-circle"></i>
+        <span>Add New Activity</span>
+    </a>
+</div>
 </div>
 <div class="container mt-4">
 
@@ -211,7 +230,7 @@
     <div class="card shadow-sm">
         <div class="card-body p-0">
 
-                <table class="table table-hover mb-0 align-middle" id="activitiesTableBody">
+                <table class="table table-hover mb-0 align-middle" id="activitiesTable">
                 <thead class="table-light">
                     <tr>
                         <th>#</th>
@@ -222,7 +241,7 @@
                         <th class="text-end">Actions</th>
                     </tr>
                 </thead>
-                <tbody>
+                    <tbody id="activitiesTableBody">
 
                     @foreach (var item in Model.Result.Items.Select((v, i) => new { v, i }))
                     {
@@ -235,34 +254,47 @@
                             </td>
                             <td>@item.v.StartDate.ToString("yyyy-MM-dd")</td>
 
-                            <td class="text-end">
-                                <div class="d-inline-flex gap-2">
+                                <td class="text-end">
+                                    <div class="d-inline-flex gap-2">
 
-                                    <a asp-page="Details" asp-route-id="@item.v.Id"
-                                       class="btn btn-sm btn-outline-success">
-                                        <i class="bi bi-eye"></i>
-                                    </a>
+                                        <!-- View -->
+                                        <a href="?handler=Details&id=@item.v.Id"
+                                           class="btn btn-sm btn-outline-success"
+                                           onclick="return viewActivity(event, @item.v.Id)">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
 
-                                    <a asp-page="Edit" asp-route-id="@item.v.Id"
-                                       class="btn btn-sm btn-outline-primary">
-                                        <i class="bi bi-pencil"></i>
-                                    </a>
+                                        <!-- Edit -->
+                                        <a href="?handler=Edit&id=@item.v.Id"
+                                           class="btn btn-sm btn-outline-primary"
+                                           onclick="return editActivity(event, @item.v.Id)">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
 
-                                    <a asp-page="Users" asp-route-id="@item.v.Id"
-                                       class="btn btn-sm btn-outline-info">
-                                        <i class="bi bi-people"></i>
-                                    </a>
+                                        <!-- Participants -->
+                                        <a href="?handler=participants&activityId=@item.v.Id"
+                                           class="btn btn-sm btn-outline-info"
+                                           onclick="return loadParticipants(event, @item.v.Id)">
+                                            <i class="bi bi-people"></i>
+                                        </a>
 
-                                    <button class="btn btn-sm btn-outline-warning">
-                                        <i class="bi bi-check-circle"></i>
-                                    </button>
+                                        <!-- Approve -->
+                                        <a href="?handler=Approve&id=@item.v.Id"
+                                           class="btn btn-sm btn-outline-warning"
+                                           onclick="return approveActivity(event, @item.v.Id)">
+                                            <i class="bi bi-check-circle"></i>
+                                        </a>
 
-                                    <button class="btn btn-sm btn-outline-danger">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
+                                        <!-- Delete -->
+                                        <a href="?handler=Delete&id=@@item.v.Id"
+                                           class="btn btn-sm btn-outline-danger"
+                                           onclick="return deleteActivity(event, @item.v.Id)">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
 
-                                </div>
-                            </td>
+                                    </div>
+                                </td>
+
                         </tr>
                     }
 
@@ -330,8 +362,55 @@
 </div>
 
 
-<script src="~/js/areas/admin/indexactivity.js"></script>
+    <div class="modal fade" id="participantsModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
 
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title">Activity Participants - مشرفين النشاط</h5>
+                    <button type="button" class="btn-close btn-close-white"
+                            data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+
+                    <!-- Coordinators -->
+                    <div class="mb-4">
+                        <h6 class="text-success fw-bold">Coordinators/الملاحظين</h6>
+                        <ul class="list-group" id="coordinatorsList"></ul>
+                    </div>
+
+                    <!-- Supervisors -->
+                    <div class="mb-4">
+                        <h6 class="text-success fw-bold">Supervisors/المشرفين</h6>
+                        <ul class="list-group" id="supervisorsList"></ul>
+                    </div>
+
+                    <!-- Viewers -->
+                    <div>
+                        <h6 class="text-success fw-bold">Viewers/المشاهدين</h6>
+                        <ul class="list-group" id="viewersList"></ul>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary"
+                            data-bs-dismiss="modal">
+                        Close
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+<script src="~/js/areas/admin/indexactivity.js"></script>
+    <script>
+        window.participantsUrl =
+            '@Url.Page("/Activities/Index", "Participants", new { area = "Admin" })';
+    </script>
 @* 
  <script>
     function searchActivities(pageNumber) {

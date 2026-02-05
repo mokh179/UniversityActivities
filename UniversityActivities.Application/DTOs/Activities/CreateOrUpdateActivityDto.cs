@@ -7,6 +7,7 @@ public class CreateOrUpdateActivityDto
 
     public string DescriptionAr { get; set; } = null!;
     public string DescriptionEn { get; set; } = null!;
+    public string ActivityCode { get; set; } = null!;
 
     public int ManagementId { get; set; }
     public int? ClubId { get; set; }

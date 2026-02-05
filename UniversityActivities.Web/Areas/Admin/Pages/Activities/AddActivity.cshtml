@@ -1,0 +1,835 @@
+﻿@page
+@model UniversityActivities.Web.Areas.Admin.Pages.Activities.AddActivityModel
+@{
+}
+<style>
+
+    .section-dot {
+        width: 14px;
+        height: 14px;
+        background-color: #dff2e6;
+        border-radius: 50%;
+        margin-top: 4px;
+        flex-shrink: 0;
+    }
+
+    .upload-badge {
+        width: 40px;
+        height: 40px;
+        background-color: #e9f6ef;
+        color: #198754;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .upload-area {
+        border: 2px dashed #d0d7de;
+        border-radius: 12px;
+        padding: 40px;
+        min-height: 220px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .img-preview {
+        max-height: 220px;
+        max-width: 100%;
+        object-fit: contain;
+        border-radius: 10px;
+    }
+
+    .beneficiary-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 10px;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        background-color: #fff;
+    }
+
+    .beneficiary-pill {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+    }
+
+        .beneficiary-pill input {
+            display: none;
+        }
+
+        .beneficiary-pill span {
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 1px solid #ced4da;
+            font-size: 14px;
+            background-color: #f8f9fa;
+            transition: all 0.2s ease;
+        }
+
+        .beneficiary-pill input:checked + span {
+            background-color: #198754;
+            color: #fff;
+            border-color: #198754;
+        }
+
+    .chip-select {
+        position: relative;
+    }
+
+    .chip-dropdown {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: #fff;
+        border: 1px solid #dee2e6;
+        border-radius: 6px;
+        max-height: 180px;
+        overflow-y: auto;
+        z-index: 10;
+        display: none;
+    }
+
+    .chip-item {
+        padding: 8px 12px;
+        cursor: pointer;
+    }
+
+        .chip-item:hover {
+            background-color: #f8f9fa;
+        }
+
+    .chips-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-bottom: 6px;
+    }
+
+    .chip {
+        background-color: #198754;
+        color: #fff;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+        .chip span {
+            cursor: pointer;
+        }
+
+
+</style>
+
+<!-- Page Header Section -->
+<div class="card mb-4 border-0">
+    <div class="card-body p-0">
+        <div class="bg-success rounded-3 text-white p-4 d-flex justify-content-between align-items-center">
+
+            <div>
+                <h5 class="mb-1 fw-bold">Add New Activity</h5>
+                <p class="mb-0 small opacity-75">
+                    Complete the form below to add a new student activity to the platform
+                </p>
+            </div>
+
+            <div class="bg-white bg-opacity-25 rounded-circle d-flex align-items-center justify-content-center"
+                 style="width:44px;height:44px;">
+                <i class="bi bi-arrow-left-short fs-3"></i>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- Activity Image Section -->
+<div class="card mb-4 shadow-sm">
+    <div class="card-body">
+
+        <!-- Section Title -->
+        <div class="d-flex justify-content-between align-items-start mb-3">
+            <div class="d-flex align-items-start gap-3">
+                <span class="section-dot"></span>
+                <div>
+                    <h6 class="mb-1 fw-semibold">Activity Image</h6>
+                    <small class="text-muted">
+                        Upload a representative image for the activity
+                    </small>
+                </div>
+            </div>
+
+            <div class="upload-badge">
+                <i class="bi bi-image"></i>
+            </div>
+        </div>
+
+        <!-- Upload Area -->
+        <div class="upload-area position-relative text-center">
+
+            <input type="file"
+                   id="activityImage"
+                   accept="image/png,image/jpeg,image/gif"
+                   hidden />
+
+            <!-- Placeholder -->
+            <div id="uploadPlaceholder">
+                <button type="button"
+                        class="btn btn-success mb-2"
+                        onclick="document.getElementById('activityImage').click()">
+                    Choose Image
+                </button>
+
+                <p class="mb-1 fw-semibold">Click to upload activity image</p>
+                <small class="text-muted">
+                    PNG, JPG, GIF – Max size 10MB
+                </small>
+            </div>
+
+            <!-- Preview (same place) -->
+            <img id="imagePreview"
+                 class="img-preview d-none" />
+
+        </div>
+
+    </div>
+</div>
+
+<!-- Basic Information Section -->
+<div class="card mb-4 shadow-sm">
+    <div class="card-body">
+
+        <!-- Section Header -->
+        <div class="d-flex justify-content-between align-items-start mb-4">
+            <div class="d-flex align-items-start gap-3">
+                <span class="section-dot"></span>
+                <div>
+                    <h6 class="mb-1 fw-semibold">Basic Information</h6>
+                    <small class="text-muted">
+                        Enter the basic information of the activity
+                    </small>
+                </div>
+            </div>
+
+            <div class="upload-badge">
+                <i class="bi bi-file-earmark-text"></i>
+            </div>
+        </div>
+
+        <!-- FORM GRID -->
+        <div class="row g-4">
+
+            <!-- Activity Title EN -->
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">
+                    Activity Title (English) <span class="text-danger">*</span>
+                </label>
+                <input asp-for="Input.TitleEn"
+                       class="form-control"
+                       placeholder="Enter activity title in English" />
+            </div>
+
+            <!-- Activity Title AR -->
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">
+                    Activity Title (Arabic) <span class="text-danger">*</span>
+                </label>
+                <input asp-for="Input.TitleAr"
+                       class="form-control"
+                       placeholder="Enter activity title in Arabic" />
+            </div>
+
+            <!-- Management Type -->
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">
+                    Organization Type <span class="text-danger">*</span>
+                </label>
+                <select class="form-select" id="managementTypeSelect">
+                    <option value="">Select Management Type</option>
+                    @foreach (var t in Model.Lookups.ManagementTypes)
+                    {
+                        <option value="@t.Id">@t.NameEn</option>
+                    }
+                </select>
+            </div>
+
+            <!-- Gender -->
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">
+                    Gender <span class="text-danger">*</span>
+                </label>
+
+                <div class="border rounded p-3 d-flex gap-4">
+                    <div class="form-check">
+                        <input asp-for="Input.AttendanceScopeId"
+                               class="form-check-input"
+                               type="radio"
+                               value="Male" />
+                        <label class="form-check-label">Male</label>
+                    </div>
+
+                    <div class="form-check">
+                        <input asp-for="Input.AttendanceScopeId"
+                               class="form-check-input"
+                               type="radio"
+                               value="Female" />
+                        <label class="form-check-label">Female</label>
+                    </div>
+
+                    <div class="form-check">
+                        <input asp-for="Input.AttendanceScopeId"
+                               class="form-check-input"
+                               type="radio"
+                               value="Both" />
+                        <label class="form-check-label">Both</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Management (depends on type) -->
+            <div class="col-md-6 d-none" id="managementFieldWrapper">
+                <label class="form-label fw-semibold">
+                    Management <span class="text-danger">*</span>
+                </label>
+                <select asp-for="Input.ManagementId"
+                        class="form-select"
+                        id="managementSelect">
+                    <option value="">Select Management</option>
+                </select>
+            </div>
+
+            <!-- Club (depends on management) -->
+            <div class="col-md-6 d-none" id="clubFieldWrapper">
+                <label class="form-label fw-semibold">
+                    Club <span class="text-danger">*</span>
+                </label>
+                <select asp-for="Input.ClubId"
+                        class="form-select"
+                        id="clubSelect">
+                    <option value="">Select Club</option>
+                </select>
+            </div>
+
+            <!-- Activity Field -->
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">
+                    Activity Field <span class="text-danger">*</span>
+                </label>
+                <select asp-for="Input.ActivityTypeId"
+                        class="form-select"
+                        id="activityField">
+                    <option value="">Select activity field</option>
+                    @foreach (var t in Model.Lookups.ActivityTypes)
+                    {
+                        <option value="@t.Id">@t.NameEn</option>
+                    }
+                </select>
+            </div>
+
+            <!-- Beneficiary Category -->
+            <div class="col-12">
+                <label class="form-label fw-semibold">
+                    Beneficiary Category <span class="text-danger">*</span>
+                    <small class="text-muted">(Multiple selection allowed)</small>
+                </label>
+
+                <div class="beneficiary-wrapper">
+
+                    @foreach (var item in Model.Lookups.TargetAudiences)
+                    {
+                        <label class="beneficiary-pill">
+                            <input type="checkbox"
+                                   name="Input.TargetAudienceIds"
+                                   value="@item.Id" />
+                            <span>@item.NameEn</span>
+                        </label>
+                    }
+
+                </div>
+            </div>
+
+            <!-- Description EN -->
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">
+                    Description (English) <span class="text-danger">*</span>
+                </label>
+                <textarea asp-for="Input.DescriptionEn"
+                          class="form-control"
+                          rows="4"
+                          placeholder="Enter activity description in English"></textarea>
+            </div>
+
+            <!-- Description AR -->
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">
+                    Description (Arabic) <span class="text-danger">*</span>
+                </label>
+                <textarea asp-for="Input.DescriptionAr"
+                          class="form-control"
+                          rows="4"
+                          placeholder="أدخل وصف النشاط باللغة العربية"></textarea>
+            </div>
+
+        </div>
+        <!-- /row -->
+
+    </div>
+</div>
+
+<!-- Attendance & Location Section -->
+<div class="card mb-4 shadow-sm">
+    <div class="card-body">
+
+        <!-- Section Header -->
+        <div class="d-flex justify-content-between align-items-start mb-4">
+            <div class="d-flex align-items-start gap-3">
+                <span class="section-dot"></span>
+                <div>
+                    <h6 class="mb-1 fw-semibold">Attendance & Location Details</h6>
+                    <small class="text-muted">
+                        Select attendance type and provide location or link
+                    </small>
+                </div>
+            </div>
+
+            <div class="upload-badge bg-warning bg-opacity-10 text-warning">
+                <i class="bi bi-geo-alt"></i>
+            </div>
+        </div>
+
+        <div class="row g-4">
+
+            <!-- Attendance Type -->
+            <div class="col-12">
+                <label class="form-label fw-semibold">
+                    Attendance Type <span class="text-danger">*</span>
+                </label>
+
+                <div class="row g-3">
+                    <!-- Onsite -->
+                    <div class="col-md-6">
+                        <label class="attendance-card">
+                            <input type="radio" asp-for="Input.AttendanceModeId"
+                                   name="AttendanceType"
+                                   value="1"
+                                   checked />
+                            <div class="attendance-content">
+                                <i class="bi bi-geo-alt"></i>
+                                <span>Onsite</span>
+                            </div>
+                        </label>
+                    </div>
+
+                    <!-- Online -->
+                    <div class="col-md-6">
+                        <label class="attendance-card">
+                            <input type="radio" asp-for="Input.AttendanceModeId"
+                                   name="AttendanceType"
+                                   value="2" />
+                            <div class="attendance-content">
+                                <i class="bi bi-globe"></i>
+                                <span>Online</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Onsite Location -->
+            <div class="col-md-6" id="locationWrapper">
+                <label class="form-label fw-semibold">
+                    Activity Location <span class="text-danger">*</span>
+                </label>
+                <input type="text" asp-for="Input.LocationEn"
+                       class="form-control"
+                       placeholder="Enter activity location" />
+            </div>
+
+            <!-- Online Link -->
+            <div class="col-md-6 d-none" id="linkWrapper">
+                <label class="form-label fw-semibold">
+                    Meeting Link <span class="text-danger">*</span>
+                </label>
+                <input type="url" asp-for="Input.OnlineLink"
+                       class="form-control"
+                       placeholder="Enter meeting link" />
+            </div>
+
+            <!-- Attendance Guide -->
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">
+                    Attendance Guide
+                    <small class="text-muted">(Optional)</small>
+                </label>
+                <input type="text"
+                       class="form-control" asp-for="Input.ActivityCode"
+                       placeholder="Enter attendance guide" />
+                <small class="text-muted">
+                    This guide will appear on activity certificates
+                </small>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Management Related Selection Section -->
+<div class="card mb-4 shadow-sm">
+    <div class="card-body">
+
+        <!-- Section Header -->
+        <div class="d-flex justify-content-between align-items-start mb-4">
+            <div class="d-flex align-items-start gap-3">
+                <span class="section-dot"></span>
+                <div>
+                    <h6 class="mb-1 fw-semibold">Management Related Data</h6>
+                    <small class="text-muted">
+                        Select related entities based on management
+                    </small>
+                </div>
+            </div>
+
+            <div class="upload-badge">
+                <i class="bi bi-diagram-3"></i>
+            </div>
+        </div>
+
+        <div class="row g-4">
+
+            <!-- Dropdown 1 -->
+            <div class="col-md-6 d-none" id="dropdown1Wrapper">
+                <label class="form-label fw-semibold">First Selection</label>
+
+                <div class="chip-select" data-name="Input.FirstIds">
+                    <input type="text"
+                           class="form-control chip-input"
+                           placeholder="Search..."
+                           autocomplete="off">
+                    <div class="chip-dropdown"></div>
+                </div>
+            </div>
+
+            <!-- Dropdown 2 -->
+            <div class="col-md-6 d-none" id="dropdown2Wrapper">
+                <label class="form-label fw-semibold">Second Selection</label>
+
+                <div class="chip-select" data-name="Input.SecondIds">
+                    <input type="text"
+                           class="form-control chip-input"
+                           placeholder="Search..."
+                           autocomplete="off">
+                    <div class="chip-dropdown"></div>
+                </div>
+            </div>
+
+            <!-- Dropdown 3 -->
+            <div class="col-md-6 d-none" id="dropdown3Wrapper">
+                <label class="form-label fw-semibold">Third Selection</label>
+
+                <div class="chip-select" data-name="Input.ThirdIds">
+                    <input type="text"
+                           class="form-control chip-input"
+                           placeholder="Search..."
+                           autocomplete="off">
+                    <div class="chip-dropdown"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+    <script>
+       document.getElementById("activityImage")
+           .addEventListener("change", function (e) {
+
+               const file = e.target.files[0];
+               if (!file) return;
+
+               const reader = new FileReader();
+               reader.onload = function () {
+
+                   const preview = document.getElementById("imagePreview");
+                   preview.src = reader.result;
+                   preview.classList.remove("d-none");
+
+                   document.getElementById("uploadPlaceholder")
+                       .classList.add("d-none");
+               };
+
+               reader.readAsDataURL(file);
+           });
+
+
+
+
+
+               const managementTypeSelect = document.getElementById("managementTypeSelect");
+    const managementSelect = document.getElementById("managementSelect");
+    const clubSelect = document.getElementById("clubSelect");
+
+    const managementWrapper = document.getElementById("managementFieldWrapper");
+    const clubWrapper = document.getElementById("clubFieldWrapper");
+
+    managementTypeSelect.addEventListener("change", async function () {
+
+        const typeId = this.value;
+
+        // reset
+        managementSelect.innerHTML = '<option value="">Select Management</option>';
+        clubSelect.innerHTML = '<option value="">Select Club</option>';
+        managementWrapper.classList.add("d-none");
+        clubWrapper.classList.add("d-none");
+
+        if (!typeId) return;
+
+        const response = await fetch(
+            `/Admin/Activities/AddActivity?handler=ManagementsByType&managementTypeId=${typeId}`
+        );
+
+        const data = await response.json();
+
+        if (!data || data.length === 0) return;
+
+        data.forEach(item => {
+            const option = document.createElement("option");
+            option.value = item.id;
+            option.textContent = item.nameEn;
+            managementSelect.appendChild(option);
+        });
+
+        managementWrapper.classList.remove("d-none");
+    });
+
+    // 2️⃣ Management → Club
+    managementSelect.addEventListener("change", async function () {
+
+        const managementId = this.value;
+
+        clubSelect.innerHTML = '<option value="">Select Club</option>';
+        clubWrapper.classList.add("d-none");
+
+        if (!managementId) return;
+
+        const response = await fetch(
+            `/Admin/Activities/AddActivity?handler=ClubsByManagement&managementId=${managementId}`
+        );
+
+        const data = await response.json();
+
+        if (!data || data.length === 0) return;
+
+        data.forEach(item => {
+            const option = document.createElement("option");
+            option.value = item.id;
+            option.textContent = item.nameEn;
+            clubSelect.appendChild(option);
+        });
+
+        clubWrapper.classList.remove("d-none");
+    });
+
+    const attendanceRadios = document.querySelectorAll('input[name="AttendanceType"]');
+    const locationWrapper = document.getElementById("locationWrapper");
+    const linkWrapper = document.getElementById("linkWrapper");
+
+    function toggleAttendanceFields(value) {
+        if (value === "Online") {
+            linkWrapper.classList.remove("d-none");
+            locationWrapper.classList.add("d-none");
+        } else {
+            locationWrapper.classList.remove("d-none");
+            linkWrapper.classList.add("d-none");
+        }
+    }
+
+    attendanceRadios.forEach(radio => {
+        radio.addEventListener("change", e => {
+            toggleAttendanceFields(e.target.value);
+        });
+    });
+
+    // Init (default)
+    toggleAttendanceFields(
+        document.querySelector('input[name="AttendanceType"]:checked').value
+    );
+
+
+
+    function initChipDropdown(wrapperId, fetchUrl) {
+
+        const wrapper = document.getElementById(wrapperId);
+        if (!wrapper) return;
+
+        const select = wrapper.querySelector(".chip-select");
+        const input = select.querySelector(".chip-input");
+        const dropdown = select.querySelector(".chip-dropdown");
+        const name = select.dataset.name;
+
+        let selected = [];
+
+        input.addEventListener("input", async () => {
+
+            const q = input.value.trim();
+
+            dropdown.innerHTML = "";
+
+            // ✅ لو مفيش fetchUrl (test mode)
+            if (!fetchUrl) {
+                renderDropdown([
+                    { id: 1, name: "Test User 1" },
+                    { id: 2, name: "Test User 2" }
+                ]);
+                return;
+            }
+
+            // ⛔ لو أقل من حرفين – UX أحسن
+            if (q.length < 2) {
+                dropdown.style.display = "none";
+                return;
+            }
+
+            const res = await fetch(`${fetchUrl}&q=${encodeURIComponent(q)}`);
+            const result = await res.json();
+
+            renderDropdown(result);
+        });
+
+        function renderDropdown(items) {
+
+            dropdown.innerHTML = "";
+
+            if (!items || items.length === 0) {
+                dropdown.style.display = "none";
+                return;
+            }
+
+            items.forEach(item => {
+
+                if (selected.some(x => x.id === item.id)) return;
+
+                const div = document.createElement("div");
+                div.className = "chip-item";
+                div.textContent = item.name;
+
+                div.onclick = () => {
+                    selected.push(item);
+                    renderChips();
+                    dropdown.style.display = "none";
+                    input.value = "";
+                };
+
+                dropdown.appendChild(div);
+            });
+
+            dropdown.style.display = "block";
+        }
+
+        function renderChips() {
+
+            let chips = select.querySelector(".chips-container");
+            if (!chips) {
+                chips = document.createElement("div");
+                chips.className = "chips-container";
+                select.prepend(chips);
+            }
+
+            chips.innerHTML = "";
+
+            selected.forEach(item => {
+
+                const chip = document.createElement("div");
+                chip.className = "chip";
+                chip.innerHTML = `${item.name} <span>&times;</span>`;
+
+                chip.querySelector("span").onclick = () => {
+                    selected = selected.filter(x => x.id !== item.id);
+                    renderChips();
+                };
+
+                chips.appendChild(chip);
+
+                // hidden input for Razor binding
+                const hidden = document.createElement("input");
+                hidden.type = "hidden";
+                hidden.name = name;
+                hidden.value = item.id;
+
+                chips.appendChild(hidden);
+            });
+        }
+    }
+
+    // Example flow after managementSelect change
+    // document.getElementById("managementSelect")
+    //     .addEventListener("change", function () {
+    //         const id = this.value;
+    //         if (!id) return;
+    //         console.log(id)
+
+
+    //             console.log("FETCH URL:", url);
+
+    //             document.getElementById("dropdown1Wrapper").classList.remove("d-none");
+    //             initChipDropdown("dropdown1Wrapper", url);
+
+    //             document.getElementById("dropdown2Wrapper").classList.remove("d-none");
+    //             initChipDropdown("dropdown2Wrapper", url);
+
+    //             document.getElementById("dropdown3Wrapper").classList.remove("d-none");
+    //             initChipDropdown("dropdown3Wrapper", url);
+    //     });
+       pageUrl = '/Admin/Activities/AddActivity';
+    //     document.addEventListener("DOMContentLoaded", function () {
+
+    //     const managementSelect = document.getElementById("managementSelect");
+    //     if (!managementSelect) return;
+
+    //     managementSelect.addEventListener("change", function () {
+
+    //         const id = this.value;
+    //         if (!id) return;
+
+    //         const url =
+    //             `${pageUrl}?handler=UsersByManagement&managementId=${id}`;
+
+    //         console.log("FETCH URL:", url);
+
+    //         document.getElementById("dropdown1Wrapper").classList.remove("d-none");
+    //         initChipDropdown("dropdown1Wrapper", url);
+
+    //         document.getElementById("dropdown2Wrapper").classList.remove("d-none");
+    //         initChipDropdown("dropdown2Wrapper", url);
+
+    //         document.getElementById("dropdown3Wrapper").classList.remove("d-none");
+    //         initChipDropdown("dropdown3Wrapper", url);
+    //     });
+
+    // });
+
+        document.addEventListener("DOMContentLoaded", function () {
+        console.log("JS LOADED");
+            const managementSelect = document.getElementById("managementSelect");
+        console.log("managementSelect:", managementSelect);
+            managementSelect.addEventListener("change", function ()
+            {
+                console.log("CHANGE FIRED", this.value);
+                const url = `${window.pageUrl}?handler=UsersByManagement&managementId=${this.value}`;
+                console.log("URL:", url);
+
+                console.log("initChipDropdown:", typeof initChipDropdown);
+                document.getElementById("dropdown1Wrapper").classList.remove("d-none");
+                initChipDropdown("dropdown1Wrapper", url);
+             });
+    });
+</script>
+
+
