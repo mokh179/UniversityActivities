@@ -28,7 +28,7 @@ namespace UniversityActivities.Web.Areas.Admin.Pages.Activities
         {
             _useCase = useCase;
         }
-        public async Task<IActionResult> OnGetAsync()
+        public async Task OnGetAsync()
         {
             var request = new PagedRequest() { PageNumber=PageNumber,PageSize= PageSize };
 
@@ -37,7 +37,7 @@ namespace UniversityActivities.Web.Areas.Admin.Pages.Activities
                 // No filter for super admins – get all activities
                 Result = await _useCase.ExecuteAsync(null, request);
                 adminStatistics= await _useCase.GetAdminStatisticsAsync(null);
-                return Partial("_ActivitiesTable", Result);
+                return ;
             }
             var filter = new ActivityAdminFilter()
             {
@@ -46,8 +46,6 @@ namespace UniversityActivities.Web.Areas.Admin.Pages.Activities
             // No filter for now – get all activities
             Result = await _useCase.ExecuteAsync(filter, request);
             adminStatistics = await _useCase.GetAdminStatisticsAsync(ManagementId);
-            return Partial("_ActivitiesTable", Result);
-
         }
 
         public async Task<PartialViewResult> OnGetFilterAsync(

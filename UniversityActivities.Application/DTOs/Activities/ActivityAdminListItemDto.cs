@@ -1,4 +1,6 @@
-﻿namespace UniversityActivities.Application.DTOs.Activities;
+﻿using UniversityActivities.Application.DTOs.Enums;
+
+namespace UniversityActivities.Application.DTOs.Activities;
 
 public class ActivityAdminListItemDto
 {
@@ -16,7 +18,7 @@ public class ActivityAdminListItemDto
 
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
-
+    public StatusEnums status { get; set; }
     public string ManagementNameAr { get; set; } = null!;
     public string ManagementNameEn { get; set; } = null!;
 

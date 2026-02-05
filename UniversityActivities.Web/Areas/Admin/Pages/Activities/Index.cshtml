@@ -2,159 +2,307 @@
 @model UniversityActivities.Web.Areas.Admin.Pages.Activities.IndexModel
 @{
 }
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
 <style>
-    .form-control,
-    .form-select {
-        height: 44px;
-        border-radius: 8px;
+    .stat-card {
+        border-radius: 10px;
+        padding: 20px;
+        color: #fff;
+        height: 110px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .stat-title {
+        font-size: 13px;
+        opacity: .9;
+    }
+
+    .stat-number {
+        font-size: 26px;
+        font-weight: bold;
+    }
+
+    .stat-sub {
+        font-size: 12px;
+        opacity: .8;
+    }
+
+    .bg-blue {
+        background: #4e73df;
+    }
+
+    .bg-green {
+        background: #1cc88a;
+    }
+
+    .bg-orange {
+        background: #f6c23e;
+    }
+
+    .bg-red {
+        background: #e74a3b;
     }
 </style>
-<h3 class="mb-3">Activities Management</h3>
-<div class="row mb-4">
-    <div class="col-md-3">
-        <div class="card shadow-sm">
-            <div class="card-body text-center">
-                <h6 class="text-muted">Total Activities</h6>
-                <h3 class="fw-bold">@Model.adminStatistics.TotalActivities</h3>
-            </div>
-        </div>
-    </div>
 
-    <div class="col-md-3">
-        <div class="card shadow-sm">
-            <div class="card-body text-center">
-                <h6 class="text-muted">Upcoming</h6>
-                <h3 class="fw-bold text-primary">@Model.adminStatistics.UpcomingActivities</h3>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-3">
-        <div class="card shadow-sm">
-            <div class="card-body text-center">
-                <h6 class="text-muted">In Progress</h6>
-                <h3 class="fw-bold text-warning">@Model.adminStatistics.InProgressActivities</h3>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-3">
-        <div class="card shadow-sm">
-            <div class="card-body text-center">
-                <h6 class="text-muted">Completed</h6>
-                <h3 class="fw-bold text-success">@Model.adminStatistics.CompletedActivities</h3>
-            </div>
-        </div>
-    </div>
-</div>
-
-<form id="activityFilterForm" class="card shadow-sm p-4 mb-4">
-
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 class="mb-0">البحث والفلاتر المتقدمة</h5>
-        <span class="badge bg-success">2 فعال</span>
-    </div>
-
+<div class="container mt-4">
     <div class="row g-3">
 
-        <!-- Activity Name -->
-        <div class="col-md-4">
-            <label class="form-label">البحث باسم النشاط</label>
-            <input type="text" class="form-control" name="ActivityName" placeholder="ابحث عن نشاط...">
-        </div>
-
-        <!-- Activity Date -->
-        <div class="col-md-4">
-            <label class="form-label">تاريخ النشاط</label>
-            <input type="date" class="form-control" name="ActivityDate">
-        </div>
-
-        <!-- Organization -->
-        <div class="col-md-4">
-            <label class="form-label">الجهة المنظمة</label>
-            <select class="form-select" name="OrganizationId">
-                <option value="">كل الجهات</option>
-                <option value="1">جهة 1</option>
-                <option value="2">جهة 2</option>
-            </select>
-        </div>
-
-        <!-- Status -->
-        <div class="col-md-4">
-            <label class="form-label">حالة النشاط</label>
-            <select class="form-select" name="Status">
-                <option value="">الكل</option>
-                <option value="Running">قيد التنفيذ</option>
-                <option value="Completed">مكتمل</option>
-            </select>
-        </div>
-
-        <!-- Participant -->
-        <div class="col-md-4">
-            <label class="form-label">المشارك</label>
-            <select class="form-select" name="ParticipantId">
-                <option value="">الكل</option>
-                <option value="1">ريم أحمد</option>
-            </select>
-        </div>
-
-        <!-- Activity Type -->
-        <div class="col-md-4">
-            <label class="form-label">نوع النشاط</label>
-            <select class="form-select" name="ActivityType">
-                <option value="">الكل</option>
-                <option value="Sport">رياضي</option>
-                <option value="Cultural">ثقافي</option>
-            </select>
-        </div>
-
-        <!-- Target Group -->
-        <div class="col-md-4">
-            <label class="form-label">الفئة المستفيدة</label>
-            <select class="form-select" name="TargetGroup">
-                <option value="">جميع الفئات</option>
-            </select>
-        </div>
-
-        <!-- Department -->
-        <div class="col-md-4">
-            <label class="form-label">نوع الشطر</label>
-            <select class="form-select" name="Department">
-                <option value="">جميع الأقسام</option>
-            </select>
-        </div>
-
-        <!-- Page Size -->
-        <div class="col-md-4">
-            <label class="form-label">عرض</label>
-            <select class="form-select" name="PageSize">
-                <option value="10">10</option>
-                <option value="25">25</option>
-                <option value="50">50</option>
-            </select>
-        </div>
-    </div>
-
-    <div class="d-flex justify-content-between align-items-center mt-4">
-        <button type="button" id="resetFilters" class="btn btn-danger">
-            مسح الكل
-        </button>
-
-        <button type="submit" class="btn btn-success px-4">
-            تطبيق الفلاتر
-        </button>
-    </div>
-
-</form>
-
-<!-- Results -->
-<div id="activitiesResult">
-    @await Html.PartialAsync("_ActivitiesTable", Model.Result)
+        <div class="col-md-3 col-sm-6">
+            <div class="stat-card bg-blue">
+                <div class="stat-title">Total Activities</div>
+                <div class="stat-number">@Model.adminStatistics.TotalActivities</div>
 </div>
+        </div>
+
+        <div class="col-md-3 col-sm-6">
+            <div class="stat-card bg-green">
+                <div class="stat-title">Upcoming Activities</div>
+                <div class="stat-number">@Model.adminStatistics.UpcomingActivities</div>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-sm-6">
+            <div class="stat-card bg-orange">
+                <div class="stat-title">InProgress Activities</div>
+                <div class="stat-number">@Model.adminStatistics.InProgressActivities</div>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-sm-6">
+            <div class="stat-card bg-red">
+                <div class="stat-title">Completed Activities</div>
+                <div class="stat-number">@Model.adminStatistics.CompletedActivities</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="container mt-4">
+
+    <!-- Header -->
+    <div class="bg-success text-white rounded-3 p-3 mb-4 d-flex justify-content-between align-items-center">
+        <div class="fw-bold">
+            Search & Advanced Filters
+        </div>
+        <button class="btn btn-outline-light btn-sm">
+            <i class="bi bi-funnel"></i>
+        </button>
+    </div>
+
+    <!-- Filters Card -->
+    <div class="card shadow-sm">
+        <div class="card-body">
+
+            <div class="row g-3">
+
+                <!-- Activity Name -->
+                <div class="col-md-4">
+                    <label class="form-label">Search by Activity Name</label>
+                    <input type="text" class="form-control" placeholder="Search activity...">
+                </div>
+
+                <!-- Activity Date -->
+                <div class="col-md-4">
+                    <label class="form-label">Activity Date</label>
+                    <input type="date" class="form-control">
+                </div>
+
+                <!-- Organization -->
+                <div class="col-md-4">
+                    <label class="form-label">Organization</label>
+                    <select class="form-select">
+                        <option>All Organizations</option>
+                        <option>Organization 1</option>
+                        <option>Organization 2</option>
+                    </select>
+                </div>
+
+                <!-- Status -->
+                <div class="col-md-4">
+                    <label class="form-label">Activity Status</label>
+                    <select class="form-select">
+                        <option>In Progress</option>
+                        <option>Completed</option>
+                        <option>Cancelled</option>
+                    </select>
+                </div>
+
+                <!-- Participant -->
+                <div class="col-md-4">
+                    <label class="form-label">Participant</label>
+                    <select class="form-select">
+                        <option>All Participants</option>
+                        <option>ريم Ahmed</option>
+                        <option>Mohamed Ali</option>
+                    </select>
+                </div>
+
+                <!-- Activity Type -->
+                <div class="col-md-4">
+                    <label class="form-label">Activity Type</label>
+                    <select class="form-select">
+                        <option>Sport</option>
+                        <option>Culture</option>
+                        <option>Volunteering</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <!-- Actions -->
+            <div class="d-flex justify-content-between align-items-center mt-4">
+
+                <button class="btn btn-danger">
+                    Clear All
+                </button>
+
+                <button class="btn btn-success px-4">
+                    Search
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+<div class="container mt-4">
+
+    <!-- Table Header -->
+    <div class="bg-success text-white rounded-3 p-3 mb-3 d-flex justify-content-between align-items-center">
+        <div class="fw-bold">
+            Activities List
+        </div>
+        <span class="badge bg-light text-success">
+            Total: 57
+        </span>
+    </div>
+
+    <!-- Table Card -->
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+
+            <table class="table table-hover mb-0 align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th>Activity Name</th>
+                        <th>Organization</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model.Result.Items.Select((v, i) => new { v, i }))
+                    {
+                        <tr>
+                            <td>@((Model.PageNumber - 1) * Model.Result.PageSize + item.i + 1)</td>
+                            <td>@item.v.TitleEn</td>
+                            <td>@item.v.ManagementNameEn</td>
+                            <td>
+                                <span class="badge bg-success">@item.v.status</span>
+                            </td>
+                            <td>@item.v.StartDate.ToString("yyyy-MM-dd")</td>
+
+                            <td class="text-end">
+                                <div class="d-inline-flex gap-2">
+
+                                    <a asp-page="Details" asp-route-id="@item.v.Id"
+                                       class="btn btn-sm btn-outline-success">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+
+                                    <a asp-page="Edit" asp-route-id="@item.v.Id"
+                                       class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+
+                                    <a asp-page="Users" asp-route-id="@item.v.Id"
+                                       class="btn btn-sm btn-outline-info">
+                                        <i class="bi bi-people"></i>
+                                    </a>
+
+                                    <button class="btn btn-sm btn-outline-warning">
+                                        <i class="bi bi-check-circle"></i>
+                                    </button>
+
+                                    <button class="btn btn-sm btn-outline-danger">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+
+                                </div>
+                            </td>
+                        </tr>
+                    }
+
+                    @if (!Model.Result.Items.Any())
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center text-muted py-4">
+                                No data found
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
 
 
+        </div>
+    </div>
 
+    <!-- Pagination -->
+    <div class="d-flex justify-content-between align-items-center mt-3">
 
+        <div class="text-muted">
+            Showing
+            @(((Model.PageNumber - 1) * Model.Result.PageSize) + 1)
+            to
+            @(Math.Min(Model.PageNumber * Model.Result.PageSize, Model.Result.TotalCount))
+            of
+            @Model.Result.TotalCount
+            entries
+        </div>
+
+        <nav>
+            <ul class="pagination mb-0">
+
+                <li class="page-item @(Model.PageNumber == 1 ? "disabled" : "")">
+                    <a class="page-link"
+                       asp-route-PageNumber="@(Model.PageNumber - 1)">
+                        Previous
+                    </a>
+                </li>
+
+                @for (int i = 1; i <= Model.Result.TotalCount; i++)
+                {
+                    <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                        <a class="page-link @(i == Model.PageNumber ? "bg-success border-success" : "text-success")"
+                           asp-route-PageNumber="@i">
+                            @i
+                        </a>
+                    </li>
+                }
+
+                <li class="page-item @(Model.PageNumber == Model.Result.TotalCount ? "disabled" : "")">
+                    <a class="page-link"
+                       asp-route-PageNumber="@(Model.PageNumber + 1)">
+                        Next
+                    </a>
+                </li>
+
+            </ul>
+        </nav>
+
+    </div>
+
+</div>
 
 
 <script src="~/js/areas/admin/indexactivity.js"></script>

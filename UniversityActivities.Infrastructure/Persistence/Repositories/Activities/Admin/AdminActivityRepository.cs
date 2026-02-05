@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using UniversityActivities.Application.Common.Models;
 using UniversityActivities.Application.DTOs.Activities;
+using UniversityActivities.Application.DTOs.Enums;
 using UniversityActivities.Application.Exceptions;
 using UniversityActivities.Application.Interfaces.Repositories.Activies.AdminActivies;
 using UniversityActivities.Domain.Entities;
@@ -112,7 +113,7 @@ namespace UniversityActivities.Infrastructure.Persistence.Repositories.Activitie
 
                 ManagementNameAr = x.Management.NameAr,
                 ManagementNameEn = x.Management.NameEn,
-
+                status=(StatusEnums)x.Activity.ActivityStatusId,
                 AttendanceModeNameAr = x.AttendanceMode.NameAr,
                 AttendanceModeNameEn = x.AttendanceMode.NameEn,
 
