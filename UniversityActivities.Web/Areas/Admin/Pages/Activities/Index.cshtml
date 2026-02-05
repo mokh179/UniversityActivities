@@ -95,79 +95,104 @@
 
     <!-- Filters Card -->
     <div class="card shadow-sm">
-        <div class="card-body">
+        <form id="searchForm" class="card shadow-sm mb-4" onsubmit="return false;">
+            <div class="card-body">
 
-            <div class="row g-3">
+                <div class="row g-3">
 
-                <!-- Activity Name -->
-                <div class="col-md-4">
-                    <label class="form-label">Search by Activity Name</label>
-                    <input type="text" class="form-control" placeholder="Search activity...">
+                    <!-- Title -->
+                    <div class="col-md-3">
+                        <label class="form-label">Title</label>
+                        <input type="text" name="Title" class="form-control" />
+                    </div>
+
+                    <!-- Status (STATIC) -->
+                    <div class="col-md-3">
+                        <label class="form-label">Status</label>
+                        <select name="Status" class="form-select">
+                            <option value="">All Status</option>
+                            <option value="1">Draft</option>
+                            <option value="2">Published</option>
+                            <option value="3">Cancelled</option>
+                        </select>
+                    </div>
+
+                    <!-- Activity Type (DB) -->
+                    <div class="col-md-3">
+                        <label class="form-label">Activity Type</label>
+                        <select name="ActivityTypeId" class="form-select">
+                            <option value="">All Types</option>
+                            @foreach (var t in Model.Lookups.ActivityTypes)
+                            {
+                                <option value="@t.Id">@t.NameEn</option>
+                            }
+                        </select>
+                    </div>
+
+                    <!-- Management Type (DB) -->
+                    <div class="col-md-3">
+                        <label class="form-label">Management Type</label>
+                        <select name="ManagementTypeId" id="managementtypeSelect" class="form-select" onchange="loadManagements()">
+                            <option value="">All Types</option>
+                            @foreach (var t in Model.Lookups.ManagementTypes)
+                            {
+                                <option value="@t.Id">@t.NameEn</option>
+                            }
+                        </select>
+                    </div>
+
+                    <!-- Management -->
+                    <div class="col-md-3  d-none" id="managementContainer">
+                        <label class="form-label">Management</label>
+                        <select name="ManagementId"
+                                id="managementSelect"
+                                class="form-select"
+                                onchange="loadClubs()">
+                            <option value="">All Managements</option>
+                        </select>
+                    </div>
+
+                    <!-- Club (depends on Management) -->
+                    <div class="col-md-3 d-none" id="clubContainer">
+                        <label class="form-label">Club</label>
+                        <select name="ClubId"
+                                id="clubSelect"
+                                class="form-select">
+                            <option value="">All Clubs</option>
+                        </select>
+                    </div>
+
+                    <!-- Date From -->
+                    <div class="col-md-3">
+                        <label class="form-label">Start Date From</label>
+                        <input type="date" name="StartDateFrom" class="form-control" />
+                    </div>
+
+                    <!-- Date To -->
+                    <div class="col-md-3">
+                        <label class="form-label">Start Date To</label>
+                        <input type="date" name="StartDateTo" class="form-control" />
+                    </div>
+
                 </div>
 
-                <!-- Activity Date -->
-                <div class="col-md-4">
-                    <label class="form-label">Activity Date</label>
-                    <input type="date" class="form-control">
-                </div>
+                <!-- Actions -->
+                <div class="d-flex justify-content-between align-items-center mt-4">
 
-                <!-- Organization -->
-                <div class="col-md-4">
-                    <label class="form-label">Organization</label>
-                    <select class="form-select">
-                        <option>All Organizations</option>
-                        <option>Organization 1</option>
-                        <option>Organization 2</option>
-                    </select>
-                </div>
+                    <button class="btn btn-danger" onclick="clearAllFilters()">
+                        Clear All
+                    </button>
 
-                <!-- Status -->
-                <div class="col-md-4">
-                    <label class="form-label">Activity Status</label>
-                    <select class="form-select">
-                        <option>In Progress</option>
-                        <option>Completed</option>
-                        <option>Cancelled</option>
-                    </select>
-                </div>
+                    <button class="btn btn-success px-4" type="button" onclick="searchActivities(1, this.form)">
+                        Search
+                    </button>
 
-                <!-- Participant -->
-                <div class="col-md-4">
-                    <label class="form-label">Participant</label>
-                    <select class="form-select">
-                        <option>All Participants</option>
-                        <option>ريم Ahmed</option>
-                        <option>Mohamed Ali</option>
-                    </select>
-                </div>
-
-                <!-- Activity Type -->
-                <div class="col-md-4">
-                    <label class="form-label">Activity Type</label>
-                    <select class="form-select">
-                        <option>Sport</option>
-                        <option>Culture</option>
-                        <option>Volunteering</option>
-                    </select>
                 </div>
 
             </div>
 
-            <!-- Actions -->
-            <div class="d-flex justify-content-between align-items-center mt-4">
+        </form>
 
-                <button class="btn btn-danger">
-                    Clear All
-                </button>
-
-                <button class="btn btn-success px-4">
-                    Search
-                </button>
-
-            </div>
-
-        </div>
-    </div>
 
 </div>
 <div class="container mt-4">
@@ -186,7 +211,7 @@
     <div class="card shadow-sm">
         <div class="card-body p-0">
 
-            <table class="table table-hover mb-0 align-middle">
+                <table class="table table-hover mb-0 align-middle" id="activitiesTableBody">
                 <thead class="table-light">
                     <tr>
                         <th>#</th>
@@ -307,29 +332,177 @@
 
 <script src="~/js/areas/admin/indexactivity.js"></script>
 
-<script>
-    document.getElementById("activityFilterForm").addEventListener("submit", function (e) {
-        e.preventDefault();
+@* 
+ <script>
+    function searchActivities(pageNumber) {
 
-        const form = this;
+        const form = document.getElementById("searchForm");
         const formData = new FormData(form);
+        formData.append("pageNumber", pageNumber);
 
-        fetch("?handler=Filter", {
-            method: "POST",
-            body: formData,
-            headers: {
-                "RequestVerificationToken":
-                    document.querySelector('input[name="__RequestVerificationToken"]').value
-            }
-        })
-        .then(res => res.text())
-        .then(html => {
-            document.getElementById("activitiesResult").innerHTML = html;
-        })
-        .catch(err => console.error(err));
-    });
+        const query = new URLSearchParams(formData).toString();
 
-    document.getElementById("resetFilters").addEventListener("click", function () {
-        document.getElementById("activityFilterForm").reset();
-    });
-</script>
+        fetch(`?handler=Search&${query}`)
+            .then(res => res.json())
+            .then(data => {
+                rebuildTable(data);
+                rebuildPagination(data);
+                rebuildInfo(data);
+            });
+    }
+
+        function rebuildTable(result) {
+        const tbody = document.getElementById("activitiesTableBody");
+        tbody.innerHTML = "";
+
+        if (!result.items.length) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="7" class="text-center text-muted py-4">
+                        No data found
+                    </td>
+                </tr>`;
+            return;
+        }
+
+        result.items.forEach((item, i) => {
+            tbody.innerHTML += `
+                <tr>
+                    <td>${((result.pageNumber - 1) * result.pageSize) + i + 1}</td>
+                    <td>${item.name}</td>
+                    <td>${item.organizationName}</td>
+                    <td>${item.status}</td>
+                    <td>${item.date.substring(0, 10)}</td>
+                    <td class="text-end">
+                        <div class="d-inline-flex gap-2">
+                            <button class="btn btn-sm btn-outline-success"><i class="bi bi-eye"></i></button>
+                            <button class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></button>
+                            <button class="btn btn-sm btn-outline-info"><i class="bi bi-people"></i></button>
+                            <button class="btn btn-sm btn-outline-warning"><i class="bi bi-check-circle"></i></button>
+                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                        </div>
+                    </td>
+                </tr>`;
+        });
+    }
+
+        function rebuildPagination(result) {
+        const ul = document.getElementById("paginationContainer");
+        ul.innerHTML = "";
+
+        for (let i = 1; i <= result.totalPages; i++) {
+            ul.innerHTML += `
+                <li class="page-item ${i === result.pageNumber ? "active" : ""}">
+                    <a href="#"
+                       class="page-link ${i === result.pageNumber ? "bg-success border-success" : "text-success"}"
+                       onclick="searchActivities(${i})">
+                        ${i}
+                    </a>
+                </li>`;
+        }
+    }
+
+
+    function rebuildInfo(result) {
+
+        const info = document.getElementById("paginationInfo");
+
+        if (!result || result.totalCount === 0) {
+            info.innerText = "Showing 0 to 0 of 0 entries";
+            return;
+        }
+
+        const from = ((result.pageNumber - 1) * result.pageSize) + 1;
+        const to = Math.min(result.pageNumber * result.pageSize, result.totalCount);
+
+        info.innerText = `Showing ${from} to ${to} of ${result.totalCount} entries`;
+    }
+
+    function clearAllFilters() {
+
+        const form = document.getElementById("searchForm");
+        form.reset();
+
+        document.getElementById("managementSelect").innerHTML =
+            `<option value="">All Managements</option>`;
+
+        document.getElementById("managementContainer")
+            .classList.add("d-none");
+
+        searchActivities(1);
+    }
+
+        function loadManagements() {
+
+        const organizationId = document.getElementById("organizationSelect").value;
+        const managementContainer = document.getElementById("managementContainer");
+        const managementSelect = document.getElementById("managementSelect");
+
+        // Reset management
+        managementSelect.innerHTML =
+            `<option value="">All Managements</option>`;
+        managementContainer.classList.add("d-none");
+
+        // Reset & hide club
+        document.getElementById("clubSelect").innerHTML =
+            `<option value="">All Clubs</option>`;
+        document.getElementById("clubContainer")
+            .classList.add("d-none");
+
+        if (!organizationId)
+            return;
+
+        fetch(`?handler=Managements&organizationId=${organizationId}`)
+            .then(res => res.json())
+            .then(data => {
+
+                if (!data || data.length === 0)
+                    return;
+
+                data.forEach(item => {
+                    managementSelect.innerHTML +=
+                        `<option value="${item.id}">${item.name}</option>`;
+                });
+
+                managementContainer.classList.remove("d-none");
+            });
+    }
+
+
+        <script>
+    function loadClubs() {
+
+        const managementId = document.getElementById("managementSelect").value;
+        const clubContainer = document.getElementById("clubContainer");
+        const clubSelect = document.getElementById("clubSelect");
+
+        // Reset & hide club
+        clubSelect.innerHTML =
+            `<option value="">All Clubs</option>`;
+        clubContainer.classList.add("d-none");
+
+        if (!managementId)
+            return;
+
+        fetch(`?handler=Clubs&managementId=${managementId}`)
+            .then(res => res.json())
+            .then(data => {
+
+                // ❌ مفيش داتا
+                if (!data || data.length === 0)
+                    return;
+
+                // ✔️ في داتا
+                data.forEach(item => {
+                    clubSelect.innerHTML +=
+                        `<option value="${item.id}">${item.name}</option>`;
+                });
+
+                clubContainer.classList.remove("d-none");
+            });
+    }
+</script> *@
+
+
+
+
