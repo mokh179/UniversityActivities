@@ -51,7 +51,7 @@ namespace UniversityActivities.Application.ApplyUseCases.AdminActivties
 
                 StartDateTime = dto.StartDate,
                 EndDateTime = dto.EndDate,
-
+                AttendanceScopeId=dto.AttendanceScopeId,
                 LocationAr = dto.LocationAr,
                 LocationEn = dto.LocationEn,
                 OnlineLink = dto.OnlineLink,

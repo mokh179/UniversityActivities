@@ -17,6 +17,8 @@ namespace UniversityActivities.Infrastructure.Seed
                         "Supervisor",
                         "Student",
                     };
+
+
             foreach (var role in Roles)
             {
                 if (!await roleManager.RoleExistsAsync(role))

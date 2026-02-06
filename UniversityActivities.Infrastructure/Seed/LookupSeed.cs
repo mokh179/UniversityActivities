@@ -64,6 +64,22 @@ public static class LookupSeed
                 new TargetAudience { NameAr = "اخري", NameEn = "Other" }
             );
         }
+        if (!context.ActivityTypes.Any())
+        {
+            context.ActivityTypes.AddRange(
+                new ActivityType { NameAr = "علمي", NameEn = "Scientfic" },
+                new ActivityType { NameAr = "ثقافي", NameEn = "Culture" },
+                new ActivityType { NameAr = "رياضي", NameEn = "Sports" }
+            );
+        }
+        if (!context.Managements.Any())
+        {
+            context.Managements.AddRange(
+                new Management { NameAr = "كليه حاسبات و معلومات", NameEn = "Facluty of computers and Information",ManagementTypeId=3 },
+                new Management { NameAr = "كليه هندسة", NameEn = "Facluty of engineering", ManagementTypeId = 3 },
+                new Management { NameAr = "كليه تجارة", NameEn = "Facluty of comerece", ManagementTypeId = 3 }
+            );
+        }
 
         await context.SaveChangesAsync();
     }

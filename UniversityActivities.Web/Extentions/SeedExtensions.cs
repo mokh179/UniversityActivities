@@ -15,7 +15,7 @@ public static class SeedExtensions
 
         await LookupSeed.SeedAsync(context);
 
-        await IdentitySeed.SeedAsync(userManager, context);
         await RolesSeed.SeedAsync(context, roleManager);
+        await IdentitySeed.SeedAsync(userManager,roleManager, context);
     }
 }

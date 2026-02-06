@@ -43,7 +43,7 @@ namespace UniversityActivities.Infrastructure.Lookup
                 result.Add(new ManagementUsersDto
                 {
                     Id = user.Id,
-                    Name = user.FirstName!+'\t'+ user.MiddleName! + '\t'+ user.LockoutEnabled!,
+                    Name = user.FirstName!+'\t'+ user.MiddleName! + '\t'+ user.LastName!,
                     username = user.UserName!
                 });
             }

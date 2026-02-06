@@ -81,26 +81,34 @@
     }
 
     .chip-dropdown {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
+        position: relative;
+        margin-top: 6px;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
         background: #fff;
-        border: 1px solid #dee2e6;
-        border-radius: 6px;
-        max-height: 180px;
+        max-height: 240px;
         overflow-y: auto;
-        z-index: 10;
-        display: none;
     }
 
     .chip-item {
-        padding: 8px 12px;
+        padding: 10px 12px;
         cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
     }
 
+        .chip-item + .chip-item {
+            border-top: 1px solid #f1f1f1;
+        }
         .chip-item:hover {
             background-color: #f8f9fa;
+        }
+
+        .chip-item .item-text {
+            display: flex;
+            flex-direction: column;
         }
 
     .chips-container {
@@ -125,6 +133,55 @@
             cursor: pointer;
         }
 
+    .selected-panel {
+        min-height: 180px;
+        border: 1px dashed #dcdcdc;
+        border-radius: 8px;
+        padding: 12px;
+        background: #fafafa;
+    }
+
+    .chips-container {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .chip {
+        background: #e9f5ee;
+        border: 1px solid #cce7d6;
+        color: #155724;
+        padding: 6px 10px;
+        border-radius: 6px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+        .chip span {
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+    .chip-item .item-text .name {
+        font-weight: 600;
+        font-size: 14px;
+        color: #111827;
+    }
+
+    .chip-item .item-text .sub {
+        font-size: 12px;
+        color: #6b7280;
+    }
+
+    .chip-item .item-badge {
+        font-size: 11px;
+        padding: 4px 8px;
+        border-radius: 12px;
+        background: #eef2ff;
+        color: #3730a3;
+        white-space: nowrap;
+    }
 
 </style>
 
@@ -269,7 +326,7 @@
                         <input asp-for="Input.AttendanceScopeId"
                                class="form-check-input"
                                type="radio"
-                               value="Male" />
+                               value="1" />
                         <label class="form-check-label">Male</label>
                     </div>
 
@@ -277,7 +334,7 @@
                         <input asp-for="Input.AttendanceScopeId"
                                class="form-check-input"
                                type="radio"
-                               value="Female" />
+                               value="2" />
                         <label class="form-check-label">Female</label>
                     </div>
 
@@ -285,7 +342,7 @@
                         <input asp-for="Input.AttendanceScopeId"
                                class="form-check-input"
                                type="radio"
-                               value="Both" />
+                               value="3" />
                         <label class="form-check-label">Both</label>
                     </div>
                 </div>
@@ -478,6 +535,55 @@
     </div>
 </div>
 
+<!-- Activity Date & Time -->
+<div class="card mb-4 shadow-sm">
+    <div class="card-body">
+
+        <div class="d-flex justify-content-between align-items-start mb-4">
+            <div class="d-flex align-items-start gap-3">
+                <span class="section-dot"></span>
+                <div>
+                    <h6 class="mb-1 fw-semibold">Activity Schedule</h6>
+                    <small class="text-muted">
+                        Select start and end date & time
+                    </small>
+                </div>
+            </div>
+
+            <div class="upload-badge">
+                <i class="bi bi-calendar-event"></i>
+            </div>
+        </div>
+
+        <div class="row g-4">
+
+            <!-- Start DateTime -->
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">
+                    Start Date & Time <span class="text-danger">*</span>
+                </label>
+                <input type="datetime-local"
+                       id="startDateTime"
+                       class="form-control" />
+            </div>
+
+            <!-- End DateTime -->
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">
+                    End Date & Time <span class="text-danger">*</span>
+                </label>
+                <input type="datetime-local"
+                       id="endDateTime"
+                       class="form-control" />
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
 <!-- Management Related Selection Section -->
 <div class="card mb-4 shadow-sm">
     <div class="card-body">
@@ -501,335 +607,102 @@
 
         <div class="row g-4">
 
-            <!-- Dropdown 1 -->
-            <div class="col-md-6 d-none" id="dropdown1Wrapper">
-                <label class="form-label fw-semibold">First Selection</label>
+            <!-- LEFT: Dropdowns -->
+            <div class="col-md-6">
 
-                <div class="chip-select" data-name="Input.FirstIds">
-                    <input type="text"
-                           class="form-control chip-input"
-                           placeholder="Search..."
-                           autocomplete="off">
-                    <div class="chip-dropdown"></div>
+                <div class="mb-3" id="dropdown1Wrapper">
+                    <label class="form-label fw-semibold">First Selection</label>
+
+                    <div class="chip-select" data-name="Assignments"
+                         data-role-id="1"
+                         data-role-name="Coordinator"
+                         data-label="Coordinator">
+                        <input type="text"
+                               class="form-control chip-input"
+                               placeholder="Search..."
+                               autocomplete="off">
+                        <div class="chip-dropdown"></div>
+                    </div>
                 </div>
+
+                <div class="mb-3" id="dropdown2Wrapper">
+                    <label class="form-label fw-semibold">Second Selection</label>
+
+                    <div class="chip-select" data-name="Assignments"
+                         data-role-id="2"
+                         data-role-name="Supervisor"
+                         data-label="Supervisor">
+                        <input type="text"
+                               class="form-control chip-input"
+                               placeholder="Search..."
+                               autocomplete="off">
+                        <div class="chip-dropdown"></div>
+                    </div>
+                </div>
+
+                <div class="mb-3" id="dropdown3Wrapper">
+                    <label class="form-label fw-semibold">Third Selection</label>
+
+                    <div class="chip-select" data-name="Assignments"
+                         data-role-id="3"
+                         data-role-name="Viewer"
+                         data-label="Viewer">
+                        <input type="text"
+                               class="form-control chip-input"
+                               placeholder="Search..."
+                               autocomplete="off">
+                        <div class="chip-dropdown"></div>
+                    </div>
+                </div>
+
             </div>
 
-            <!-- Dropdown 2 -->
-            <div class="col-md-6 d-none" id="dropdown2Wrapper">
-                <label class="form-label fw-semibold">Second Selection</label>
+            <!-- RIGHT: Selected Chips -->
+            <div class="col-md-6">
 
-                <div class="chip-select" data-name="Input.SecondIds">
-                    <input type="text"
-                           class="form-control chip-input"
-                           placeholder="Search..."
-                           autocomplete="off">
-                    <div class="chip-dropdown"></div>
+                <label class="form-label fw-semibold">Selected Items</label>
+
+                <div id="selectedChipsPanel" class="selected-panel">
+                    <div class="text-muted small">
+                        Selected items will appear here
+                    </div>
                 </div>
-            </div>
 
-            <!-- Dropdown 3 -->
-            <div class="col-md-6 d-none" id="dropdown3Wrapper">
-                <label class="form-label fw-semibold">Third Selection</label>
-
-                <div class="chip-select" data-name="Input.ThirdIds">
-                    <input type="text"
-                           class="form-control chip-input"
-                           placeholder="Search..."
-                           autocomplete="off">
-                    <div class="chip-dropdown"></div>
-                </div>
             </div>
 
         </div>
+
+    </div>
+</div>
+
+<div class="card shadow-sm mt-4">
+    <div class="card-body">
+
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="form-check">
+                <input class="form-check-input"
+                       type="checkbox"
+                       id="publishCheckbox"
+                       name="Publish"
+                       value="true" asp-for="Input.IsPublished"/>
+
+                <label class="form-check-label fw-semibold" for="publishCheckbox">
+                    Publish activity
+                </label>
+            </div>
+
+            <button type="button"
+                    class="btn btn-success px-4" id="createActivityBtn">
+                Create Activity
+            </button>
+        </div>
+
     </div>
 </div>
 
 
 
+<script src="~/js/areas/admin/addactivity.js"></script>
 
-    <script>
-       document.getElementById("activityImage")
-           .addEventListener("change", function (e) {
-
-               const file = e.target.files[0];
-               if (!file) return;
-
-               const reader = new FileReader();
-               reader.onload = function () {
-
-                   const preview = document.getElementById("imagePreview");
-                   preview.src = reader.result;
-                   preview.classList.remove("d-none");
-
-                   document.getElementById("uploadPlaceholder")
-                       .classList.add("d-none");
-               };
-
-               reader.readAsDataURL(file);
-           });
-
-
-
-
-
-               const managementTypeSelect = document.getElementById("managementTypeSelect");
-    const managementSelect = document.getElementById("managementSelect");
-    const clubSelect = document.getElementById("clubSelect");
-
-    const managementWrapper = document.getElementById("managementFieldWrapper");
-    const clubWrapper = document.getElementById("clubFieldWrapper");
-
-    managementTypeSelect.addEventListener("change", async function () {
-
-        const typeId = this.value;
-
-        // reset
-        managementSelect.innerHTML = '<option value="">Select Management</option>';
-        clubSelect.innerHTML = '<option value="">Select Club</option>';
-        managementWrapper.classList.add("d-none");
-        clubWrapper.classList.add("d-none");
-
-        if (!typeId) return;
-
-        const response = await fetch(
-            `/Admin/Activities/AddActivity?handler=ManagementsByType&managementTypeId=${typeId}`
-        );
-
-        const data = await response.json();
-
-        if (!data || data.length === 0) return;
-
-        data.forEach(item => {
-            const option = document.createElement("option");
-            option.value = item.id;
-            option.textContent = item.nameEn;
-            managementSelect.appendChild(option);
-        });
-
-        managementWrapper.classList.remove("d-none");
-    });
-
-    // 2️⃣ Management → Club
-    managementSelect.addEventListener("change", async function () {
-
-        const managementId = this.value;
-
-        clubSelect.innerHTML = '<option value="">Select Club</option>';
-        clubWrapper.classList.add("d-none");
-
-        if (!managementId) return;
-
-        const response = await fetch(
-            `/Admin/Activities/AddActivity?handler=ClubsByManagement&managementId=${managementId}`
-        );
-
-        const data = await response.json();
-
-        if (!data || data.length === 0) return;
-
-        data.forEach(item => {
-            const option = document.createElement("option");
-            option.value = item.id;
-            option.textContent = item.nameEn;
-            clubSelect.appendChild(option);
-        });
-
-        clubWrapper.classList.remove("d-none");
-    });
-
-    const attendanceRadios = document.querySelectorAll('input[name="AttendanceType"]');
-    const locationWrapper = document.getElementById("locationWrapper");
-    const linkWrapper = document.getElementById("linkWrapper");
-
-    function toggleAttendanceFields(value) {
-        if (value === "Online") {
-            linkWrapper.classList.remove("d-none");
-            locationWrapper.classList.add("d-none");
-        } else {
-            locationWrapper.classList.remove("d-none");
-            linkWrapper.classList.add("d-none");
-        }
-    }
-
-    attendanceRadios.forEach(radio => {
-        radio.addEventListener("change", e => {
-            toggleAttendanceFields(e.target.value);
-        });
-    });
-
-    // Init (default)
-    toggleAttendanceFields(
-        document.querySelector('input[name="AttendanceType"]:checked').value
-    );
-
-
-
-    function initChipDropdown(wrapperId, fetchUrl) {
-
-        const wrapper = document.getElementById(wrapperId);
-        if (!wrapper) return;
-
-        const select = wrapper.querySelector(".chip-select");
-        const input = select.querySelector(".chip-input");
-        const dropdown = select.querySelector(".chip-dropdown");
-        const name = select.dataset.name;
-
-        let selected = [];
-
-        input.addEventListener("input", async () => {
-
-            const q = input.value.trim();
-
-            dropdown.innerHTML = "";
-
-            // ✅ لو مفيش fetchUrl (test mode)
-            if (!fetchUrl) {
-                renderDropdown([
-                    { id: 1, name: "Test User 1" },
-                    { id: 2, name: "Test User 2" }
-                ]);
-                return;
-            }
-
-            // ⛔ لو أقل من حرفين – UX أحسن
-            if (q.length < 2) {
-                dropdown.style.display = "none";
-                return;
-            }
-
-            const res = await fetch(`${fetchUrl}&q=${encodeURIComponent(q)}`);
-            const result = await res.json();
-
-            renderDropdown(result);
-        });
-
-        function renderDropdown(items) {
-
-            dropdown.innerHTML = "";
-
-            if (!items || items.length === 0) {
-                dropdown.style.display = "none";
-                return;
-            }
-
-            items.forEach(item => {
-
-                if (selected.some(x => x.id === item.id)) return;
-
-                const div = document.createElement("div");
-                div.className = "chip-item";
-                div.textContent = item.name;
-
-                div.onclick = () => {
-                    selected.push(item);
-                    renderChips();
-                    dropdown.style.display = "none";
-                    input.value = "";
-                };
-
-                dropdown.appendChild(div);
-            });
-
-            dropdown.style.display = "block";
-        }
-
-        function renderChips() {
-
-            let chips = select.querySelector(".chips-container");
-            if (!chips) {
-                chips = document.createElement("div");
-                chips.className = "chips-container";
-                select.prepend(chips);
-            }
-
-            chips.innerHTML = "";
-
-            selected.forEach(item => {
-
-                const chip = document.createElement("div");
-                chip.className = "chip";
-                chip.innerHTML = `${item.name} <span>&times;</span>`;
-
-                chip.querySelector("span").onclick = () => {
-                    selected = selected.filter(x => x.id !== item.id);
-                    renderChips();
-                };
-
-                chips.appendChild(chip);
-
-                // hidden input for Razor binding
-                const hidden = document.createElement("input");
-                hidden.type = "hidden";
-                hidden.name = name;
-                hidden.value = item.id;
-
-                chips.appendChild(hidden);
-            });
-        }
-    }
-
-    // Example flow after managementSelect change
-    // document.getElementById("managementSelect")
-    //     .addEventListener("change", function () {
-    //         const id = this.value;
-    //         if (!id) return;
-    //         console.log(id)
-
-
-    //             console.log("FETCH URL:", url);
-
-    //             document.getElementById("dropdown1Wrapper").classList.remove("d-none");
-    //             initChipDropdown("dropdown1Wrapper", url);
-
-    //             document.getElementById("dropdown2Wrapper").classList.remove("d-none");
-    //             initChipDropdown("dropdown2Wrapper", url);
-
-    //             document.getElementById("dropdown3Wrapper").classList.remove("d-none");
-    //             initChipDropdown("dropdown3Wrapper", url);
-    //     });
-       pageUrl = '/Admin/Activities/AddActivity';
-    //     document.addEventListener("DOMContentLoaded", function () {
-
-    //     const managementSelect = document.getElementById("managementSelect");
-    //     if (!managementSelect) return;
-
-    //     managementSelect.addEventListener("change", function () {
-
-    //         const id = this.value;
-    //         if (!id) return;
-
-    //         const url =
-    //             `${pageUrl}?handler=UsersByManagement&managementId=${id}`;
-
-    //         console.log("FETCH URL:", url);
-
-    //         document.getElementById("dropdown1Wrapper").classList.remove("d-none");
-    //         initChipDropdown("dropdown1Wrapper", url);
-
-    //         document.getElementById("dropdown2Wrapper").classList.remove("d-none");
-    //         initChipDropdown("dropdown2Wrapper", url);
-
-    //         document.getElementById("dropdown3Wrapper").classList.remove("d-none");
-    //         initChipDropdown("dropdown3Wrapper", url);
-    //     });
-
-    // });
-
-        document.addEventListener("DOMContentLoaded", function () {
-        console.log("JS LOADED");
-            const managementSelect = document.getElementById("managementSelect");
-        console.log("managementSelect:", managementSelect);
-            managementSelect.addEventListener("change", function ()
-            {
-                console.log("CHANGE FIRED", this.value);
-                const url = `${window.pageUrl}?handler=UsersByManagement&managementId=${this.value}`;
-                console.log("URL:", url);
-
-                console.log("initChipDropdown:", typeof initChipDropdown);
-                document.getElementById("dropdown1Wrapper").classList.remove("d-none");
-                initChipDropdown("dropdown1Wrapper", url);
-             });
-    });
-</script>
 
 

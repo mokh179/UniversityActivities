@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Text.Json;
 using UniversityActivities.Application.DTOs.Activities;
 using UniversityActivities.Application.lookup.Dto;
 using UniversityActivities.Application.lookup.Interface;
@@ -7,6 +8,7 @@ using UniversityActivities.Web.Common;
 
 namespace UniversityActivities.Web.Areas.Admin.Pages.Activities
 {
+    [IgnoreAntiforgeryToken]
     public class AddActivityModel : BaseModel
     {
         private readonly ICreateActivityUseCase _createUseCase;
@@ -62,8 +64,9 @@ namespace UniversityActivities.Web.Areas.Admin.Pages.Activities
 
             return new JsonResult(result);
         }
+
         public async Task<JsonResult> OnGetUsersByManagementAsync(int managementId)
-        {
+         {
             if (managementId <= 0)
                 return new JsonResult(new List<LookupDto>());
 
@@ -71,6 +74,20 @@ namespace UniversityActivities.Web.Areas.Admin.Pages.Activities
                 .GetUsersinManagement(managementId);
 
             return new JsonResult(result);
+        }
+
+      
+
+        public async Task<IActionResult> OnPostCreateAsync(
+    [FromForm] string activityJson,
+    [FromForm] IFormFile? image)
+        {
+            
+            var activityDto =
+            JsonSerializer.Deserialize<CreateOrUpdateActivityDto>(activityJson,new JsonSerializerOptions { PropertyNameCaseInsensitive=true});
+            await _createUseCase.ExecuteAsync(activityDto);
+
+            return new JsonResult(new { success = true });
         }
     }
 }
