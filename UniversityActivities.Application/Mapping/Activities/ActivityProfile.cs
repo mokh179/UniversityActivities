@@ -45,7 +45,7 @@ public class ActivityProfile : Profile
                     ActivityRoleId = a.ActivityRoleId
                 })))
 
-   // .ForMember(dest => dest.Management.ManagementTypeId,opt => opt.MapFrom(src =>src.ManagementTypeId))
+    .ForMember(dest => dest.Management.ManagementTypeId,opt => opt.MapFrom(src =>src.ManagementTypeId))
     
     .ForMember(dest => dest.ActivityStatusId, opt => opt.Ignore())
     .ForMember(dest => dest.ActivityType, opt => opt.Ignore())

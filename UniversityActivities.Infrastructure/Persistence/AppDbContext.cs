@@ -112,7 +112,7 @@ namespace UniversityActivities.Infrastructure.Persistence
 
             // One evaluation per student per activity
             modelBuilder.Entity<ActivityEvaluation>()
-                .HasIndex(x => new { x.StudentId, x.ActivityId })
+                .HasIndex(x => new { x.StudentId, x.ActivityId,x.EvaluationCriteriaId })
                 .IsUnique();
 
             // One membership per user per club

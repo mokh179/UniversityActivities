@@ -10,9 +10,10 @@ namespace UniversityActivities.Application.UserCases.Activities.Student
     {
         Task<PagedResult<StudentActivityListItemDto>> ExecuteAsync(
             int studentId,
-            int studentManagementId,
             List<int> studentTargetAudienceIds,
             StudentActivityFilter filter,
             PagedRequest paging);
+        Task<StudentActivityDetailsDto?> ExecuteAsync(
+            int activityId,int studentId);
     }
 }

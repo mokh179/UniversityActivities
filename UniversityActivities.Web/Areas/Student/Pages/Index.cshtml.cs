@@ -1,6 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using UniversityActivities.Application.Common.Models;
+using UniversityActivities.Application.DTOs.Activities.Student;
+using UniversityActivities.Application.lookup.Dto;
+using UniversityActivities.Application.lookup.Interface;
 using UniversityActivities.Application.UserCases.Activities.Student;
 using UniversityActivities.Web.Common;
 
@@ -10,54 +14,43 @@ namespace UniversityActivities.Web.Areas.Student.Pages
     public class IndexModel : BaseModel
     {
         private readonly IViewStudentActivitiesUseCase _viewStudentActivitiesUseCase;
-        public IndexModel(IViewStudentActivitiesUseCase viewStudentActivitiesUseCase)
+        private readonly IUiLookupsQuery _lookupsQuery;
+
+        public IndexModel(IViewStudentActivitiesUseCase viewStudentActivitiesUseCase,IUiLookupsQuery lookupsQuery)
         {
               _viewStudentActivitiesUseCase = viewStudentActivitiesUseCase;
+            _lookupsQuery = lookupsQuery;
         }
-        public int JoinedActivitiesCount { get; set; }
-        public int UpcomingActivitiesCount { get; set; }
-    
+        public PagedResult<StudentActivityListItemDto> Result { get; private set; }
         [BindProperty(SupportsGet = true)]
-        public string? SelectedCategory { get; set; }
+        public int PageNumber { get; set; } = 1;
 
+        private const int PageSize = 5; // change to 5 if needed
         [BindProperty(SupportsGet = true)]
-        public string? SelectedStatus { get; set; }
-        [BindProperty(SupportsGet = true)]
-        public DateTime? SelectedDate { get; set; }
+        public StudentActivityFilter Filter { get; set; } = new();
 
-        [BindProperty(SupportsGet = true)]
-        public string? DateRange { get; set; }
-        // List
-        public List<ActivityDto> Activities { get; set; } = new();
-        public List<(string Type, string Value)> Claims { get; set; } = new();
-        public void OnGet(string? category, string? status, string? remove)
+        public UiLookupsDto Lookups { get; private set; } = new();
+
+        public int TotalCount { get; set; }
+        public int TotalPages =>
+            PageSize == 0 ? 1 : (int)Math.Ceiling(TotalCount / (double)PageSize);
+        public async Task OnGetAsync()
         {
-            // Demo values (replace with Application Layer)
-            JoinedActivitiesCount = 5;
-            UpcomingActivitiesCount = 2;
-            var allActivities = new List<ActivityDto>
-        {
-            new() { Id = 1, Title = "Football Tournament", Category = "Sports", Status = "Upcoming", Date = DateTime.Today },
-            new() { Id = 2, Title = "Tech Talk AI", Category = "Tech", Status = "Upcoming", Date = DateTime.Today.AddDays(2) },
-            new() { Id = 3, Title = "Cultural Day", Category = "Culture", Status = "Finished", Date = DateTime.Today.AddDays(-3) }
-        };
-            if (remove == "Category") category = null;
-            if (remove == "Status") status = null;
+           
+            var request = new PagedRequest() { PageNumber = PageNumber, PageSize = PageSize };
+            Lookups = await _lookupsQuery.GetAllAsync();
+            Result = await _viewStudentActivitiesUseCase.ExecuteAsync(CurrentUserId, [TargetAudienceId.Value], Filter, request);
 
-            SelectedCategory = category;
-            SelectedStatus = status;
-            Activities = allActivities;
         }
-    }
 
-    public class ActivityDto
-    {
-        public int Id { get; set; }
-        public string Title { get; set; } = string.Empty;
-        public string Category { get; set; } = string.Empty;
-        public string Status { get; set; } = string.Empty;
-        public DateTime Date { get; set; }
-        public string ImageUrl { get; set; } = "/images/activity-placeholder.jpg";
+        public async Task<IActionResult> OnGetFilterAsync([FromQuery] StudentActivityFilter filter, int pageNumber = 1)
+        {
+            var request = new PagedRequest() { PageNumber = PageNumber, PageSize = PageSize };
+
+            var result = await _viewStudentActivitiesUseCase.ExecuteAsync(CurrentUserId, [TargetAudienceId.Value], filter, request);
+
+            return new JsonResult(result);
+        }
     }
 
 

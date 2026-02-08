@@ -9,7 +9,7 @@ using UniversityActivities.Application.UserCases.Activities.Student;
 
 namespace UniversityActivities.Application.ApplyUseCases.StudentActivties
 {
-    public class ViewStudentUseCase:IViewStudentActivitiesUseCase
+    public class ViewStudentUseCase : IViewStudentActivitiesUseCase
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IStudentActivityQueryRepository _studentActivityQueryRepository;
@@ -24,18 +24,25 @@ namespace UniversityActivities.Application.ApplyUseCases.StudentActivties
 
         public async Task<PagedResult<StudentActivityListItemDto>> ExecuteAsync(
        int studentId,
-       int studentManagementId,
        List<int> studentTargetAudienceIds,
        StudentActivityFilter filter,
        PagedRequest paging)
         {
             return await _studentActivityQueryRepository
                 .GetPublishedActivitiesAsync(
-                    studentId,
-                    studentManagementId,
+                  studentId,
                     studentTargetAudienceIds,
                     filter,
                     paging);
         }
+        public async Task<StudentActivityDetailsDto?> ExecuteAsync(
+            int activityId, int studentId)
+        {
+            return await _studentActivityQueryRepository.GetDetailsAsync(activityId, studentId);
+        }
+
+  
     }
-}
+
+    }
+

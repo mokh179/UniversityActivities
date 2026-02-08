@@ -1,0 +1,441 @@
+﻿@page "{id:int}"
+@model UniversityActivities.Web.Areas.Student.Pages.ActivityDetailsModel
+@{
+    ViewData["Title"] = Model.Activity.TitleEn;
+}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+<link href="~/css/areas/student/activitydetials.css" rel="stylesheet" />
+
+<div class="container-fluid activity-details-page">
+    <div class="row g-4">
+
+        <!-- ================= LEFT SIDEBAR ================= -->
+        <div class="col-lg-4">
+
+            @* NOT REGISTERED *@
+            @if (!Model.Activity.IsRegistered)
+            {
+                <div class="card side-card mb-4">
+                    <div class="card-body text-center">
+                        <div class="icon-box bg-success">
+                            <i class="bi bi-person-plus"></i>
+                        </div>
+
+                        <h5 class="fw-bold mt-3">Register for this activity</h5>
+                        <p class="text-muted small">
+                            Secure your seat by registering now
+                        </p>
+
+                        <button class="btn btn-success w-100"
+                                data-bs-toggle="modal"
+                                data-bs-target="#registerModal">
+                            Register
+                        </button>
+                    </div>
+                </div>
+            }
+
+            @* REGISTERED BUT NOT ATTENDED *@
+            @if (Model.Activity.IsRegistered && Model.Activity.IsAttended)
+            {
+                <div class="card side-card mb-4">
+                    <div class="card-body text-center">
+                        <div class="icon-box bg-success">
+                            <i class="bi bi-person-check"></i>
+                        </div>
+
+                        <h5 class="fw-bold mt-3">You are registered</h5>
+                        <p class="text-muted small">
+                            You are registered for this activity
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card side-card mb-4 bg-orange text-white">
+                    <div class="card-body text-center">
+                        <i class="bi bi-star-fill fs-2 mb-2"></i>
+                        <h6 class="fw-bold">Rate this activity</h6>
+                        <p class="small">Your feedback matters</p>
+
+                        <button class="btn btn-light w-100"
+                                data-bs-toggle="modal"
+                                data-bs-target="#rateModal">
+                            Rate Activity
+                        </button>
+                    </div>
+                </div>
+            }
+            @if (Model.Activity.IsRated)
+            {
+                <div class="card side-card mb-4">
+                    <div class="card-body text-center">
+
+                        <div class="bg-primary text-white rounded-3 p-4 mb-3">
+                            <i class="bi bi-award fs-1 mb-2"></i>
+                            <h6 class="fw-bold mb-1">Attendance Certificate</h6>
+                            <p class="small mb-0">
+                                Congratulations on earning your certificate
+                            </p>
+                        </div>
+
+                        <a asp-page="/Certificates/View"
+                           asp-route-activityId="@Model.Activity.Id"
+                           class="btn btn-outline-primary w-100 mb-2">
+                            View Certificate
+                        </a>
+
+                        <a asp-page="/Certificates/Download"
+                           asp-route-activityId="@Model.Activity.Id"
+                           class="btn btn-primary w-100">
+                            Download Certificate (PDF)
+                        </a>
+
+                    </div>
+                </div>
+            }
+
+            @* ATTENDED *@
+            @if (Model.Activity.IsAttended)
+            {
+                <div class="card side-card mb-4">
+                    <div class="card-body text-center">
+                        <div class="icon-box bg-primary">
+                            <i class="bi bi-check-circle"></i>
+                        </div>
+
+                        <h5 class="fw-bold mt-3">Activity completed</h5>
+                        <p class="text-muted small">
+                            You have already attended this activity
+                        </p>
+                    </div>
+                </div>
+            }
+
+        </div>
+
+        <!-- ================= MAIN CONTENT ================= -->
+        <div class="col-lg-8">
+
+            <div class="activity-image mb-4">
+                <img src="@Model.Activity.ImageUrl" alt="Activity Image" />
+            </div>
+
+            <h2 class="fw-bold mb-2">@Model.Activity.TitleEn</h2>
+
+            <p class="text-muted">
+                @Model.Activity.DescriptionEn
+            </p>
+
+            <hr />
+
+            <h5 class="section-title">Activity Details</h5>
+
+            <div class="row g-3 details-grid">
+
+                <div class="col-md-6">
+                    <div class="detail-item">
+                        <i class="bi bi-layers"></i>
+                        <div>
+                            <small>Activity Type</small>
+                            <strong>@Model.Activity.ActivityTypeEn</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="detail-item">
+                        <i class="bi bi-people"></i>
+                        <div>
+                            <small>Target Audience</small>
+                            <strong>@string.Join(", ", Model.Activity.TargetAudiencesEn)</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="detail-item">
+                        <i class="bi bi-calendar-event"></i>
+                        <div>
+                            <small>Date</small>
+                            <strong>
+                                @Model.Activity.StartDate.ToShortDateString()
+                                
+                            </strong> -to-
+                            <strong>
+                                @Model.Activity.EndDate.ToShortDateString()
+                            </strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="detail-item">
+                        <i class="bi bi-clock"></i>
+                        <div>
+                            <small>Time</small>
+                            <strong>
+                                @Model.Activity.StartDate.ToShortTimeString()
+
+                            </strong> -to-
+                            <strong>
+                                @Model.Activity.EndDate.ToShortTimeString()
+                            </strong>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- ================= REGISTER MODAL ================= -->
+<div class="modal fade" id="registerModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Registration</h5>
+                <button class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to register for this activity?
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button class="btn btn-success" id="confirmRegisterBtn">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ================= RATE MODAL ================= -->
+<div class="modal fade" id="rateModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Rate This Activity</h5>
+                <button class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="rating-item">
+                    <label>Content Quality</label>
+                    <div class="stars" data-id="1"></div>
+                </div>
+
+                <div class="rating-item">
+                    <label>Presenter Performance</label>
+                    <div class="stars" data-id="2"></div>
+                </div>
+
+                <div class="rating-item">
+                    <label>Organization</label>
+                    <div class="stars" data-id="3"></div>
+                </div>
+
+                <div class="rating-item">
+                    <label>Timing</label>
+                    <div class="stars" data-id="4"></div>
+                </div>
+
+                <div class="rating-item">
+                    <label>Overall Satisfaction</label>
+                    <div class="stars" data-id="5"></div>
+                </div>
+
+                <div class="mt-3">
+                    <label class="fw-bold">Comment</label>
+                    <textarea class="form-control"
+                              id="rateComment"
+                              rows="3"
+                              placeholder="Write your comment here..."></textarea>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">
+                    Cancel
+                </button>
+                <button class="btn btn-success" id="submitRateBtn">
+                    Submit
+                </button>
+            </div>
+            <div class="text-danger small mt-2 d-none" id="rateValidationMsg">
+                Please rate all criteria before submitting.
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+
+             let starsInitialized = false;
+        const ratesMap = {};
+        const totalCriteria = document.querySelectorAll("#rateModal .stars").length;
+
+        const rateModal = document.getElementById("rateModal");
+        const submitBtn = document.getElementById("submitRateBtn");
+        const validationMsg = document.getElementById("rateValidationMsg");
+
+        function validateRating() {
+            if (Object.keys(ratesMap).length === totalCriteria) {
+                submitBtn.disabled = false;
+                validationMsg.classList.add("d-none");
+            } else {
+                submitBtn.disabled = true;
+                validationMsg.classList.remove("d-none");
+            }
+        }
+
+        rateModal.addEventListener("shown.bs.modal", function () {
+
+            if (starsInitialized) return;
+            starsInitialized = true;
+
+            document.querySelectorAll("#rateModal .stars").forEach(group => {
+
+                const criteriaId = group.dataset.id;
+
+                for (let i = 1; i <= 5; i++) {
+                    const star = document.createElement("i");
+                    star.className = "bi bi-star";
+                    star.style.cursor = "pointer";
+                    star.style.fontSize = "22px";
+                    star.style.marginRight = "6px";
+
+                    star.onclick = () => {
+                        ratesMap[criteriaId] = i;
+
+                        [...group.children].forEach(s => {
+                            s.className = "bi bi-star";
+                        });
+
+                        for (let j = 0; j < i; j++) {
+                            group.children[j].className =
+                                "bi bi-star-fill text-warning";
+                        }
+
+                        validateRating();
+                    };
+
+                    group.appendChild(star);
+                }
+            });
+        });
+
+           submitBtn?.addEventListener("click", () => {
+
+            if (Object.keys(ratesMap).length !== totalCriteria) {
+                validationMsg.classList.remove("d-none");
+                return; // ⛔ امنع النداء
+            }
+
+            const dto = Object.keys(ratesMap).map(id => ({
+                evaluationCrieteriaId: parseInt(id),
+                value: ratesMap[id]
+            }));
+
+            const comment =
+                document.getElementById("rateComment").value;
+
+            fetch(`?handler=Rate&id=@Model.Activity.Id&comment=${encodeURIComponent(comment)}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(dto)
+            })
+            .then(async res => {
+                const text = await res.text();
+                return text ? JSON.parse(text) : {};
+            })
+            .then(d => {
+                if (d.success) {
+                    alert("Thank you for your feedback!");
+                    location.reload();
+                } else {
+                    alert(d.message);
+                }
+            });
+        });
+        //             let starsInitialized = false;
+        // const ratesMap = {};
+
+        // const rateModal = document.getElementById("rateModal");
+
+        // rateModal.addEventListener("shown.bs.modal", function () {
+
+        //     if (starsInitialized) return;
+        //     starsInitialized = true;
+
+        //     document.querySelectorAll("#rateModal .stars").forEach(group => {
+
+        //         const criteriaId = group.dataset.id;
+
+        //         for (let i = 1; i <= 5; i++) {
+        //             const star = document.createElement("i");
+        //             star.className = "bi bi-star";
+        //             star.dataset.value = i;
+        //             star.style.cursor = "pointer";
+        //             star.style.fontSize = "22px";
+        //             star.style.marginRight = "6px";
+
+        //             star.onclick = () => {
+        //                 ratesMap[criteriaId] = i;
+
+        //                 [...group.children].forEach(s => {
+        //                     s.className = "bi bi-star";
+        //                 });
+
+        //                 for (let j = 0; j < i; j++) {
+        //                     group.children[j].className =
+        //                         "bi bi-star-fill text-warning";
+        //                 }
+        //             };
+
+        //             group.appendChild(star);
+        //         }
+        //     });
+        // });
+
+        // document.getElementById("submitRateBtn")
+        //     ?.addEventListener("click", () => {
+
+        //         const dto = Object.keys(ratesMap).map(id => ({
+        //             evaluationCrieteriaId: parseInt(id),
+        //             value: ratesMap[id]
+        //         }));
+
+        //         const comment =
+        //             document.getElementById("rateComment").value;
+        //             console.log()
+        //         fetch(`?handler=Rate&id=@Model.Activity.Id&comment=${encodeURIComponent(comment)}`, {
+        //             method: "POST",
+        //             headers: { "Content-Type": "application/json" },
+        //             body: JSON.stringify(dto)
+        //         })
+        //         .then(async res => {
+        //             const text = await res.text();
+        //             return text ? JSON.parse(text) : {};
+        //         })
+        //         .then(d => {
+        //             if (d.success) {
+        //                 alert("Thank you for your feedback!");
+        //                 location.reload();
+        //             }
+        //         });
+        //     });
+
+        document.getElementById("confirmRegisterBtn")
+            ?.addEventListener("click", () => {
+                fetch(`?handler=Register&id=@Model.Activity.Id`)
+                    .then(res => res.json())
+                    .then(d => {
+                        if (d.success) location.reload();
+                    });
+            });
+    </script>
+}

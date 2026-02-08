@@ -8,9 +8,7 @@ namespace UniversityActivities.Application.Interfaces.Repositories.Activies.Stud
 {
     public interface IStudentActivityQueryRepository
     {
-        Task<PagedResult<StudentActivityListItemDto>> GetPublishedActivitiesAsync(
-       int studentId,
-       int studentManagementId,
+        Task<PagedResult<StudentActivityListItemDto>> GetPublishedActivitiesAsync(int studentid,
        List<int> studentTargetAudienceIds,
        StudentActivityFilter filter,
        PagedRequest paging);

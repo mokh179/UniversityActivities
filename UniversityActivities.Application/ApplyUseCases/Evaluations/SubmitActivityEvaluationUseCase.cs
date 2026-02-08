@@ -27,51 +27,59 @@ namespace UniversityActivities.Application.ApplyUseCases.Evaluations
             int activityId,
             DTOs.Evaluation.SubmitActivityEvaluationDto items)
         {
-            // =========================
-            //  Validation
-            // =========================
-            if (items.Items == null || items.Items.Count == 0)
-                throw new InvalidOperationException("Evaluation items are required.");
-            // =========================
-            //  Check Attendance
-            // =========================
-            var isRegistered = await _studentActivityRepository
-                .IsRegisteredAsync(studentId, items.ActivityId);
-
-            if (!isRegistered)
-                throw new InvalidOperationException(
-                    "Student must be registered and attended the activity to evaluate it.");
-            // =========================
-            //  Prevent Duplicate Evaluation
-            // =========================
-            var hasEvaluated = await _evaluationRepository
-                .HasEvaluatedAsync(studentId, items.ActivityId);
-
-            if (hasEvaluated)
-                throw new InvalidOperationException(
-                    "Student has already evaluated this activity.");
-            // =========================
-            //  Submit Scores
-            // =========================
-            await _evaluationRepository.SubmitAsync(
-                studentId,
-                items.ActivityId,
-                items.Items);
-            // =========================
-            //  Submit Comment (Optional)
-            // =========================
-            if (!string.IsNullOrWhiteSpace(items.Comment))
+            try
             {
-                await _evaluationRepository.SubmitCommentAsync(
+                // =========================
+                //  Validation
+                // =========================
+                if (items.Items == null || items.Items.Count == 0)
+                    throw new InvalidOperationException("Evaluation items are required.");
+                // =========================
+                //  Check Attendance
+                // =========================
+                var isRegistered = await _studentActivityRepository
+                    .IsRegisteredAsync(studentId, items.ActivityId);
+
+                if (!isRegistered)
+                    throw new InvalidOperationException(
+                        "Student must be registered and attended the activity to evaluate it.");
+                // =========================
+                //  Prevent Duplicate Evaluation
+                // =========================
+                var hasEvaluated = await _evaluationRepository
+                    .HasEvaluatedAsync(studentId, items.ActivityId);
+
+                if (hasEvaluated)
+                    throw new InvalidOperationException(
+                        "Student has already evaluated this activity.");
+                // =========================
+                //  Submit Scores
+                // =========================
+                await _evaluationRepository.SubmitAsync(
                     studentId,
                     items.ActivityId,
-                    items.Comment.Trim());
-            }
+                    items.Items);
+                // =========================
+                //  Submit Comment (Optional)
+                // =========================
+                if (!string.IsNullOrWhiteSpace(items.Comment))
+                {
+                    await _evaluationRepository.SubmitCommentAsync(
+                        studentId,
+                        items.ActivityId,
+                        items.Comment.Trim());
+                }
 
-            // =========================
-            //  Commit
-            // =========================
-            await _unitOfWork.SaveChangesAsync();
+                // =========================
+                //  Commit
+                // =========================
+                await _unitOfWork.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+
+                throw ;
+            }
         }
     }
 }

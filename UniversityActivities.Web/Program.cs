@@ -30,6 +30,10 @@ builder.Services.AddRazorPages(options =>
     options.Conventions.AddAreaPageRoute("Admin", "/Activities/ViewActivity", "viewactivity");
 
 
+    options.Conventions.AddAreaPageRoute("Student", "/Index", "dashboard");
+    options.Conventions.AddAreaPageRoute("Admin", "/Activities/ViewActivity", "viewactivity");
+
+
 });
 
 builder.Services.AddInfrastructure(builder.Configuration);

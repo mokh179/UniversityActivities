@@ -64,18 +64,20 @@ namespace UniversityActivities.Application.ApplyUseCases.AdminActivties
                 ManagementId = dto.ManagementId,
                 ActivityTypeId = dto.ActivityTypeId,
                 AttendanceModeId = dto.AttendanceModeId,
-                IsPublished = dto.IsPublished
+                IsPublished = dto.IsPublished,
+                StudentClubId = dto.ClubId,
+                
             };
 
             // =========================
             // Image Saving
             // =========================
              var ImageUrl=await _imageStorageService.SaveOrReplaceActivityImageAsync(image,Guid.NewGuid(),activity.TitleEn,null);
-
-            // =========================
-            //  Persist Activity
-            // =========================
-            var activityId = await _adminActivityRepository
+            activity.ImageUrl = ImageUrl;
+           // =========================
+           //  Persist Activity
+           // =========================
+           var activityId = await _adminActivityRepository
                 .CreateAsync(activity);
 
             // =========================

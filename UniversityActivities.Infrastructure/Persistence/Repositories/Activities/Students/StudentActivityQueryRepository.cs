@@ -38,7 +38,29 @@ namespace UniversityActivities.Infrastructure.Persistence.Repositories.Activitie
                 OnlineLink = a.OnlineLink,
 
                 ManagementNameAr = m.NameAr,
-                ManagementNameEn = m.NameEn
+                ManagementNameEn = m.NameEn,
+                ScopeAr = a.AttendanceScope.NameAr,
+                ScopeEn = a.AttendanceScope.NameEn,
+                ActivityTypeAr = a.ActivityType.NameAr,
+                ActivityTypeEn = a.ActivityType.NameEn, 
+                TargetAudiencesAr = (from ta in _context.ActivityTargetAudiences
+                                     join t in _context.TargetAudiences on ta.TargetAudienceId equals t.Id
+                                     where ta.ActivityId == a.Id
+                                     select t.NameAr).ToList(),
+                TargetAudiencesEn = (from ta in _context.ActivityTargetAudiences
+                                     join t in _context.TargetAudiences on ta.TargetAudienceId equals t.Id
+                                     where ta.ActivityId == a.Id
+                                     select t.NameEn).ToList(),
+                IsRegistered = _context.StudentActivities.Any(sa =>
+                            sa.ActivityId == a.Id &&
+                            sa.StudentId == studentId),
+                IsAttended = _context.StudentActivities.Any(sa =>
+                            sa.ActivityId == a.Id &&
+                            sa.StudentId == studentId&&sa.AttendedAt!=null),
+                IsRated= _context.ActivityEvaluations.Count(sa =>
+                            sa.ActivityId == a.Id &&
+                            sa.StudentId == studentId)==5,
+
             }).FirstOrDefaultAsync();
         }
 
@@ -61,51 +83,70 @@ namespace UniversityActivities.Infrastructure.Persistence.Repositories.Activitie
         }
 
 
-        public async Task<PagedResult<StudentActivityListItemDto>> GetPublishedActivitiesAsync(int studentId, int studentManagementId, List<int> studentTargetAudienceIds, StudentActivityFilter filter, PagedRequest paging)
+        public async Task<PagedResult<StudentActivityListItemDto>> GetPublishedActivitiesAsync(int studentid, List<int> studentTargetAudienceIds, StudentActivityFilter filter, PagedRequest paging)
         {
             var query =
             from a in _context.Activities.AsNoTracking()
+            join at in _context.ActivityTypes on a.ActivityTypeId equals at.Id
+            join actas in _context.ActivityStatuses on a.ActivityStatusId equals actas.Id
             join m in _context.Managements on a.ManagementId equals m.Id
+            //join c in _context.Clubs on a.StudentClubId equals c.Id
             where a.IsPublished
             select new
             {
                 Activity = a,
-                Management = m
+                Management = m,
+               // Club=c,
+                ActivityTypes=at,
+                ActivityStatuses= actas
             };
 
             // =========================
             // Filters
             // =========================
-
-            if (!string.IsNullOrWhiteSpace(filter.Title))
+            if (filter != null)
             {
-                query = query.Where(x =>
-                    x.Activity.TitleAr.Contains(filter.Title) ||
-                    x.Activity.TitleEn.Contains(filter.Title));
-            }
 
-            if (filter.ManagementId.HasValue)
-            {
-                query = query.Where(x =>
-                    x.Activity.ManagementId == filter.ManagementId);
-            }
+                if (!string.IsNullOrWhiteSpace(filter.Title))
+                {
+                    query = query.Where(x =>
+                        x.Activity.TitleAr.Contains(filter.Title) ||
+                        x.Activity.TitleEn.Contains(filter.Title));
+                }
 
-            if (filter.AttendanceModeId.HasValue)
-            {
-                query = query.Where(x =>
-                    x.Activity.AttendanceModeId == filter.AttendanceModeId);
-            }
+                if (filter.ManagementId.HasValue)
+                {
+                    query = query.Where(x =>
+                        x.Activity.ManagementId == filter.ManagementId);
+                }
+                if (filter.Activitytype.HasValue)
+                {
+                    query = query.Where(x =>
+                        x.Activity.AttendanceModeId == filter.Activitytype);
+                }
+                if (filter.AttendanceModeId.HasValue)
+                {
+                    query = query.Where(x =>
+                        x.Activity.AttendanceModeId == filter.AttendanceModeId);
+                }
 
-            if (filter.StartDateFrom.HasValue)
-            {
-                query = query.Where(x =>
-                    x.Activity.StartDateTime >= filter.StartDateFrom);
-            }
+                if (filter.AttendanceScopeId.HasValue)
+                {
+                    query = query.Where(x =>
+                        x.Activity.AttendanceScopeId == filter.AttendanceScopeId);
+                }
 
-            if (filter.StartDateTo.HasValue)
-            {
-                query = query.Where(x =>
-                    x.Activity.StartDateTime <= filter.StartDateTo);
+                if (filter.StartDateFrom.HasValue)
+                {
+                    query = query.Where(x =>
+                        x.Activity.StartDateTime >= filter.StartDateFrom);
+                }
+
+                if (filter.StartDateTo.HasValue)
+                {
+                    query = query.Where(x =>
+                        x.Activity.StartDateTime <= filter.StartDateTo);
+                }
             }
 
             // =========================
@@ -117,34 +158,46 @@ namespace UniversityActivities.Infrastructure.Persistence.Repositories.Activitie
                     studentTargetAudienceIds.Contains(ta.TargetAudienceId)));
 
             var totalCount = await query.CountAsync();
+            if (totalCount > 0) 
+            {
 
-            var items = await query
-                .OrderBy(x => x.Activity.StartDateTime)
-                .Skip((paging.PageNumber - 1) * paging.PageSize)
-                .Take(paging.PageSize)
-                .Select(x => new StudentActivityListItemDto
-                {
-                    Id = x.Activity.Id,
-                    TitleAr = x.Activity.TitleAr,
-                    TitleEn = x.Activity.TitleEn,
-                    ImageUrl = x.Activity.ImageUrl,
-                    StartDate = x.Activity.StartDateTime,
-                    EndDate = x.Activity.EndDateTime,
-
-                    ManagementNameAr = x.Management.NameAr,
-                    ManagementNameEn = x.Management.NameEn,
-
-                    IsRegistered = _context.StudentActivities.Any(sa =>
-                        sa.ActivityId == x.Activity.Id &&
-                        sa.StudentId == studentId)
-                })
-                .ToListAsync();
-
+                var items = await query
+                    .OrderBy(x => x.Activity.StartDateTime)
+                    .Skip((paging.PageNumber - 1) * paging.PageSize)
+                    .Take(paging.PageSize)
+                    .Select(x => new StudentActivityListItemDto
+                    {
+                        Id = x.Activity.Id,
+                        TitleAr = x.Activity.TitleAr,
+                        TitleEn = x.Activity.TitleEn,
+                        ImageUrl = x.Activity.ImageUrl,
+                        StartDate = x.Activity.StartDateTime,
+                        EndDate = x.Activity.EndDateTime,
+                        onlineLink=x.Activity.OnlineLink,
+                        LocationAr=x.Activity.LocationAr,
+                        LocationEn = x.Activity.LocationEn,
+                        ManagementNameAr = x.Management.NameAr,
+                        ManagementNameEn = x.Management.NameEn,
+                        ActiviyTypeAr=x.ActivityTypes.NameAr,
+                        ActiviyTypeEn=x.ActivityTypes.NameEn,
+                        StatusAr=x.ActivityStatuses.NameAr,
+                        StatusEn=x.ActivityStatuses.NameEn,
+                        IsRegistered = _context.StudentActivities.Any(sa =>
+                            sa.ActivityId == x.Activity.Id &&
+                            sa.StudentId == studentid)
+                    })
+                    .ToListAsync();
+                return new PagedResult<StudentActivityListItemDto>(
+                    items,
+                    totalCount,
+                    paging.PageNumber,
+                    paging.PageSize);
+            }
             return new PagedResult<StudentActivityListItemDto>(
-                items,
-                totalCount,
-                paging.PageNumber,
-                paging.PageSize);
+              null,
+              totalCount,
+              paging.PageNumber,
+              paging.PageSize);
 
         }
     }

@@ -1,67 +1,285 @@
 ﻿@page
 @model UniversityActivities.Web.Areas.Student.Pages.IndexModel
 @{
-    ViewData["Title"] = "Dashboard";
+    ViewData["Title"] = "All Activities";
 }
-@{
-    ViewData["Title"] = "Dashboard";
-}
-<link href="~/css/areas/student/student-filters.css" rel="stylesheet" />
-<div class="vibe-header mb-4">
-    <h2 class="fw-bold">Find Your Vibe</h2>
-    <p class="text-muted">
-        Discover local events perfectly matched to your interests
-    </p>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+<link href="~/css/areas/student/studentactivities.css" rel="stylesheet" />
+<div class="page-header">
+    <h1>All Activities</h1>
+    <p>Browse and discover university activities</p>
+
+    <button id="toggleFilterBtn" class="btn btn-outline-success">
+        <i class="bi bi-funnel"></i> Show Filters
+    </button>
 </div>
 
-<form method="get">
+<!-- ================= FILTER ================= -->
+<div id="filterPanel" class="filter-panel d-none">
+    <form method="get" class="row g-3">
 
-    <div class="filter-accordion" onclick="toggleSection('whenSection')">
-        <div class="filter-title">
-            <span> Filters</span>
-            <span class="arrow">⌄</span>
+        <div class="col-md-4">
+            <label class="form-label">Activity Title</label>
+            <input class="form-control"
+                   name="Filter.Title"
+                   value="@Model.Filter.Title" />
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">Management</label>
+            <select class="form-select" name="Filter.ManagementId">
+                <option value="">All</option>
+             @foreach (var item in Model.Lookups.Managements)
+                {
+                    <option value="@item.Id">@item.NameEn</option>
+
+                }        
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Activity Type</label>
+            <select class="form-select" name="Filter.ManagementId">
+                <option value="">All</option>
+                 @foreach (var item in Model.Lookups.ActivityTypes)
+                    {
+                        <option value="@item.Id">@item.NameEn</option>
+
+                    }        
+            </select>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">Attendance Mode</label>
+            <select class="form-select" name="Filter.AttendanceModeId">
+                <option value="">All</option>
+                <option value="1">Onsite</option>
+                <option value="2">Online</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Attendance Scope</label>
+            <select class="form-select" name="Filter.AttendanceScopeId">
+                <option value="">All</option>
+                @foreach (var item in Model.Lookups.AttendanceScopes)
+                {
+                    <option value="@item.Id">@item.NameEn</option>
+
+                }
+            </select>
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">Start Date From</label>
+            <input type="date"
+                   class="form-control"
+                   name="Filter.StartDateFrom"
+                   value="@Model.Filter.StartDateFrom?.ToString("yyyy-MM-dd")" />
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">Start Date To</label>
+            <input type="date"
+                   class="form-control"
+                   name="Filter.StartDateTo"
+                   value="@Model.Filter.StartDateTo?.ToString("yyyy-MM-dd")" />
+        </div>
+
+        <div class="col-md-12 text-end">
+            <button class="btn btn-success px-4">Apply Filters</button>
+        </div>
+    </form>
+</div>
+
+<!-- ================= RESULT INFO ================= -->
+<div class="results-bar">
+    <span>
+        Showing <strong>@Model.Result.Items.Count</strong> of
+        <strong>@Model.Result.TotalCount</strong> Activities
+    </span>
+</div>
+
+<!-- ================= CARDS ================= -->
+<div class="row g-4">
+@foreach (var item in Model.Result.Items)
+{
+    <div class="col-lg-4 col-md-6">
+            <div class="activity-card position-relative">
+                <div class="activity-image-wrapper">
+                    <img src="~@item.ImageUrl" alt="Activity Image" />
+                </div>
+
+                <!-- ACTIVITY TYPE (top-left) -->
+                <span class="badge badge-type">
+                    @item.ActiviyTypeEn
+                </span>
+
+                <!-- STATUS (top-right) -->
+                <span class="badge badge-status
+            @(item.StatusEn == "Completed" ? "status-completed" : "status-upcoming")">
+                    @item.StatusEn
+                </span>
+
+            <div class="card-body">
+                <h5>@item.TitleEn</h5>
+
+                <ul class="activity-info">
+                    <li>
+                        <i class="bi bi-calendar"></i>
+                        @item.StartDate to @item.EndDate
+                    </li>
+                    
+
+                    <li>
+                        <i class="bi bi-geo-alt"></i>
+                        @(item.AttendenceMode == "Online"
+                            ? "Online"
+                            : item.LocationEn)
+                    </li>
+
+                    <li>
+                        <i class="bi bi-people"></i>
+                        @item.ManagementNameEn
+                    </li>
+                </ul>
+
+                @if (item.IsRegistered)
+                {
+                    <button class="btn btn-outline-secondary w-100" disabled>
+                        Registered
+                    </button>
+                }
+                else
+                {
+                        <a class="btn btn-success w-100" href="/Student/ActivityDetails/@item.Id">
+                            
+                        View Details
+                    </a>
+                }
+            </div>
         </div>
     </div>
+}
+</div>
 
-    <div id="whenSection" class="filter-body d-none">
-        <div class="row g-3">
 
-            <!-- Date -->
-            <div class="col-md-6">
-                <label class="form-label small text-muted">
-                    Select date
-                </label>
-                <input type="date"
-                       name="SelectedDate"
-                       class="form-control" />
-            </div>
+<div class="d-flex justify-content-between align-items-center mt-4">
 
-            <!-- Range -->
-            <div class="col-md-6">
-                <label class="form-label small text-muted">
-                    Time range
-                </label>
-                <select name="DateRange"
-                        class="form-select">
-                    <option value="">Any time</option>
-                    <option value="Today">Today</option>
-                    <option value="Week">This week</option>
-                    <option value="Month">This month</option>
-                </select>
-            </div>
-
-        </div>
+    <!-- RESULT SUMMARY -->
+    <div class="results-summary">
+        Showing
+        <strong>@Model.Result.Items.Count</strong>
+        of
+        <strong>@Model.Result.TotalCount</strong>
+        Activities
     </div>
 
-    <!-- Apply -->
-    <button type="submit" class="btn apply-filters-btn mt-4">
-        🔍 Apply Filters
-    </button>
+    <!-- PAGINATION -->
+    <nav>
+        <ul class="pagination mb-0">
 
-</form>
+            <!-- PREVIOUS -->
+            @if (Model.PageNumber > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link"
+                       asp-route-PageNumber="@(Model.PageNumber - 1)"
+                       asp-route-Filter.Title="@Model.Filter.Title"
+                       asp-route-Filter.ManagementId="@Model.Filter.ManagementId"
+                       asp-route-Filter.AttendanceModeId="@Model.Filter.AttendanceModeId"
+                       asp-route-Filter.StartDateFrom="@Model.Filter.StartDateFrom"
+                       asp-route-Filter.Activitytype="@Model.Filter.Activitytype"
+                       asp-route-Filter.StartDateTo="@Model.Filter.StartDateTo">
+                        ‹
+                    </a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item disabled">
+                    <span class="page-link">‹</span>
+                </li>
+            }
 
+            <!-- PAGES -->
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                    <a class="page-link"
+                       asp-route-PageNumber="@i"
+                       asp-route-Filter.Title="@Model.Filter.Title"
+                       asp-route-Filter.ManagementId="@Model.Filter.ManagementId"
+                       asp-route-Filter.AttendanceModeId="@Model.Filter.AttendanceModeId"
+                       asp-route-Filter.StartDateFrom="@Model.Filter.StartDateFrom"
+                       asp-route-Filter.Activitytype="@Model.Filter.Activitytype"
+                       asp-route-Filter.StartDateTo="@Model.Filter.StartDateTo">
+                        @i
+                    </a>
+                </li>
+            }
+
+            <!-- NEXT -->
+            @if (Model.PageNumber < Model.TotalPages)
+            {
+                <li class="page-item">
+                    <a class="page-link"
+                       asp-route-PageNumber="@(Model.PageNumber + 1)"
+                       asp-route-Filter.Title="@Model.Filter.Title"
+                       asp-route-Filter.ManagementId="@Model.Filter.ManagementId"
+                       asp-route-Filter.AttendanceModeId="@Model.Filter.AttendanceModeId"
+                       asp-route-Filter.StartDateFrom="@Model.Filter.StartDateFrom"
+                       asp-route-Filter.Activitytype="@Model.Filter.Activitytype"
+                       asp-route-Filter.StartDateTo="@Model.Filter.StartDateTo">
+                        
+                    </a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item disabled">
+                    <span class="page-link">›</span>
+                </li>
+            }
+
+        </ul>
+    </nav>
+
+</div>
+
+
+<!-- ================= PAGINATION ================= -->
+<div class="pagination-wrapper">
+    <ul class="pagination">
+@for (int i = 1; i <= Model.TotalPages; i++)
+{
+    <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+        <a class="page-link"
+           asp-route-PageNumber="@i"
+           asp-route-Filter.Title="@Model.Filter.Title"
+           asp-route-Filter.ManagementId="@Model.Filter.ManagementId"
+           asp-route-Filter.AttendanceModeId="@Model.Filter.AttendanceModeId"
+           asp-route-Filter.AttendanceScopeId="@Model.Filter.AttendanceScopeId"
+           asp-route-Filter.StartDateFrom="@Model.Filter.StartDateFrom"
+           asp-route-Filter.StartDateTo="@Model.Filter.StartDateTo"
+           asp-route-Filter.Activitytype="@Model.Filter.Activitytype">
+            @i
+        </a>
+    </li>
+}
+    </ul>
+</div>
+
+@section Scripts {
 <script>
-    function toggleSection(id) {
-        document.getElementById(id).classList.toggle("d-none");
-    }
+    const btn = document.getElementById("toggleFilterBtn");
+    const panel = document.getElementById("filterPanel");
+
+    btn.onclick = () => {
+        panel.classList.toggle("d-none");
+        btn.innerHTML = panel.classList.contains("d-none")
+            ? '<i class="bi bi-funnel"></i> Show Filters'
+            : '<i class="bi bi-x"></i> Hide Filters';
+    };
 </script>
+}

@@ -26,12 +26,16 @@ public class Activity : AuditableEntity
     [Required]
     public int ManagementId { get; set; }
 
+    public Management Management { get; set; } = null!;
+
     // نشاط ممكن يبقى تابع لنادي أو لا
     public int? StudentClubId { get; set; }
+    public Club? StudentClub { get; set; }
 
     //  Lookups
     [Required]
     public int ActivityStatusId { get; set; }
+    public ActivityStatus ActivityStatus { get; set; } = null!;
 
     [Required]
     public int ActivityTypeId { get; set; }
@@ -55,6 +59,9 @@ public class Activity : AuditableEntity
 
     [MaxLength(300)]
     public string? LocationEn { get; set; }
+
+    public string? ActivityCode { get; set; }
+
 
     [MaxLength(500)]
     public string? OnlineLink { get; set; }
