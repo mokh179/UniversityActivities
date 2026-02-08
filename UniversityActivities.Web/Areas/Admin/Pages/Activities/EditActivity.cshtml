@@ -1,0 +1,494 @@
+﻿@page "{id:int}"
+@model UniversityActivities.Web.Areas.Admin.Pages.Activities.EditActivityModel
+@{
+    ViewData["Title"] = "Edit Activity";
+}
+<style>
+    <style >
+    /* ===== Layout ===== */
+    .management-section {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    /* ===== Dropdown ===== */
+    .chip-select {
+        position: relative;
+    }
+
+    .chip-input {
+        width: 100%;
+        padding: 10px 12px;
+        border-radius: 8px;
+        border: 1px solid #d1d5db;
+    }
+
+    .chip-dropdown {
+        position: absolute;
+        width: 100%;
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        margin-top: 6px;
+        max-height: 260px;
+        overflow-y: auto;
+        z-index: 100;
+    }
+
+    /* ===== Dropdown Item ===== */
+    .chip-item {
+        padding: 10px 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+    }
+
+        .chip-item:hover {
+            background: #f3f4f6;
+        }
+
+    .item-badge {
+        font-size: 12px;
+        background: #eef2ff;
+        color: #3730a3;
+        padding: 4px 8px;
+        border-radius: 14px;
+    }
+
+    /* ===== Selected Panel ===== */
+    .selected-panel {
+        border: 1px dashed #d1d5db;
+        border-radius: 10px;
+        padding: 12px;
+        min-height: 180px;
+        background: #fafafa;
+    }
+
+    /* ===== Chips ===== */
+    .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px;
+        border-radius: 20px;
+        background: #16a34a;
+        color: #fff;
+        font-size: 13px;
+        margin: 4px;
+    }
+
+    .chip-remove {
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+</style>
+<!-- ================= HEADER ================= -->
+<div class="card mb-4 border-0">
+    <div class="card-body p-0">
+        <div class="bg-warning rounded-3 text-dark p-4 d-flex justify-content-between align-items-center">
+            <div>
+                <h5 class="mb-1 fw-bold">Edit Activity</h5>
+                <p class="mb-0 small opacity-75">Update activity details</p>
+            </div>
+            <a asp-page="./Index" class="btn btn-outline-dark">Back</a>
+        </div>
+    </div>
+</div>
+
+<form method="post" enctype="multipart/form-data">
+
+    <!-- ================= IMAGE ================= -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+            <h6 class="fw-semibold mb-3">Activity Image</h6>
+
+            @if (!string.IsNullOrEmpty(Model.Input.ImageUrl))
+            {
+                <img src="@Model.Input.ImageUrl"
+                     class="img-thumbnail mb-3"
+                     style="max-height:200px"
+                     id="imagePreview" />
+            }
+
+            <input type="file"
+                   class="form-control"
+                   id="activityImage"
+                   name="Image" />
+        </div>
+    </div>
+
+    <!-- ================= BASIC INFO ================= -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+            <h6 class="fw-semibold mb-3">Basic Information</h6>
+
+            <div class="row g-3">
+
+                <div class="col-md-6">
+                    <label asp-for="Input.TitleEn"></label>
+                    <input asp-for="Input.TitleEn" class="form-control" />
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="Input.TitleAr"></label>
+                    <input asp-for="Input.TitleAr" class="form-control" />
+                </div>
+
+                <div class="col-md-6">
+                    <label>Management Type</label>
+                    <select asp-for="Input.ManagementTypeId"
+                            id="managementTypeSelect"
+                            class="form-select">
+                        <option value="">Select</option>
+                        @foreach (var t in Model.Lookups.ManagementTypes)
+                        {
+                            <option value="@t.Id">@t.NameEn</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label>Management</label>
+                    <select asp-for="Input.ManagementId"
+                            id="managementSelect"
+                            class="form-select">
+                        <option value="">Select</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label>Club</label>
+                    <select asp-for="Input.ClubId"
+                            id="clubSelect"
+                            class="form-select">
+                        <option value="">Select</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="Input.ActivityTypeId"></label>
+                    <select asp-for="Input.ActivityTypeId"
+                            class="form-select">
+                        <option value="">Select</option>
+                        @foreach (var t in Model.Lookups.ActivityTypes)
+                        {
+                            <option value="@t.Id">@t.NameEn</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="Input.StartDate"></label>
+                    <input asp-for="Input.StartDate"
+                           type="datetime-local"
+                           class="form-control" />
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="Input.EndDate"></label>
+                    <input asp-for="Input.EndDate"
+                           type="datetime-local"
+                           class="form-control" />
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= DESCRIPTIONS ================= -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+            <h6 class="fw-semibold mb-3">Descriptions</h6>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label asp-for="Input.DescriptionEn"></label>
+                    <textarea asp-for="Input.DescriptionEn"
+                              class="form-control" rows="4"></textarea>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Input.DescriptionAr"></label>
+                    <textarea asp-for="Input.DescriptionAr"
+                              class="form-control" rows="4"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= ASSIGNMENTS ================= -->
+    <div class="row g-4">
+
+        <!-- LEFT -->
+        <div class="col-md-6">
+
+            <div class="mb-3" id="dropdown1Wrapper">
+                <label class="form-label fw-semibold">Coordinators</label>
+                <div class="chip-select" data-role-id="1" data-role-name="Coordinator">
+                    <input class="form-control chip-input" placeholder="Search user..." />
+                    <div class="chip-dropdown"></div>
+                </div>
+            </div>
+
+            <div class="mb-3" id="dropdown2Wrapper">
+                <label class="form-label fw-semibold">Supervisors</label>
+                <div class="chip-select" data-role-id="2" data-role-name="Supervisor">
+                    <input class="form-control chip-input" placeholder="Search user..." />
+                    <div class="chip-dropdown"></div>
+                </div>
+            </div>
+
+            <div class="mb-3" id="dropdown3Wrapper">
+                <label class="form-label fw-semibold">Viewers</label>
+                <div class="chip-select" data-role-id="3" data-role-name="Viewer">
+                    <input class="form-control chip-input" placeholder="Search user..." />
+                    <div class="chip-dropdown"></div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- RIGHT -->
+        <div class="col-md-6">
+            <label class="form-label fw-semibold">Selected Assignments</label>
+            <div id="selectedChipsPanel" class="selected-panel">
+                <div class="text-muted small">No assignments selected</div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ================= PUBLISH ================= -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body d-flex justify-content-between align-items-center">
+            <div class="form-check">
+                <input asp-for="Input.IsPublished"
+                       class="form-check-input" />
+                <label asp-for="Input.IsPublished"
+                       class="form-check-label fw-semibold"></label>
+            </div>
+
+            <button type="submit"
+                    class="btn btn-warning px-4">
+                Update Activity
+            </button>
+        </div>
+    </div>
+
+</form>
+
+<script>
+    console.log("JS Loaded");
+
+    /* ================= EDIT DATA ================= */
+    window.editData = {
+        managementTypeId: @Model.Input.ManagementTypeId,
+        managementId: @Model.Input.ManagementId,
+        clubId: @(Model.Input.ClubId ?? 0),
+        assignments: @Html.Raw(
+                        System.Text.Json.JsonSerializer.Serialize(
+                                Model.Input.Assignments 
+                        )
+                )
+    };
+
+    /* ================= GLOBAL STATE ================= */
+    const assignment = {
+        coordinators: [],
+        supervisors: [],
+        viewers: []
+    };
+
+    let isReady = false;
+
+    /* ================= HELPERS ================= */
+    function getAllSelectedIds() {
+        return [
+            ...assignment.coordinators,
+            ...assignment.supervisors,
+            ...assignment.viewers
+        ].map(x => x.userId);
+    }
+
+    /* ================= INIT CHIP DROPDOWN ================= */
+    function initChipDropdown(wrapperId, fetchUrl) {
+
+        const wrapper = document.getElementById(wrapperId);
+        if (!wrapper) return;
+
+        const select = wrapper.querySelector(".chip-select");
+        const input = select.querySelector(".chip-input");
+        const dropdown = select.querySelector(".chip-dropdown");
+
+        if (select._initialized) return;
+        select._initialized = true;
+
+        fetch(fetchUrl)
+            .then(r => r.json())
+            .then(data => {
+                select._items = Array.isArray(data) ? data : [];
+                renderAll();
+            });
+
+        input.addEventListener("input", renderAll);
+    }
+
+    /* ================= RENDER ALL ================= */
+    function renderAll() {
+        if (!isReady) return;
+        renderDropdowns();
+        renderChips();
+    }
+
+    /* ================= RENDER DROPDOWNS ================= */
+    function renderDropdowns() {
+
+        document.querySelectorAll(".chip-select").forEach(select => {
+
+            const dropdown = select.querySelector(".chip-dropdown");
+            const input = select.querySelector(".chip-input");
+            const roleId = +select.dataset.roleId;
+            const roleName = select.dataset.roleName;
+            const items = Array.isArray(select._items) ? select._items : [];
+
+            dropdown.innerHTML = "";
+
+            const q = input.value.toLowerCase();
+            const usedIds = getAllSelectedIds();
+
+            items.forEach(u => {
+
+                if (usedIds.includes(u.id)) return;
+
+                const name =
+                    u.fullname || u.name || u.nameEn || u.userName || `User #${u.id}`;
+
+                if (q && !name.toLowerCase().includes(q)) return;
+
+                const div = document.createElement("div");
+                div.className = "chip-item";
+                div.innerHTML = `
+                    <span>${name}</span>
+                    <span class="item-badge">${roleName}</span>
+                `;
+
+                div.onclick = () => {
+                    addAssignment(u.id, name, roleId);
+                    input.value = "";
+                };
+
+                dropdown.appendChild(div);
+            });
+
+            dropdown.style.display = dropdown.children.length ? "block" : "none";
+        });
+    }
+
+    /* ================= ADD / REMOVE ================= */
+    function addAssignment(userId, userName, roleId) {
+
+        const target =
+            roleId === 1 ? assignment.coordinators :
+            roleId === 2 ? assignment.supervisors :
+            assignment.viewers;
+
+        target.push({ userId, roleId, userName });
+        renderAll();
+    }
+
+    function removeAssignment(userId, roleId) {
+
+        if (roleId === 1)
+            assignment.coordinators =
+                assignment.coordinators.filter(x => x.userId !== userId);
+
+        if (roleId === 2)
+            assignment.supervisors =
+                assignment.supervisors.filter(x => x.userId !== userId);
+
+        if (roleId === 3)
+            assignment.viewers =
+                assignment.viewers.filter(x => x.userId !== userId);
+
+        renderAll();
+    }
+
+    /* ================= RENDER CHIPS ================= */
+    function renderChips() {
+
+        const panel = document.getElementById("selectedChipsPanel");
+        panel.innerHTML = "";
+
+        const draw = (title, list, roleId) => {
+
+            if (!list.length) return;
+
+            panel.insertAdjacentHTML(
+                "beforeend",
+                `<h6 class="mb-2">${title}</h6>`
+            );
+
+            list.forEach(i => {
+
+                const chip = document.createElement("div");
+                chip.className = "chip";
+                chip.innerHTML = `
+                    ${i.userName}
+                    <span class="chip-remove">&times;</span>
+                `;
+
+                chip.querySelector(".chip-remove").onclick =
+                    () => removeAssignment(i.userId, roleId);
+
+                panel.appendChild(chip);
+            });
+        };
+
+        draw("Coordinators", assignment.coordinators, 1);
+        draw("Supervisors", assignment.supervisors, 2);
+        draw("Viewers", assignment.viewers, 3);
+    }
+
+    /* ================= LOAD EXISTING ASSIGNMENTS ================= */
+    function loadExistingAssignments(list) {
+
+        list.forEach(a => {
+
+            const name = `User #${a.userId}`;
+
+            if (a.activityRoleId === 1)
+                assignment.coordinators.push({ userId: a.userId, roleId: 1, userName: name });
+
+            if (a.activityRoleId === 2)
+                assignment.supervisors.push({ userId: a.userId, roleId: 2, userName: name });
+
+            if (a.activityRoleId === 3)
+                assignment.viewers.push({ userId: a.userId, roleId: 3, userName: name });
+        });
+    }
+
+    /* ================= EDIT PAGE INIT ================= */
+    document.addEventListener("DOMContentLoaded", async () => {
+
+        // 1️⃣ Load existing assignments
+        loadExistingAssignments(window.editData.assignments || []);
+
+        // 2️⃣ Load users by management
+        if (window.editData.managementId) {
+
+            const url = `?handler=UsersByManagement&managementId=${window.editData.managementId}`;
+
+            ["dropdown1Wrapper", "dropdown2Wrapper", "dropdown3Wrapper"]
+                .forEach(id => initChipDropdown(id, url));
+        }
+
+        // 3️⃣ UI ready
+        isReady = true;
+        renderAll();
+    });
+</script>
+
+
+

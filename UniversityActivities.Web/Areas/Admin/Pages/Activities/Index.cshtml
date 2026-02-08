@@ -93,7 +93,7 @@
     </div>
     <br />
 <div class="d-flex justify-content-end mb-3">
-    <a href="/Admin/Activities/CreateActivity"
+    <a href="/Admin/Activities/AddActivity"
        class="btn btn-success d-flex align-items-center gap-2 shadow-sm">
         <i class="bi bi-plus-circle"></i>
         <span>Add New Activity</span>
@@ -258,16 +258,16 @@
                                     <div class="d-inline-flex gap-2">
 
                                         <!-- View -->
-                                        <a href="?handler=Details&id=@item.v.Id"
+                                        <a href="/Admin/Activities/EditActivity/@item.v.Id"
                                            class="btn btn-sm btn-outline-success"
                                            onclick="return viewActivity(event, @item.v.Id)">
                                             <i class="bi bi-eye"></i>
                                         </a>
 
                                         <!-- Edit -->
-                                        <a href="?handler=Edit&id=@item.v.Id"
+                                        <a href="/Admin/Activities/EditActivity/@item.v.Id"
                                            class="btn btn-sm btn-outline-primary"
-                                           onclick="return editActivity(event, @item.v.Id)">
+                                           >
                                             <i class="bi bi-pencil"></i>
                                         </a>
 

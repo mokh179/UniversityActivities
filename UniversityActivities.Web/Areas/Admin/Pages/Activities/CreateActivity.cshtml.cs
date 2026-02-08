@@ -70,8 +70,8 @@ namespace UniversityActivities.Web.Areas.Admin.Pages.Activities
             var userId = int.Parse(
                 User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-            await _createUseCase.ExecuteAsync(
-                Input);
+            //await _createUseCase.ExecuteAsync(
+            //    Input);
 
             return RedirectToPage("Index");
         }

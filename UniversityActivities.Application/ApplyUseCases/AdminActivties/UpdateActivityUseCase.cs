@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using UniversityActivities.Application.DTOs.Activities;
@@ -13,19 +14,27 @@ namespace UniversityActivities.Application.ApplyUseCases.AdminActivties
         private readonly IAdminActivityRepository _adminActivityRepository;
         private readonly IActivityTargetAudienceRepository _targetAudienceRepository;
         private readonly IActivityAssignmentRepository _assignmentRepository;
+        private readonly IMapper _mapper;
 
         public UpdateActivityUseCase(
             IUnitOfWork unitOfWork,
             IAdminActivityRepository adminActivityRepository,
             IActivityTargetAudienceRepository targetAudienceRepository,
-            IActivityAssignmentRepository assignmentRepository)
+            IActivityAssignmentRepository assignmentRepository, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _adminActivityRepository = adminActivityRepository;
             _targetAudienceRepository = targetAudienceRepository;
             _assignmentRepository = assignmentRepository;
+            _mapper = mapper;
         }
 
+        public async Task<CreateOrUpdateActivityDto> GetDetailsAsync(int activityId)
+        {
+                var activity=await _adminActivityRepository.GetEntityAsync(activityId);
+
+            return  _mapper.Map<CreateOrUpdateActivityDto>(activity);
+        }
         public async Task ExecuteAsync(int activityId, CreateOrUpdateActivityDto dto)
         {
             // =========================
@@ -79,8 +88,6 @@ namespace UniversityActivities.Application.ApplyUseCases.AdminActivties
                 await _targetAudienceRepository
                     .ReplaceAsync(activityId, dto.TargetAudienceIds);
             }
-
-            throw new NotImplementedException();
         }
     }
 }

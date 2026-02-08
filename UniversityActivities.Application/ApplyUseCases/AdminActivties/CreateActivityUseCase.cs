@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using UniversityActivities.Application.DTOs.Activities;
+using UniversityActivities.Application.Interfaces.ImageStorage;
 using UniversityActivities.Application.Interfaces.IUnitOfWork;
 using UniversityActivities.Application.Interfaces.Repositories.Activies.AdminActivies;
 
@@ -13,18 +15,21 @@ namespace UniversityActivities.Application.ApplyUseCases.AdminActivties
         private readonly IAdminActivityRepository _adminActivityRepository;
         private readonly IActivityTargetAudienceRepository _targetAudienceRepository;
         private readonly IActivityAssignmentRepository _assignmentRepository;
+        private readonly IImageStorageService _imageStorageService;
         public CreateActivityUseCase(IUnitOfWork unitOfWork,
             IAdminActivityRepository adminActivityRepository,
             IActivityTargetAudienceRepository targetAudienceRepository,
-            IActivityAssignmentRepository assignmentRepository)
+            IActivityAssignmentRepository assignmentRepository,
+            IImageStorageService imageStorageService)
         {
             _unitOfWork = unitOfWork;
             _adminActivityRepository = adminActivityRepository;
             _targetAudienceRepository = targetAudienceRepository;
             _assignmentRepository = assignmentRepository;
+            _imageStorageService = imageStorageService;
         }
 
-        public async Task<int> ExecuteAsync(CreateOrUpdateActivityDto dto)
+        public async Task<int> ExecuteAsync(CreateOrUpdateActivityDto dto,IFormFile image)
         {
             int status = 0;
             // =========================
@@ -63,6 +68,11 @@ namespace UniversityActivities.Application.ApplyUseCases.AdminActivties
             };
 
             // =========================
+            // Image Saving
+            // =========================
+             var ImageUrl=await _imageStorageService.SaveOrReplaceActivityImageAsync(image,Guid.NewGuid(),activity.TitleEn,null);
+
+            // =========================
             //  Persist Activity
             // =========================
             var activityId = await _adminActivityRepository
@@ -85,6 +95,8 @@ namespace UniversityActivities.Application.ApplyUseCases.AdminActivties
                 await _assignmentRepository
                     .ReplaceAsync(activityId, dto.Assignments);
             }
+
+           
 
             // =========================
             //  Commit

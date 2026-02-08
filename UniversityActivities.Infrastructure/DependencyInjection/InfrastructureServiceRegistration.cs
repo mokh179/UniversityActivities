@@ -14,12 +14,14 @@ using UniversityActivities.Application.ApplyUseCases.StudentActivties;
 using UniversityActivities.Application.ApplyUseCases.StudentAuth;
 using UniversityActivities.Application.AuthorizationModule.Services.Interfaces;
 using UniversityActivities.Application.AuthorizationModule.Services.Services;
+using UniversityActivities.Application.Interfaces.ImageStorage;
 using UniversityActivities.Application.Interfaces.IUnitOfWork;
 using UniversityActivities.Application.Interfaces.Repositories.Activies.AdminActivies;
 using UniversityActivities.Application.Interfaces.Repositories.Activies.StudentActivies;
 using UniversityActivities.Application.Interfaces.Repositories.Admin;
 using UniversityActivities.Application.Interfaces.Repositories.Roles;
 using UniversityActivities.Application.lookup.Interface;
+using UniversityActivities.Application.Mapping.Activities;
 using UniversityActivities.Application.UserCases.Activities.Admin;
 using UniversityActivities.Application.UserCases.Activities.Student;
 using UniversityActivities.Application.UserCases.Admin;
@@ -34,6 +36,7 @@ using UniversityActivities.Infrastructure.Persistence.Repositories.Activities.Ev
 using UniversityActivities.Infrastructure.Persistence.Repositories.Activities.Students;
 using UniversityActivities.Infrastructure.Persistence.Repositories.Admin;
 using UniversityActivities.Infrastructure.Persistence.Repositories.Roles;
+using UniversityActivities.Infrastructure.Persistence.Services;
 
 public static class InfrastructureServiceRegistration
 {
@@ -191,10 +194,14 @@ public static class InfrastructureServiceRegistration
         services.AddScoped<IDashboardQueryRepository,
                            AdminDashboardQueryRepository>();
 
+        // AutoMapper
+        services.AddAutoMapper(typeof(ActivityProfile).Assembly);
+
 
         services.AddScoped<ILogOutUseCase, LogOutUseCase>();
         services.AddScoped<IfilterLookupQuery, FilterLookupQuery>();
         services.AddScoped<IGetUserManagmentQuery, GetUserManagmentQuery>();
+        services.AddScoped<IImageStorageService, ImageStorageService>();
         return services;
     }
 }

@@ -1,6 +1,7 @@
-﻿using UniversityActivities.Application.DTOs.Activities;
+﻿using Microsoft.AspNetCore.Http;
+using UniversityActivities.Application.DTOs.Activities;
 
 public interface ICreateActivityUseCase
 {
-    Task<int> ExecuteAsync(CreateOrUpdateActivityDto dto);
+    Task<int> ExecuteAsync(CreateOrUpdateActivityDto dto,IFormFile image);
 }

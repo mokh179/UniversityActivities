@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+//using System.Diagnostics;
 using System.Text;
 using UniversityActivities.Application.AuthorizationModule.Models;
 using UniversityActivities.Application.Common.Models;
@@ -18,9 +20,11 @@ namespace UniversityActivities.Infrastructure.Persistence.Repositories.Activitie
     {
         private readonly AppDbContext _context;
 
+
         public AdminActivityRepository(AppDbContext context)
         {
             _context = context;
+;
         }
 
         public async Task<int> CreateAsync(Activity activity)
@@ -195,7 +199,8 @@ namespace UniversityActivities.Infrastructure.Persistence.Repositories.Activitie
 
         public async Task<Activity?> GetEntityAsync(int activityId)
         {
-            return await _context.Activities
+            return await _context.Activities.Include(a => a.ActivityTargetAudiences)
+        .Include(a => a.ActivityUsers)
                 .FirstOrDefaultAsync(x =>
                     x.Id == activityId &&
                     !x.IsDeleted);
@@ -205,6 +210,7 @@ namespace UniversityActivities.Infrastructure.Persistence.Repositories.Activitie
 
         public async Task<AdminStatistics> GetAdminStatisticsAsync(int? mangementId)
         {
+            
             var Allactivities=new List<Activity>();
             if (mangementId == 0|| mangementId==null) 
                  Allactivities= await _context.Activities.ToListAsync();
@@ -272,7 +278,6 @@ namespace UniversityActivities.Infrastructure.Persistence.Repositories.Activitie
                 
         }
 
-
-
+        
     }
 }
