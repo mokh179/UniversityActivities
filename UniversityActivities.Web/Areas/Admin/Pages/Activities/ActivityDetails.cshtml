@@ -1,0 +1,219 @@
+﻿@page "{id:int}"
+@model UniversityActivities.Web.Areas.Admin.Pages.Activities.ActivityDetailsModel
+@{
+    ViewData["Title"] = "Activity Details";
+}
+
+<style>
+    .header-card {
+        background: #1f7a4d;
+        color: #fff;
+    }
+
+    .section-header {
+        font-weight: 600;
+    }
+
+        .section-header.blue {
+            background: #e7f1ff;
+        }
+
+        .section-header.purple {
+            background: #f3e8ff;
+        }
+
+        .section-header.pink {
+            background: #fde7f3;
+        }
+
+        .section-header.orange {
+            background: #fff3cd;
+        }
+
+        .section-header.info {
+            background: #e7f6f8;
+        }
+
+    .card-header {
+        border-bottom: 1px solid #ddd;
+    }
+
+</style>
+
+<div class="container-fluid px-4 py-3">
+
+    <!-- HEADER -->
+    <div class="card header-card mb-4">
+        <div class="card-body d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">@Model.Activity.TitleEn</h5>
+
+            <div class="d-flex gap-2">
+                <button class="btn btn-danger btn-sm"
+                        data-bs-toggle="modal"
+                        data-bs-target="#deleteModal">
+                    Delete
+                </button>
+                <a class="btn btn-primary btn-sm" asp-area="Admin" asp-page="/EditActivity" asp-route-id="@Model.Activity.Id">Edit</a>
+                <a class="btn btn-light btn-sm">QR</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+
+        <!-- BASIC INFORMATION -->
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header section-header blue">
+                    Basic Information
+                </div>
+
+                <div class="card-body">
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Title</label>
+                            <input class="form-control" value="@Model.Activity.TitleEn" disabled />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Activity Type</label>
+                            <input class="form-control" value="@Model.Activity.ActivityTypeNameEn" disabled />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-control" rows="4" disabled>
+@Model.Activity.DescriptionEn
+                        </textarea>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label class="form-label">Management</label>
+                            <input class="form-control" value="@Model.Activity.ManagementNameEn" disabled />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Club</label>
+                            <input class="form-control" value="@Model.Activity.ClubNameEn" disabled />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Attendance Mode</label>
+                            <input class="form-control" value="@Model.Activity.AttendanceModeNameEn" disabled />
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- IMAGE -->
+        <div class="col-lg-4">
+            <div class="card shadow-sm">
+                <div class="card-header section-header purple">
+                    Activity Image
+                </div>
+                <div class="card-body text-center">
+                    <img src="@Model.Activity.ImageUrl" class="img-fluid rounded" />
+                </div>
+            </div>
+        </div>
+
+        <!-- ATTENDANCE DETAILS -->
+        <div class="col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-header section-header pink">
+                    Attendance Details
+                </div>
+                <div class="card-body">
+                    <p><strong>Location:</strong> @Model.Activity.LocationEn</p>
+                    <p><strong>Online Link:</strong>
+                        <a href="@Model.Activity.OnlineLink" target="_blank">
+                            @Model.Activity.OnlineLink
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- DATE & TIME -->
+        <div class="col-lg-6">
+            <div class="card shadow-sm">
+                <div class="card-header section-header orange">
+                    Date & Time
+                </div>
+                <div class="card-body">
+                    <p><strong>Start Date:</strong> @Model.Activity.StartDate.ToString("yyyy-MM-dd")</p>
+                    <p><strong>End Date:</strong> @Model.Activity.EndDate.ToString("yyyy-MM-dd")</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TARGET AUDIENCES -->
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header section-header info">
+                    Target Audiences
+                </div>
+                <div class="card-body">
+                    @foreach (var item in Model.Activity.TargetAudiencesEn)
+                    {
+                        <span class="badge bg-secondary me-1">@item</span>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- ROLES -->
+        <div class="col-12">
+            <div class="row g-3">
+
+                @Html.Partial("_UsersCard", ("Supervisors","primary",Model.Activity.Supervisors))
+                @Html.Partial("_UsersCard", ("Reviewers", "success", Model.Activity.Viewers))
+                @Html.Partial("_UsersCard", ("Coordinators", "secondary", Model.Activity.Coordinators))
+             
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title text-danger">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <p>
+                    Are you sure you want to delete this activity?
+                </p>
+                <strong>@Model.Activity.TitleEn</strong>
+            </div>
+
+            <div class="modal-footer">
+
+                <button type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                    Cancel
+                </button>
+
+                <form method="post" asp-page-handler="Delete">
+                    <input type="hidden" name="id" value="@Model.Activity.Id" />
+                    <button type="submit" class="btn btn-danger">
+                        Yes, Delete
+                    </button>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+

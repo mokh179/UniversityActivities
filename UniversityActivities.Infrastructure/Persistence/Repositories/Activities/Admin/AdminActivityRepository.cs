@@ -162,39 +162,95 @@ namespace UniversityActivities.Infrastructure.Persistence.Repositories.Activitie
  
         public async Task<ActivityAdminDetailsDto?> GetDetailsAsync(int activityId)
         {
-            return await (
-                from a in _context.Activities
-                join m in _context.Managements on a.ManagementId equals m.Id
-                join am in _context.AttendanceModes on a.AttendanceModeId equals am.Id
-                join at in _context.ActivityTypes on a.ActivityTypeId equals at.Id
-                where a.Id == activityId && !a.IsDeleted
-                select new ActivityAdminDetailsDto
-                {
-                    Id = a.Id,
-                    TitleAr = a.TitleAr,
-                    TitleEn = a.TitleEn,
-                    DescriptionAr = a.DescriptionAr,
-                    DescriptionEn = a.DescriptionEn,
-                    ImageUrl = a.ImageUrl,
-                    IsPublished = a.IsPublished,
+            try
+            {
+                var res = await (
+                            from a in _context.Activities
+                            join m in _context.Managements on a.ManagementId equals m.Id
+                            join am in _context.AttendanceModes on a.AttendanceModeId equals am.Id
+                            join at in _context.ActivityTypes on a.ActivityTypeId equals at.Id
+                            where a.Id == activityId && !a.IsDeleted
+                            select new ActivityAdminDetailsDto
+                            {
+                                Id = a.Id,
+                                TitleAr = a.TitleAr,
+                                TitleEn = a.TitleEn,
+                                DescriptionAr = a.DescriptionAr,
+                                DescriptionEn = a.DescriptionEn,
+                                ImageUrl = a.ImageUrl,
+                                IsPublished = a.IsPublished,
 
-                    StartDate = a.StartDateTime,
-                    EndDate = a.EndDateTime,
+                                StartDate = a.StartDateTime,
+                                EndDate = a.EndDateTime,
 
-                    LocationEn = a.LocationEn,
-                    LocationAr = a.LocationAr,
-                    OnlineLink = a.OnlineLink,
+                                LocationEn = a.LocationEn,
+                                LocationAr = a.LocationAr,
+                                OnlineLink = a.OnlineLink,
 
-                    ManagementNameAr = m.NameAr,
-                    ManagementNameEn = m.NameEn,
+                                ManagementNameAr = m.NameAr,
+                                ManagementNameEn = m.NameEn,
 
-                    AttendanceModeNameAr = am.NameAr,
-                    AttendanceModeNameEn = am.NameEn,
+                                AttendanceModeNameAr = am.NameAr,
+                                AttendanceModeNameEn = am.NameEn,
 
-                    ActivityTypeNameAr = at.NameAr,
-                    ActivityTypeNameEn = at.NameEn
-                }
-            ).FirstOrDefaultAsync();
+                                ActivityTypeNameAr = at.NameAr,
+                                ActivityTypeNameEn = at.NameEn,
+
+                                ClubNameAr = a.StudentClub.NameAr,
+                                ClubNameEn = a.StudentClub.NameEn,
+
+                                TargetAudiencesAr = a.ActivityTargetAudiences
+                                    .Select(ata => ata.TargetAudience.NameAr)
+                                    .ToList(),
+
+                                TargetAudiencesEn = a.ActivityTargetAudiences
+                                    .Select(ata => ata.TargetAudience.NameEn)
+                                    .ToList(),
+
+                                Coordinators =
+                                    (from au in _context.ActivityUsers
+                                     join u in _context.Users on au.UserId equals u.Id
+                                     where au.ActivityId == a.Id
+                                        && au.ActivityRoleId == (int)ActivityRoles.Coordinator
+                                     select new ActivityUserViewDto
+                                     {
+                                         UserId = u.Id,
+                                         FullNameEn = u.FirstName + " " + u.LastName
+                                     }).ToList(),
+
+                                Viewers =
+                                    (from au in _context.ActivityUsers
+                                     join u in _context.Users on au.UserId equals u.Id
+                                     where au.ActivityId == a.Id
+                                        && au.ActivityRoleId == (int)ActivityRoles.Viewer
+                                     select new ActivityUserViewDto
+                                     {
+                                         UserId = u.Id,
+                                         FullNameEn = u.FirstName + " " + u.LastName
+                                     }).ToList(),
+
+                                Supervisors =
+                                    (from au in _context.ActivityUsers
+                                     join u in _context.Users on au.UserId equals u.Id
+                                     where au.ActivityId == a.Id
+                                        && au.ActivityRoleId == (int)ActivityRoles.Supervisor
+                                     select new ActivityUserViewDto
+                                     {
+                                         UserId = u.Id,
+                                         FullNameEn = u.FirstName + " " + u.LastName
+                                     }).ToList(),
+                            }
+                        ).FirstOrDefaultAsync();
+
+
+                return res;  
+            }
+            catch (Exception ex)
+            {
+
+                throw new BusinessException("An error occured ...");
+            }
+
         }
 
         public async Task<Activity?> GetEntityAsync(int activityId)

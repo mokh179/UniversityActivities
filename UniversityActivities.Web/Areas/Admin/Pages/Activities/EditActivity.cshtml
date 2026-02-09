@@ -531,22 +531,16 @@
 
     /* ===================== CHIPS ===================== */
     /* ===== RENDER CHIPS ===== */
-    function renderChips() {
-
+       function renderChips() {
         const panel = document.getElementById("selectedChipsPanel");
         panel.innerHTML = "";
 
         const draw = (title, list, roleId) => {
-
             if (!list.length) return;
 
-            panel.insertAdjacentHTML(
-                "beforeend",
-                `<h6 class="mb-2">${title}</h6>`
-            );
+            panel.insertAdjacentHTML("beforeend", `<h6>${title}</h6>`);
 
             list.forEach(item => {
-
                 const name = getUserName(item.userId);
 
                 const chip = document.createElement("div");
@@ -567,6 +561,7 @@
         draw("Supervisors", assignment.supervisors, 2);
         draw("Viewers", assignment.viewers, 3);
     }
+
 
     /* ===================== RENDER ALL ===================== */
     function renderAll() {

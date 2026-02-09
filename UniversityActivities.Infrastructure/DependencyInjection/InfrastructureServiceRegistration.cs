@@ -176,6 +176,8 @@ public static class InfrastructureServiceRegistration
         services.AddScoped<ILoginUseCase, LoginUseCase>();
         services.AddScoped<IUiLookupsQuery, UiLookupsQuery>();
         services.AddScoped<IGetUiLookupsUseCase, GetUiLookupsUseCase >();
+        services.AddScoped<IAdminViewActivityDetailsUseCase, AdminViewActivityDetailsUseCase>();
+        
 
         // =========================
         // Use Cases - Evaluation
@@ -202,6 +204,7 @@ public static class InfrastructureServiceRegistration
         services.AddScoped<IfilterLookupQuery, FilterLookupQuery>();
         services.AddScoped<IGetUserManagmentQuery, GetUserManagmentQuery>();
         services.AddScoped<IImageStorageService, ImageStorageService>();
+        services.AddScoped<IGenerateAttendanceCertificateUseCase, GenerateAttendanceCertificateUseCase>();
         return services;
     }
 }

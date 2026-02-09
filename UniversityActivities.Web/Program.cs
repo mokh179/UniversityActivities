@@ -37,6 +37,8 @@ builder.Services.AddRazorPages(options =>
 });
 
 builder.Services.AddInfrastructure(builder.Configuration);
+QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
+
 var app = builder.Build();
 
 //Looging 

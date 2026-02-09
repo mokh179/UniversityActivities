@@ -20,7 +20,6 @@ namespace UniversityActivities.Application.ApplyUseCases.AdminDashboard
             int managementId,
             bool isSuperAdmin)
         {
-            // SuperAdmin → كل الداتا
             if (isSuperAdmin || managementId == 0)
             {
                 return _query.GetGlobalStatsAsync();

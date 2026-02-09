@@ -107,7 +107,7 @@
     <div class="col-lg-4 col-md-6">
             <div class="activity-card position-relative">
                 <div class="activity-image-wrapper">
-                    <img src="~@item.ImageUrl" alt="Activity Image" />
+                    <img src="@item.ImageUrl" alt="Activity Image" />
                 </div>
 
                 <!-- ACTIVITY TYPE (top-left) -->
@@ -144,7 +144,7 @@
                     </li>
                 </ul>
 
-                @if (item.IsRegistered)
+               @*  @if (item.IsRegistered)
                 {
                     <button class="btn btn-outline-secondary w-100" disabled>
                         Registered
@@ -153,10 +153,14 @@
                 else
                 {
                         <a class="btn btn-success w-100" href="/Student/ActivityDetails/@item.Id">
-                            
+
+                            View Details
+                        </a>
+                } *@
+                    <a class="btn btn-success w-100" asp-area="Student" asp-page="/ActivityDetails" asp-route-id="@item.Id">
+
                         View Details
                     </a>
-                }
             </div>
         </div>
     </div>

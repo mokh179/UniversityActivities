@@ -49,7 +49,7 @@ function rebuildTable(result) {
                 <td>${item.startDate?.substring(0, 10)}</td>
                 <td class="text-end">
                     <div class="d-inline-flex gap-2">
-                        <a class="btn btn-sm btn-outline-success"><i class="bi bi-eye"></i></a>
+                        <a class="btn btn-sm btn-outline-success" href="/Admin/Activities/ActivityDetails/${item.id}"><i class="bi bi-eye"></i></a>
                         <a class="btn btn-sm btn-outline-primary" href="/Admin/Activities/EditActivity/${item.id}"><i class="bi bi-pencil"></i></a>
                         <a class="btn btn-sm btn-outline-info"><i class="bi bi-people" href="?handler=participants&activityId=${item.id}" onclick="return loadParticipants(event, ${item.id})">></i></a>
                         <a class="btn btn-sm btn-outline-warning"><i class="bi bi-check-circle"></i></a>

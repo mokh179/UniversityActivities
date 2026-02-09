@@ -29,6 +29,7 @@ namespace UniversityActivities.Application.ApplyUseCases.StudentActivties
             var evaluated = await _evaluationRepo.HasEvaluatedAsync(studentId, activityId);
             if (!evaluated)
                 throw new Exception("Evaluation required");
+
             var activity = await _activityQuery.GetCertificateDetails(studentId,activityId);
             return new AttendanceCertificateDto
             {
@@ -39,9 +40,6 @@ namespace UniversityActivities.Application.ApplyUseCases.StudentActivties
                 IssuedAt = DateTime.UtcNow,
                 CertificateNumber = Guid.NewGuid().ToString("N")[..10]
             };
-
-
-            throw new NotImplementedException();
         }
     }
 }
