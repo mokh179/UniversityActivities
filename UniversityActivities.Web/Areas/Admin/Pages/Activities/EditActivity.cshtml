@@ -3,607 +3,640 @@
 @{
     ViewData["Title"] = "Edit Activity";
 }
+<link rel="stylesheet"href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 <style>
-    <style >
-    /* ===== Layout ===== */
-    .management-section {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
-    }
-
-    /* ===== Dropdown ===== */
-    .chip-select {
-        position: relative;
-    }
-
-    .chip-input {
-        width: 100%;
-        padding: 10px 12px;
+    .header-card {
+        background: #1f7a4d;
         border-radius: 8px;
-        border: 1px solid #d1d5db;
+    }
+    /* ================= GENERAL ================= */
+    body {
+        background-color: #f5f7fa;
     }
 
-    .chip-dropdown {
-        position: absolute;
-        width: 100%;
-        background: #fff;
+    .card {
         border: 1px solid #e5e7eb;
         border-radius: 10px;
-        margin-top: 6px;
-        max-height: 260px;
-        overflow-y: auto;
-        z-index: 100;
     }
 
-    /* ===== Dropdown Item ===== */
-    .chip-item {
-        padding: 10px 12px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        cursor: pointer;
-    }
-
-        .chip-item:hover {
-            background: #f3f4f6;
+        .card + .card {
+            margin-top: 1.25rem;
         }
 
-    .item-badge {
-        font-size: 12px;
-        background: #eef2ff;
-        color: #3730a3;
-        padding: 4px 8px;
-        border-radius: 14px;
+    .card-header {
+        background-color: #f9fafb;
+        border-bottom: 1px solid #e5e7eb;
+        padding: 0.85rem 1.25rem;
     }
 
-    /* ===== Selected Panel ===== */
-    .selected-panel {
-        border: 1px dashed #d1d5db;
-        border-radius: 10px;
-        padding: 12px;
-        min-height: 180px;
-        background: #fafafa;
+    .card-body {
+        padding: 1.25rem;
     }
 
-    /* ===== Chips ===== */
-    .chip {
+    .form-label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #374151;
+    }
+
+    .form-control,
+    .form-select {
+        font-size: 0.9rem;
+        border-radius: 8px;
+    }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 0.1rem rgba(79, 70, 229, 0.15);
+        }
+
+    /* ================= HEADER ================= */
+    .header-card {
+        background: linear-gradient(135deg, #15803d, #166534);
+        border: none;
+        border-radius: 12px;
+    }
+
+        .header-card h5 {
+            font-weight: 600;
+        }
+
+        .header-card small {
+            font-size: 0.8rem;
+        }
+
+    /* ================= IMAGE CARD ================= */
+    .card img {
+        background-color: #f3f4f6;
+    }
+
+    .card input[type="file"] {
+        font-size: 0.85rem;
+    }
+
+    /* ================= SECTION TITLES ================= */
+    .card-header .fw-semibold {
+        font-size: 0.95rem;
+    }
+
+    .card-header small {
+        font-size: 0.75rem;
+    }
+
+    /* ================= MULTI SELECT ================= */
+    select[multiple] {
+        min-height: 110px;
+    }
+
+    /* ================= ROLES SECTION ================= */
+    #supervisorsChips,
+    #coordinatorsChips,
+    #participantsChips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    /* chip */
+    .role-chip {
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        padding: 6px 12px;
-        border-radius: 20px;
-        background: #16a34a;
-        color: #fff;
-        font-size: 13px;
-        margin: 4px;
-    }
-
-    .chip-remove {
-        cursor: pointer;
-        font-weight: bold;
-    }
-    /* ===== LEFT LISTS (DROPDOWNS) ===== */
-    .chip-select {
-        position: relative;
-        margin-bottom: 16px;
-    }
-
-    .chip-dropdown {
-        position: relative; /* ❌ مش absolute */
-        margin-top: 6px;
-        border: 1px solid #e5e7eb;
-        border-radius: 8px;
-        background: #fff;
-        max-height: 220px;
-        overflow-y: auto;
-    }
-
-    /* كل عنصر في الليست */
-    .chip-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px 12px;
-        border-bottom: 1px solid #f1f1f1;
-        cursor: pointer;
-    }
-
-        .chip-item:last-child {
-            border-bottom: none;
-        }
-
-        .chip-item:hover {
-            background: #f8fafc;
-        }
-
-    /* Badge الدور */
-    .item-badge {
-        background: #eef2ff;
-        color: #4338ca;
+        background-color: #eef2ff;
+        color: #3730a3;
+        border-radius: 999px;
         padding: 4px 10px;
-        border-radius: 999px;
-        font-size: 12px;
+        font-size: 0.75rem;
+        font-weight: 500;
     }
 
-    /* ===== RIGHT PANEL (CHIPS) ===== */
-    #selectedChipsPanel {
-        min-height: 180px;
-        border: 1px dashed #e5e7eb;
-        border-radius: 10px;
-        padding: 14px;
+        .role-chip button {
+            border: none;
+            background: transparent;
+            color: #6b7280;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+
+            .role-chip button:hover {
+                color: #dc2626;
+            }
+
+    /* ================= SWITCH ================= */
+    .form-switch .form-check-input {
+        width: 2.4em;
+        height: 1.2em;
     }
 
-    /* CHIP */
-    .chip {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        background: #16a34a;
-        color: #fff;
-        padding: 6px 12px;
-        border-radius: 999px;
-        margin: 6px 6px 0 0;
-        font-size: 13px;
+    /* ================= BUTTONS ================= */
+    .btn-light {
+        font-weight: 600;
+        border-radius: 8px;
     }
 
-    .chip-remove {
-        cursor: pointer;
-        font-weight: bold;
+    .btn-success {
+        border-radius: 8px;
+    }
+
+    /* ================= SPACING ================= */
+    .row.mb-3 {
+        margin-bottom: 1rem !important;
+    }
+
+    /* ================= ICON ================= */
+    .bi {
+        font-size: 1.1rem;
     }
 
 </style>
-<!-- ================= HEADER ================= -->
-<div class="card mb-4 border-0">
-    <div class="card-body p-0">
-        <div class="bg-warning rounded-3 text-dark p-4 d-flex justify-content-between align-items-center">
+
+
+
+
+<form method="post" id="editForm" enctype="multipart/form-data">
+
+    <!-- ================= HEADER ================= -->
+    <div class="card header-card mb-4">
+        <div class="card-body d-flex justify-content-between align-items-center">
             <div>
-                <h5 class="mb-1 fw-bold">Edit Activity</h5>
-                <p class="mb-0 small opacity-75">Update activity details</p>
+                <h5 class="mb-1 text-white">Edit Activity</h5>
+                <small class="text-white-50">
+                    Update activity information and settings
+                </small>
             </div>
-            <a asp-page="./Index" class="btn btn-outline-dark">Back</a>
+
+            <button type="submit" class="btn btn-light btn-sm">
+                Save Changes
+            </button>
         </div>
     </div>
-</div>
 
-<form method="post" enctype="multipart/form-data">
+    <!-- ================= ACTIVITY IMAGE ================= -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header fw-semibold">
+            Activity Image
+            <small class="text-muted d-block">
+                Upload or change the activity image
+            </small>
+        </div>
 
-    <!-- ================= IMAGE ================= -->
-    <div class="card mb-4 shadow-sm">
         <div class="card-body">
-            <h6 class="fw-semibold mb-3">Activity Image</h6>
-
-            @if (!string.IsNullOrEmpty(Model.Input.ImageUrl))
-            {
+            <div class="d-flex align-items-center gap-3">
                 <img src="@Model.Input.ImageUrl"
-                     class="img-thumbnail mb-3"
-                     style="max-height:200px"
-                     id="imagePreview" />
-            }
+                     class="rounded border"
+                     style="width:120px;height:80px;object-fit:cover;" />
 
-            <input type="file"
-                   class="form-control"
-                   id="activityImage"
-                   name="Image" />
+                <input type="file"
+                       class="form-control w-50"
+                       name="ImageFile" />
+            </div>
         </div>
     </div>
 
-    <!-- ================= BASIC INFO ================= -->
-    <div class="card mb-4 shadow-sm">
+    <!-- ================= BASIC INFORMATION ================= -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header d-flex align-items-center gap-2">
+            <i class="bi bi-info-circle text-primary"></i>
+            <div>
+                <div class="fw-semibold">Basic Information</div>
+                <small class="text-muted">Main activity details</small>
+            </div>
+        </div>
+
         <div class="card-body">
-            <h6 class="fw-semibold mb-3">Basic Information</h6>
 
-            <div class="row g-3">
-
+            <!-- Titles -->
+            <div class="row mb-3">
                 <div class="col-md-6">
-                    <label asp-for="Input.TitleEn"></label>
+                    <label class="form-label">Title (English)</label>
                     <input asp-for="Input.TitleEn" class="form-control" />
                 </div>
 
                 <div class="col-md-6">
-                    <label asp-for="Input.TitleAr"></label>
+                    <label class="form-label">Title (Arabic)</label>
                     <input asp-for="Input.TitleAr" class="form-control" />
                 </div>
+            </div>
 
+            <!-- Activity Code -->
+            <div class="row mb-3">
                 <div class="col-md-6">
-                    <label>Management Type</label>
+                    <label class="form-label">Activity Code</label>
+                    <input asp-for="Input.ActivityCode" class="form-control" />
+                </div>
+            </div>
+
+            <!-- Management Type -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label">Management Type</label>
                     <select asp-for="Input.ManagementTypeId"
                             id="managementTypeSelect"
                             class="form-select">
-                        <option value="">Select</option>
-                        @foreach (var t in Model.Lookups.ManagementTypes)
+                        <option value="">Select management type</option>
+                        @foreach (var item in Model.Lookups.ManagementTypes)
                         {
-                            <option value="@t.Id">@t.NameEn</option>
+                            <option value="@item.Id">@item.NameEn</option>
                         }
                     </select>
                 </div>
 
                 <div class="col-md-6">
-                    <label>Management</label>
+                    <label class="form-label">Management</label>
                     <select asp-for="Input.ManagementId"
                             id="managementSelect"
                             class="form-select">
-                        <option value="">Select</option>
+                        <option value="">Select management</option>
                     </select>
                 </div>
+            </div>
 
+            <!-- Club -->
+            <div class="row mb-3">
                 <div class="col-md-6">
-                    <label>Club</label>
+                    <label class="form-label">Club</label>
                     <select asp-for="Input.ClubId"
                             id="clubSelect"
                             class="form-select">
-                        <option value="">Select</option>
+                        <option value="">Select club</option>
                     </select>
                 </div>
 
                 <div class="col-md-6">
-                    <label asp-for="Input.ActivityTypeId"></label>
+                    <label class="form-label">Activity Type</label>
                     <select asp-for="Input.ActivityTypeId"
                             class="form-select">
-                        <option value="">Select</option>
-                        @foreach (var t in Model.Lookups.ActivityTypes)
+                        <option value="">Select activity type</option>
+                        @foreach (var item in Model.Lookups.ActivityTypes)
                         {
-                            <option value="@t.Id">@t.NameEn</option>
+                            <option value="@item.Id">@item.NameEn</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <!-- Target Audiences -->
+            <div class="mb-3">
+                <label class="form-label">Target Audiences</label>
+                <select asp-for="Input.TargetAudienceIds"
+                        multiple
+                        class="form-select">
+                    @foreach (var item in Model.Lookups.TargetAudiences)
+                    {
+                        <option value="@item.Id">@item.NameEn</option>
+                    }
+                </select>
+            </div>
+
+            <!-- Description -->
+            <div>
+                <label class="form-label">Description</label>
+                <textarea asp-for="Input.DescriptionEn"
+                          rows="4"
+                          class="form-control"></textarea>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ================= ATTENDANCE ================= -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header fw-semibold">
+            Attendance & Location
+        </div>
+
+        <div class="card-body">
+            <div class="row mb-3">
+
+                <div class="col-md-6">
+                    <label class="form-label">Attendance Mode</label>
+                    <select asp-for="Input.AttendanceModeId"
+                            class="form-select">
+                        @foreach (var item in Model.Lookups.AttendanceModes)
+                        {
+                            <option value="@item.Id">@item.NameEn</option>
                         }
                     </select>
                 </div>
 
                 <div class="col-md-6">
-                    <label asp-for="Input.StartDate"></label>
-                    <input asp-for="Input.StartDate"
-                           type="datetime-local"
-                           class="form-control" />
-                </div>
-
-                <div class="col-md-6">
-                    <label asp-for="Input.EndDate"></label>
-                    <input asp-for="Input.EndDate"
-                           type="datetime-local"
-                           class="form-control" />
+                    <label class="form-label">Attendance Scope</label>
+                    <select asp-for="Input.AttendanceScopeId"
+                            class="form-select">
+                        @foreach (var item in Model.Lookups.AttendanceScopes)
+                        {
+                            <option value="@item.Id">@item.NameEn</option>
+                        }
+                    </select>
                 </div>
 
             </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="form-label">Location</label>
+                    <input asp-for="Input.LocationEn" class="form-control" />
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Online Link</label>
+                    <input asp-for="Input.OnlineLink" class="form-control" />
+                </div>
+            </div>
+
         </div>
     </div>
 
-    <!-- ================= DESCRIPTIONS ================= -->
-    <div class="card mb-4 shadow-sm">
+    <!-- ================= DATE & PUBLISH ================= -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header fw-semibold">
+            Date & Publish
+        </div>
+
         <div class="card-body">
-            <h6 class="fw-semibold mb-3">Descriptions</h6>
-
-            <div class="row g-3">
+            <div class="row mb-3">
                 <div class="col-md-6">
-                    <label asp-for="Input.DescriptionEn"></label>
-                    <textarea asp-for="Input.DescriptionEn"
-                              class="form-control" rows="4"></textarea>
+                    <label class="form-label">Start Date</label>
+                    <input asp-for="Input.StartDate"
+                           type="date"
+                           class="form-control" />
                 </div>
+
                 <div class="col-md-6">
-                    <label asp-for="Input.DescriptionAr"></label>
-                    <textarea asp-for="Input.DescriptionAr"
-                              class="form-control" rows="4"></textarea>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ================= ASSIGNMENTS ================= -->
-    <div class="row g-4">
-
-        <!-- LEFT -->
-        <div class="col-md-6">
-
-            <div class="mb-3" id="dropdown1Wrapper">
-                <label class="form-label fw-semibold">Coordinators</label>
-                <div class="chip-select" data-role-id="1" data-role-name="Coordinator">
-                    <input class="form-control chip-input" placeholder="Search user..." />
-                    <div class="chip-dropdown"></div>
+                    <label class="form-label">End Date</label>
+                    <input asp-for="Input.EndDate"
+                           type="date"
+                           class="form-control" />
                 </div>
             </div>
 
-            <div class="mb-3" id="dropdown2Wrapper">
-                <label class="form-label fw-semibold">Supervisors</label>
-                <div class="chip-select" data-role-id="2" data-role-name="Supervisor">
-                    <input class="form-control chip-input" placeholder="Search user..." />
-                    <div class="chip-dropdown"></div>
-                </div>
-            </div>
-
-            <div class="mb-3" id="dropdown3Wrapper">
-                <label class="form-label fw-semibold">Viewers</label>
-                <div class="chip-select" data-role-id="3" data-role-name="Viewer">
-                    <input class="form-control chip-input" placeholder="Search user..." />
-                    <div class="chip-dropdown"></div>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- RIGHT -->
-        <div class="col-md-6">
-            <label class="form-label fw-semibold">Selected Assignments</label>
-            <div id="selectedChipsPanel" class="selected-panel">
-                <div class="text-muted small">No assignments selected</div>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- ================= PUBLISH ================= -->
-    <div class="card mb-4 shadow-sm">
-        <div class="card-body d-flex justify-content-between align-items-center">
-            <div class="form-check">
+            <div class="form-check form-switch">
                 <input asp-for="Input.IsPublished"
-                       class="form-check-input" />
-                <label asp-for="Input.IsPublished"
-                       class="form-check-label fw-semibold"></label>
+                       class="form-check-input"
+                       type="checkbox" />
+                <label class="form-check-label">
+                    Publish Activity
+                </label>
             </div>
+        </div>
+    </div>
 
-            <button type="submit"
-                    class="btn btn-warning px-4">
-                Update Activity
-            </button>
+    <!-- ================= ROLES ================= -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header fw-semibold">
+            Activity Roles
+        </div>
+
+        <div class="card-body">
+            <div class="row g-3">
+
+                <div class="col-md-4">
+                    <label class="form-label">Supervisors</label>
+                    <select id="supervisorsSelect" class="form-select">
+                        <option value="">Select supervisor</option>
+                    </select>
+                    <div class="mt-2" id="supervisorsChips"></div>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Coordinators</label>
+                    <select id="coordinatorsSelect" class="form-select">
+                        <option value="">Select coordinator</option>
+                    </select>
+                    <div class="mt-2" id="coordinatorsChips"></div>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">Participants</label>
+                    <select id="participantsSelect" class="form-select">
+                        <option value="">Select participant</option>
+                    </select>
+                    <div class="mt-2" id="participantsChips"></div>
+                </div>
+
+            </div>
         </div>
     </div>
 
 </form>
 
+
+
 <script>
-    console.log("JS LOADED");
+    const imageInput = document.getElementById("imageInput");
+    const imagePreview = document.getElementById("imagePreview");
 
-    /* ===================== EDIT DATA ===================== */
-    window.editData = {
-        managementTypeId: @Model.Input.ManagementTypeId,
-        managementId: @Model.Input.ManagementId,
-        clubId: @(Model.Input.ClubId ?? 0),
-        assignments: @Html.Raw(
-                        System.Text.Json.JsonSerializer.Serialize(
-                                Model.Input.Assignments 
-                        )
-                )
-    };
+    if (imageInput) {
+        imageInput.addEventListener("change", function () {
+            const file = this.files[0];
+            if (!file) return;
 
-    /* ===================== STATE ===================== */
-    let usersCache = [];
-
-    let assignment = {
-        coordinators: [],
-        supervisors: [],
-        viewers: []
-    };
-
-    /* ===================== HELPERS ===================== */
-    function getUserName(u) {
-        console.log(u)
-    const user = usersCache.find(u => u.id === userId);
-      return user
-          ? (user.fullname || user.name || user.nameEn || user.userName)
-          : `User #${userId}`;
-    }
-
-    function getAllSelectedIds() {
-        return [
-            ...assignment.coordinators,
-            ...assignment.supervisors,
-            ...assignment.viewers
-        ].map(x => x.userId);
-    }
-
-    /* ===================== LOADERS ===================== */
-    async function loadManagements(typeId) {
-        const res = await fetch(`?handler=ManagementsByType&managementTypeId=${typeId}`);
-        const data = await res.json();
-
-        const select = document.getElementById("managementSelect");
-        select.innerHTML = `<option value="">Select</option>`;
-        data.forEach(m => {
-            select.innerHTML += `<option value="${m.id}">${m.nameEn}</option>`;
+            const reader = new FileReader();
+            reader.onload = e => imagePreview.src = e.target.result;
+            reader.readAsDataURL(file);
         });
-    }
+        }        document.addEventListener("DOMContentLoaded", async function () {
 
-    async function loadClubs(managementId) {
-        const res = await fetch(`?handler=ClubsByManagement&managementId=${managementId}`);
-        const data = await res.json();
+        /* ================= ELEMENTS ================= */
+        const managementTypeSelect = document.getElementById("managementTypeSelect");
+        const managementSelect = document.getElementById("managementSelect");
+        const clubSelect = document.getElementById("clubSelect");
 
-        const select = document.getElementById("clubSelect");
-        select.innerHTML = `<option value="">Select</option>`;
-        data.forEach(c => {
-            select.innerHTML += `<option value="${c.id}">${c.nameEn}</option>`;
-        });
-    }
+        const supervisorsSelect = document.getElementById("supervisorsSelect");
+        const coordinatorsSelect = document.getElementById("coordinatorsSelect");
+        const participantsSelect = document.getElementById("participantsSelect");
 
-    async function loadUsers(managementId) {
-        const res = await fetch(`?handler=UsersByManagement&managementId=${managementId}`);
-        usersCache = await res.json();
-            renderAll();
+        const supervisorsChips = document.getElementById("supervisorsChips");
+        const coordinatorsChips = document.getElementById("coordinatorsChips");
+        const participantsChips = document.getElementById("participantsChips");
 
-    }
+        /* ================= DATA FROM SERVER ================= */
+        const existingAssignments = @Html.Raw(
+                        System.Text.Json.JsonSerializer.Serialize(Model.Input.Assignments)
+                );
 
-    /* ===================== DROPDOWNS ===================== */
-    // function renderDropdown(wrapperId, roleId, roleName) {
+        const usersMap = new Map();
 
-    //     const wrapper = document.getElementById(wrapperId);
-    //     const input = wrapper.querySelector(".chip-input");
-    //     const dropdown = wrapper.querySelector(".chip-dropdown");
+        /* ================= PRELOADED VALUES ================= */
+        const selectedManagementTypeId = managementTypeSelect?.value;
+        const selectedManagementId = "@Model.Input.ManagementId";
+        const selectedClubId = "@Model.Input.ClubId";
 
-    //     const q = input.value.toLowerCase();
-    //     const usedIds = getAllSelectedIds();
+        /* ================= INITIAL LOAD ================= */
+        if (selectedManagementTypeId) {
+            await loadManagements(selectedManagementTypeId);
 
-    //     dropdown.innerHTML = "";
+            if (selectedManagementId) {
+                managementSelect.value = selectedManagementId;
+                await loadClubsAndUsers(selectedManagementId);
 
-    //     usersCache.forEach(u => {
-
-    //         if (usedIds.includes(u.id)) return;
-
-    //         const name = getUserName(u);
-    //         if (q && !name.toLowerCase().includes(q)) return;
-
-    //         const div = document.createElement("div");
-    //         div.className = "chip-item";
-    //         div.innerHTML = `
-    //             <span>${name}</span>
-    //             <span class="item-badge">${roleName}</span>
-    //         `;
-
-    //         div.onclick = () => {
-    //             addAssignment(u.id, name, roleId);
-    //             input.value = "";
-    //             renderAll();
-    //         };
-
-    //         dropdown.appendChild(div);
-    //     });
-    // }
-        /* ===== RENDER DROPDOWNS ===== */
-    function renderDropdowns() {
-
-        document.querySelectorAll(".chip-select").forEach(select => {
-
-            const dropdown = select.querySelector(".chip-dropdown");
-            const input = select.querySelector(".chip-input");
-            const roleId = +select.dataset.roleId;
-            const roleName = select.dataset.roleName;
-            const q = input.value.toLowerCase();
-
-            dropdown.innerHTML = "";
-
-            const usedIds = [
-                ...assignment.coordinators,
-                ...assignment.supervisors,
-                ...assignment.viewers
-            ].map(x => x.userId);
-
-            usersCache.forEach(user => {
-
-                if (usedIds.includes(user.id)) return;
-
-                const name = getUserName(user.id);
-                if (q && !name.toLowerCase().includes(q)) return;
-
-                const div = document.createElement("div");
-                div.className = "chip-item";
-                div.innerHTML = `
-                    <span>${name}</span>
-                    <span class="item-badge">${roleName}</span>
-                `;
-
-                div.onclick = () => {
-                    addAssignment(user.id, roleId);
-                    input.value = "";
-                };
-
-                dropdown.appendChild(div);
-            });
-        });
-    }
-
-    /* ===================== ASSIGNMENTS ===================== */
-        /* ===== ADD / REMOVE ===== */
-    function addAssignment(userId, roleId) {
-
-        const target =
-            roleId === 1 ? assignment.coordinators :
-            roleId === 2 ? assignment.supervisors :
-            assignment.viewers;
-
-        if (target.some(x => x.userId === userId)) return;
-
-        target.push({ userId, roleId });
-        renderAll();
-    }
-
-    function removeAssignment(userId, roleId) {
-
-        if (roleId === 1)
-            assignment.coordinators =
-                assignment.coordinators.filter(x => x.userId !== userId);
-
-        if (roleId === 2)
-            assignment.supervisors =
-                assignment.supervisors.filter(x => x.userId !== userId);
-
-        if (roleId === 3)
-            assignment.viewers =
-                assignment.viewers.filter(x => x.userId !== userId);
-
-        renderAll();
-    }
-
-
-    /* ===================== CHIPS ===================== */
-    /* ===== RENDER CHIPS ===== */
-       function renderChips() {
-        const panel = document.getElementById("selectedChipsPanel");
-        panel.innerHTML = "";
-
-        const draw = (title, list, roleId) => {
-            if (!list.length) return;
-
-            panel.insertAdjacentHTML("beforeend", `<h6>${title}</h6>`);
-
-            list.forEach(item => {
-                const name = getUserName(item.userId);
-
-                const chip = document.createElement("div");
-                chip.className = "chip";
-                chip.innerHTML = `
-                    ${name}
-                    <span class="chip-remove">&times;</span>
-                `;
-
-                chip.querySelector(".chip-remove").onclick =
-                    () => removeAssignment(item.userId, roleId);
-
-                panel.appendChild(chip);
-            });
-        };
-
-        draw("Coordinators", assignment.coordinators, 1);
-        draw("Supervisors", assignment.supervisors, 2);
-        draw("Viewers", assignment.viewers, 3);
-    }
-
-
-    /* ===================== RENDER ALL ===================== */
-    function renderAll() {
-       renderDropdowns();
-    renderChips();
-    }
-
-    /* ===================== INIT EDIT PAGE ===================== */
-    document.addEventListener("DOMContentLoaded", async () => {
-
-        console.log("BOOTSTRAP EDIT");
-
-        // load managements
-        await loadManagements(editData.managementTypeId);
-        document.getElementById("managementSelect").value = editData.managementId;
-
-        // load clubs
-        await loadClubs(editData.managementId);
-        if (editData.clubId)
-            document.getElementById("clubSelect").value = editData.clubId;
-
-        // load users
-        await loadUsers(editData.managementId);
-
-        // load existing assignments
-        editData.assignments.forEach(a => {
-               const user = usersCache.find(u => u.id === a.userId);
-               const name = user? getUserName(user): `User #${a.userId}`; // fallback حقيقي
-                  addAssignment(a.userId, name, a.activityRoleId);
-            });
-
-        // wire inputs
-        document.querySelectorAll(".chip-input").forEach(() => {
-            document.querySelectorAll(".chip-input").forEach(inp => {
-                inp.addEventListener("input", renderAll);
-            });
+                if (selectedClubId) {
+                    clubSelect.value = selectedClubId;
+                }
+            }
+        }
+    console.log("Assignments:", existingAssignments);
+    console.log("Chips supervisors:", supervisorsChips.children.length);
+        /* ================= EVENTS ================= */
+        managementTypeSelect?.addEventListener("change", async function () {
+            resetAll();
+            if (!this.value) return;
+            await loadManagements(this.value);
         });
 
-        renderAll();
+        managementSelect?.addEventListener("change", async function () {
+            resetAfterManagement();
+            if (!this.value) return;
+            await loadClubsAndUsers(this.value);
+        });
+
+        supervisorsSelect?.addEventListener("change", () =>
+            handleRoleSelect(supervisorsSelect, supervisorsChips, 1)
+        );
+
+        coordinatorsSelect?.addEventListener("change", () =>
+            handleRoleSelect(coordinatorsSelect, coordinatorsChips, 2)
+        );
+
+        participantsSelect?.addEventListener("change", () =>
+            handleRoleSelect(participantsSelect, participantsChips, 3)
+        );
+
+        /* ================= LOADERS ================= */
+        async function loadManagements(typeId) {
+            resetSelect(managementSelect, "Select management");
+
+            const res = await fetch(
+                `?handler=ManagementsByType&managementTypeId=${typeId}`
+            );
+            const data = await res.json();
+
+            data.forEach(m =>
+                managementSelect.add(new Option(m.nameEn, m.id))
+            );
+        }
+
+        async function loadClubsAndUsers(managementId) {
+
+            // ---------- Clubs ----------
+            resetSelect(clubSelect, "Select club");
+            const clubsRes = await fetch(
+                `?handler=ClubsByManagement&managementId=${managementId}`
+            );
+            const clubs = await clubsRes.json();
+            clubs.forEach(c =>
+                clubSelect.add(new Option(c.nameEn, c.id))
+            );
+
+            // ---------- Users ----------
+            resetUsers();
+            usersMap.clear();
+
+            const usersRes = await fetch(
+                `?handler=UsersByManagement&managementId=${managementId}&role=all`
+            );
+            const users = await usersRes.json();
+
+            users.forEach(u => {
+                usersMap.set(u.id, u.name);
+
+                supervisorsSelect.add(new Option(u.name, u.id));
+                coordinatorsSelect.add(new Option(u.name, u.id));
+                participantsSelect.add(new Option(u.name, u.id));
+            });
+
+            preloadAssignments();
+        }
+
+        /* ================= PRELOAD ASSIGNMENTS ================= */
+        function preloadAssignments() {
+
+                //  supervisorsChips.innerHTML = "";
+                // coordinatorsChips.innerHTML = "";
+                // participantsChips.innerHTML = "";
+
+                if (!existingAssignments || existingAssignments.length === 0) return;
+
+                existingAssignments.forEach(a => {
+
+                    const userId = a.UserId;
+                    const roleId = a.ActivityRoleId;
+
+                    const userName = usersMap.get(userId);
+                    if (!userName) return;
+
+                    let container = null;
+                    if (roleId === 1) container = supervisorsChips;
+                    if (roleId === 2) container = coordinatorsChips;
+                    if (roleId === 3) container = participantsChips;
+
+                    if (!container) return;
+
+                    addChip(container, userId, userName, roleId);
+    });
+        }
+
+        /* ================= ROLES & CHIPS ================= */
+        function handleRoleSelect(select, container, roleId) {
+            const userId = select.value;
+            if (!userId) return;
+
+            if (container.querySelector(`[data-user-id="${userId}"]`)) {
+                select.value = "";
+                return;
+            }
+
+            const userName = select.options[select.selectedIndex].text;
+            addChip(container, userId, userName, roleId);
+            select.value = "";
+        }
+
+        function addChip(container, userId, name, roleId) {
+            const chip = document.createElement("div");
+            chip.className = "role-chip";
+            chip.dataset.userId = userId;
+            chip.dataset.roleId = roleId;
+
+            chip.innerHTML = `
+                <span>${name}</span>
+                <button type="button">&times;</button>
+                <input type="hidden" name="Input.Assignments[].UserId" value="${userId}" />
+                <input type="hidden" name="Input.Assignments[].ActivityRoleId" value="${roleId}" />
+            `;
+
+            chip.querySelector("button")
+                .addEventListener("click", () => chip.remove());
+
+            container.appendChild(chip);
+        }
+
+        /* ================= HELPERS ================= */
+        function resetSelect(select, placeholder) {
+            if (!select) return;
+            select.innerHTML = "";
+            select.add(new Option(placeholder, ""));
+        }
+
+        function resetUsers() {
+            resetSelect(supervisorsSelect, "Select supervisor");
+            resetSelect(coordinatorsSelect, "Select coordinator");
+            resetSelect(participantsSelect, "Select participant");
+
+            // supervisorsChips.innerHTML = "";
+            // coordinatorsChips.innerHTML = "";
+            // participantsChips.innerHTML = "";
+        }
+
+        function resetAfterManagement() {
+            resetSelect(clubSelect, "Select club");
+            resetUsers();
+        }
+
+        function resetAll() {
+            resetSelect(managementSelect, "Select management");
+            resetAfterManagement();
+        }
+
     });
 </script>
-
-
-
-
