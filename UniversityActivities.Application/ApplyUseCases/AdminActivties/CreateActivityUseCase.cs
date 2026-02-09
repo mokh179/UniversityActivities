@@ -37,10 +37,10 @@ namespace UniversityActivities.Application.ApplyUseCases.AdminActivties
             // =========================
             if (dto.StartDate >= dto.EndDate)
                 throw new InvalidOperationException("Activity start date must be before end date.");
-            if (dto.StartDate == DateTime.Now)
+            if (dto.StartDate.Day == DateTime.Now.Day)
                 status = 1;
             if (dto.StartDate > DateTime.Now)
-                status = 2;
+                status = 3;
 
             // =========================
             // 2️⃣ Create Activity Entity

@@ -148,7 +148,43 @@
     .bi {
         font-size: 1.1rem;
     }
+    /* ===== Target Audience Cards ===== */
+    .audience-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill,minmax(200px,1fr));
+        gap: 12px;
+    }
 
+    .audience-card {
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        padding: 14px;
+        cursor: pointer;
+        display: flex;
+        gap: 12px;
+        background: #fff;
+        transition: .2s;
+    }
+
+        .audience-card.active {
+            border-color: #22c55e;
+            background: #f0fdf4;
+        }
+
+        .audience-card input {
+            display: none;
+        }
+
+    .audience-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: #dcfce7;
+        color: #166534;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 </style>
 
 
@@ -183,13 +219,18 @@
 
         <div class="card-body">
             <div class="d-flex align-items-center gap-3">
-                <img src="@Model.Input.ImageUrl"
-                     class="rounded border"
-                     style="width:120px;height:80px;object-fit:cover;" />
+                <img id="imagePreview"
+                     src="@Model.Input.ImageUrl"
+                     style="width:120px;height:80px;object-fit:cover"
+                     class="rounded border" />
 
                 <input type="file"
-                       class="form-control w-50"
-                       name="ImageFile" />
+                       id="imageInput"
+                       name="ImageFile"
+                       accept="image/*"
+                       class="form-control mt-2" />
+
+                <input type="hidden" id="isImageChanged" name="IsImageChanged" value="false" />
             </div>
         </div>
     </div>
@@ -276,18 +317,29 @@
                 </div>
             </div>
 
-            <!-- Target Audiences -->
-            <div class="mb-3">
-                <label class="form-label">Target Audiences</label>
-                <select asp-for="Input.TargetAudienceIds"
-                        multiple
-                        class="form-select">
-                    @foreach (var item in Model.Lookups.TargetAudiences)
-                    {
-                        <option value="@item.Id">@item.NameEn</option>
-                    }
-                </select>
+            <label class="form-label">Target Audiences</label>
+            <div class="audience-grid mb-3">
+                @foreach (var a in Model.Lookups.TargetAudiences)
+                {
+                    var selected = Model.Input.TargetAudienceIds.Contains(a.Id);
+                    <label class="audience-card @(selected ? "active" : "")">
+                        <input type="checkbox"
+                               name="Input.TargetAudienceIds"
+                               value="@a.Id"
+                               @(selected ? "checked" : "") />
+                        <div class="audience-icon">
+                            <i class="bi bi-people"></i>
+                        </div>
+                        <div>
+                            <div class="fw-semibold">@a.NameEn</div>
+                            <small class="text-muted">Audience</small>
+                        </div>
+                    </label>
+                }
             </div>
+
+            <label class="form-label">Description</label>
+            <textarea asp-for="Input.DescriptionEn" rows="4" class="form-control"></textarea>
 
             <!-- Description -->
             <div>
@@ -302,49 +354,33 @@
 
     <!-- ================= ATTENDANCE ================= -->
     <div class="card shadow-sm mb-4">
-        <div class="card-header fw-semibold">
-            Attendance & Location
-        </div>
+        <!-- ATTENDANCE -->
+        <div class="card mb-4">
+            <div class="card-header fw-semibold">Attendance & Location</div>
+            <div class="card-body">
 
-        <div class="card-body">
-            <div class="row mb-3">
+                <label class="form-label">Attendance Mode</label>
+                <select asp-for="Input.AttendanceModeId"
+                        id="attendanceModeSelect"
+                        class="form-select mb-3">
+                    @foreach (var m in Model.Lookups.AttendanceModes)
+                    {
+                        <option value="@m.Id">@m.NameEn</option>
+                    }
+                </select>
 
-                <div class="col-md-6">
-                    <label class="form-label">Attendance Mode</label>
-                    <select asp-for="Input.AttendanceModeId"
-                            class="form-select">
-                        @foreach (var item in Model.Lookups.AttendanceModes)
-                        {
-                            <option value="@item.Id">@item.NameEn</option>
-                        }
-                    </select>
-                </div>
-
-                <div class="col-md-6">
-                    <label class="form-label">Attendance Scope</label>
-                    <select asp-for="Input.AttendanceScopeId"
-                            class="form-select">
-                        @foreach (var item in Model.Lookups.AttendanceScopes)
-                        {
-                            <option value="@item.Id">@item.NameEn</option>
-                        }
-                    </select>
+                <div class="row">
+                    <div class="col-md-6" id="locationWrapper">
+                        <label class="form-label">Location</label>
+                        <input asp-for="Input.LocationEn" class="form-control">
+                    </div>
+                    <div class="col-md-6" id="onlineLinkWrapper">
+                        <label class="form-label">Online Link</label>
+                        <input asp-for="Input.OnlineLink" class="form-control">
+                    </div>
                 </div>
 
             </div>
-
-            <div class="row">
-                <div class="col-md-6">
-                    <label class="form-label">Location</label>
-                    <input asp-for="Input.LocationEn" class="form-control" />
-                </div>
-
-                <div class="col-md-6">
-                    <label class="form-label">Online Link</label>
-                    <input asp-for="Input.OnlineLink" class="form-control" />
-                </div>
-            </div>
-
         </div>
     </div>
 
@@ -424,10 +460,12 @@
 
 
 <script>
+    /* ================= IMAGE PREVIEW + FLAG ================= */
     const imageInput = document.getElementById("imageInput");
     const imagePreview = document.getElementById("imagePreview");
+    const isImageChangedInput = document.getElementById("isImageChanged");
 
-    if (imageInput) {
+    if (imageInput && imagePreview) {
         imageInput.addEventListener("change", function () {
             const file = this.files[0];
             if (!file) return;
@@ -435,10 +473,47 @@
             const reader = new FileReader();
             reader.onload = e => imagePreview.src = e.target.result;
             reader.readAsDataURL(file);
+
+            // 🔥 علّم إن الصورة اتغيرت
+            isImageChangedInput.value = "true";
         });
-        }        document.addEventListener("DOMContentLoaded", async function () {
+    }
+
+
+        /* Target audience cards */
+    document.querySelectorAll(".audience-card").forEach(c=>{
+     const cb=c.querySelector("input");
+     c.addEventListener("click",()=>{
+       cb.checked=!cb.checked;
+       c.classList.toggle("active",cb.checked);
+     });
+    });
+
+    /* Attendance toggle */
+    const attendance=document.getElementById("attendanceModeSelect");
+    const loc=document.getElementById("locationWrapper");
+    const link=document.getElementById("onlineLinkWrapper");
+
+    const ONLINE_ID=1;
+    const ONSITE_ID=2;
+
+    function toggleAttendance(){
+     if(attendance.value==ONLINE_ID){
+       link.style.display="block"; loc.style.display="none";
+     }else if(attendance.value==ONSITE_ID){
+       loc.style.display="block"; link.style.display="none";
+     }else{
+       loc.style.display="none"; link.style.display="none";
+     }
+    }
+    toggleAttendance();
+    attendance.addEventListener("change",toggleAttendance);
+
+    document.addEventListener("DOMContentLoaded", async function () {
 
         /* ================= ELEMENTS ================= */
+        const form = document.getElementById("editForm");
+
         const managementTypeSelect = document.getElementById("managementTypeSelect");
         const managementSelect = document.getElementById("managementSelect");
         const clubSelect = document.getElementById("clubSelect");
@@ -458,12 +533,11 @@
 
         const usersMap = new Map();
 
-        /* ================= PRELOADED VALUES ================= */
+        /* ================= PRELOAD ================= */
         const selectedManagementTypeId = managementTypeSelect?.value;
         const selectedManagementId = "@Model.Input.ManagementId";
         const selectedClubId = "@Model.Input.ClubId";
 
-        /* ================= INITIAL LOAD ================= */
         if (selectedManagementTypeId) {
             await loadManagements(selectedManagementTypeId);
 
@@ -476,8 +550,7 @@
                 }
             }
         }
-    console.log("Assignments:", existingAssignments);
-    console.log("Chips supervisors:", supervisorsChips.children.length);
+
         /* ================= EVENTS ================= */
         managementTypeSelect?.addEventListener("change", async function () {
             resetAll();
@@ -486,6 +559,7 @@
         });
 
         managementSelect?.addEventListener("change", async function () {
+            clearChips();
             resetAfterManagement();
             if (!this.value) return;
             await loadClubsAndUsers(this.value);
@@ -494,11 +568,9 @@
         supervisorsSelect?.addEventListener("change", () =>
             handleRoleSelect(supervisorsSelect, supervisorsChips, 1)
         );
-
         coordinatorsSelect?.addEventListener("change", () =>
             handleRoleSelect(coordinatorsSelect, coordinatorsChips, 2)
         );
-
         participantsSelect?.addEventListener("change", () =>
             handleRoleSelect(participantsSelect, participantsChips, 3)
         );
@@ -507,40 +579,24 @@
         async function loadManagements(typeId) {
             resetSelect(managementSelect, "Select management");
 
-            const res = await fetch(
-                `?handler=ManagementsByType&managementTypeId=${typeId}`
-            );
+            const res = await fetch(`?handler=ManagementsByType&managementTypeId=${typeId}`);
             const data = await res.json();
 
-            data.forEach(m =>
-                managementSelect.add(new Option(m.nameEn, m.id))
-            );
+            data.forEach(m => managementSelect.add(new Option(m.nameEn, m.id)));
         }
 
         async function loadClubsAndUsers(managementId) {
 
-            // ---------- Clubs ----------
             resetSelect(clubSelect, "Select club");
-            const clubsRes = await fetch(
-                `?handler=ClubsByManagement&managementId=${managementId}`
-            );
-            const clubs = await clubsRes.json();
-            clubs.forEach(c =>
-                clubSelect.add(new Option(c.nameEn, c.id))
-            );
+            const clubs = await (await fetch(`?handler=ClubsByManagement&managementId=${managementId}`)).json();
+            clubs.forEach(c => clubSelect.add(new Option(c.nameEn, c.id)));
 
-            // ---------- Users ----------
             resetUsers();
             usersMap.clear();
 
-            const usersRes = await fetch(
-                `?handler=UsersByManagement&managementId=${managementId}&role=all`
-            );
-            const users = await usersRes.json();
-
+            const users = await (await fetch(`?handler=UsersByManagement&managementId=${managementId}`)).json();
             users.forEach(u => {
                 usersMap.set(u.id, u.name);
-
                 supervisorsSelect.add(new Option(u.name, u.id));
                 coordinatorsSelect.add(new Option(u.name, u.id));
                 participantsSelect.add(new Option(u.name, u.id));
@@ -549,46 +605,30 @@
             preloadAssignments();
         }
 
-        /* ================= PRELOAD ASSIGNMENTS ================= */
+        /* ================= ASSIGNMENTS ================= */
         function preloadAssignments() {
+            if (!existingAssignments) return;
 
-                //  supervisorsChips.innerHTML = "";
-                // coordinatorsChips.innerHTML = "";
-                // participantsChips.innerHTML = "";
+            existingAssignments.forEach(a => {
+                const name = usersMap.get(a.UserId);
+                if (!name) return;
 
-                if (!existingAssignments || existingAssignments.length === 0) return;
+                const container =
+                    a.ActivityRoleId === 1 ? supervisorsChips :
+                    a.ActivityRoleId === 2 ? coordinatorsChips :
+                    participantsChips;
 
-                existingAssignments.forEach(a => {
-
-                    const userId = a.UserId;
-                    const roleId = a.ActivityRoleId;
-
-                    const userName = usersMap.get(userId);
-                    if (!userName) return;
-
-                    let container = null;
-                    if (roleId === 1) container = supervisorsChips;
-                    if (roleId === 2) container = coordinatorsChips;
-                    if (roleId === 3) container = participantsChips;
-
-                    if (!container) return;
-
-                    addChip(container, userId, userName, roleId);
-    });
+                addChip(container, a.UserId, name, a.ActivityRoleId);
+            });
         }
 
-        /* ================= ROLES & CHIPS ================= */
         function handleRoleSelect(select, container, roleId) {
             const userId = select.value;
             if (!userId) return;
 
-            if (container.querySelector(`[data-user-id="${userId}"]`)) {
-                select.value = "";
-                return;
-            }
+            if (container.querySelector(`[data-user-id="${userId}"]`)) return;
 
-            const userName = select.options[select.selectedIndex].text;
-            addChip(container, userId, userName, roleId);
+            addChip(container, userId, select.options[select.selectedIndex].text, roleId);
             select.value = "";
         }
 
@@ -598,34 +638,49 @@
             chip.dataset.userId = userId;
             chip.dataset.roleId = roleId;
 
-            chip.innerHTML = `
-                <span>${name}</span>
-                <button type="button">&times;</button>
-                <input type="hidden" name="Input.Assignments[].UserId" value="${userId}" />
-                <input type="hidden" name="Input.Assignments[].ActivityRoleId" value="${roleId}" />
-            `;
+            chip.innerHTML = `<span>${name}</span><button type="button">&times;</button>`;
+            chip.querySelector("button").onclick = () => {
+                chip.remove();
+                restoreOption(roleId, userId, name);
+            };
 
-            chip.querySelector("button")
-                .addEventListener("click", () => chip.remove());
-
+            removeOption(roleId, userId);
             container.appendChild(chip);
         }
 
         /* ================= HELPERS ================= */
-        function resetSelect(select, placeholder) {
-            if (!select) return;
+        function getSelect(roleId) {
+            return roleId === 1 ? supervisorsSelect :
+                   roleId === 2 ? coordinatorsSelect :
+                   participantsSelect;
+        }
+
+        function removeOption(roleId, userId) {
+            const opt = getSelect(roleId).querySelector(`option[value="${userId}"]`);
+            if (opt) opt.remove();
+        }
+
+        function restoreOption(roleId, userId, name) {
+            const select = getSelect(roleId);
+            if (!select.querySelector(`option[value="${userId}"]`))
+                select.add(new Option(name, userId));
+        }
+
+        function clearChips() {
+            supervisorsChips.innerHTML = "";
+            coordinatorsChips.innerHTML = "";
+            participantsChips.innerHTML = "";
+        }
+
+        function resetSelect(select, text) {
             select.innerHTML = "";
-            select.add(new Option(placeholder, ""));
+            select.add(new Option(text, ""));
         }
 
         function resetUsers() {
             resetSelect(supervisorsSelect, "Select supervisor");
             resetSelect(coordinatorsSelect, "Select coordinator");
             resetSelect(participantsSelect, "Select participant");
-
-            // supervisorsChips.innerHTML = "";
-            // coordinatorsChips.innerHTML = "";
-            // participantsChips.innerHTML = "";
         }
 
         function resetAfterManagement() {
@@ -637,6 +692,33 @@
             resetSelect(managementSelect, "Select management");
             resetAfterManagement();
         }
+
+        /* ================= BEFORE SUBMIT ================= */
+        form.addEventListener("submit", function () {
+
+            // شيل أي hidden inputs قديمة
+            document.querySelectorAll(".assignment-hidden").forEach(x => x.remove());
+
+            const chips = document.querySelectorAll(".role-chip");
+
+            chips.forEach((chip, index) => {
+
+                const userInput = document.createElement("input");
+                userInput.type = "hidden";
+                userInput.name = `Input.Assignments[${index}].UserId`;
+                userInput.value = chip.dataset.userId;
+                userInput.classList.add("assignment-hidden");
+
+                const roleInput = document.createElement("input");
+                roleInput.type = "hidden";
+                roleInput.name = `Input.Assignments[${index}].ActivityRoleId`;
+                roleInput.value = chip.dataset.roleId;
+                roleInput.classList.add("assignment-hidden");
+
+                form.appendChild(userInput);
+                form.appendChild(roleInput);
+            });
+        });
 
     });
 </script>

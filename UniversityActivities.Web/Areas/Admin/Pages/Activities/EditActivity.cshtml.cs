@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using UniversityActivities.Application.DTOs.Activities;
 using UniversityActivities.Application.lookup.Dto;
@@ -11,7 +11,11 @@ namespace UniversityActivities.Web.Areas.Admin.Pages.Activities
     public class EditActivityModel : PageModel
     {
 
-        public int id { get; set; }
+        [BindProperty]
+        public IFormFile? ImageFile { get; set; }
+
+        [BindProperty]
+        public bool IsImageChanged { get; set; }
         [BindProperty]
         public CreateOrUpdateActivityDto Input { get; set; } = new CreateOrUpdateActivityDto();
         public UiLookupsDto Lookups { get; private set; } = new();
@@ -67,6 +71,27 @@ namespace UniversityActivities.Web.Areas.Admin.Pages.Activities
                 .GetUsersinManagement(managementId);
 
             return new JsonResult(result);
+        }
+
+        public async Task<IActionResult> OnPostAsync(int id)
+        {
+            // id جاي من route
+            // Input جاي كامل من الفورم (including Assignments)
+
+            if (!ModelState.IsValid)
+            {
+                Lookups = await _lookupsQuery.GetAllAsync();
+                return Page();
+            }
+
+            // Safety
+            Input.Assignments ??= new List<ActivityAssignmentDto>();
+
+            // ✨ هنا بقى تبعت الموديل كله زي ما هو
+           // await _EditUseCase.UpdateAsync(id, Input);
+
+            // Redirect بعد النجاح
+            return RedirectToPage("Details", new { id });
         }
     }
 }
