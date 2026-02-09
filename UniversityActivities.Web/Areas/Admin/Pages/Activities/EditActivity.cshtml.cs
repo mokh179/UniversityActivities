@@ -75,23 +75,18 @@ namespace UniversityActivities.Web.Areas.Admin.Pages.Activities
 
         public async Task<IActionResult> OnPostAsync(int id)
         {
-            // id جاي من route
-            // Input جاي كامل من الفورم (including Assignments)
-
+        
             if (!ModelState.IsValid)
             {
                 Lookups = await _lookupsQuery.GetAllAsync();
                 return Page();
             }
 
-            // Safety
             Input.Assignments ??= new List<ActivityAssignmentDto>();
 
-            // ✨ هنا بقى تبعت الموديل كله زي ما هو
-           // await _EditUseCase.UpdateAsync(id, Input);
+           await _EditUseCase.ExecuteAsync(id, Input,ImageFile);
 
-            // Redirect بعد النجاح
-            return RedirectToPage("Details", new { id });
+            return RedirectToPage("ActivityDetails", new { id });
         }
     }
 }
