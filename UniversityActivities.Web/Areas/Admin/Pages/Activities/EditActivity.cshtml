@@ -83,6 +83,74 @@
         cursor: pointer;
         font-weight: bold;
     }
+    /* ===== LEFT LISTS (DROPDOWNS) ===== */
+    .chip-select {
+        position: relative;
+        margin-bottom: 16px;
+    }
+
+    .chip-dropdown {
+        position: relative; /* ❌ مش absolute */
+        margin-top: 6px;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        background: #fff;
+        max-height: 220px;
+        overflow-y: auto;
+    }
+
+    /* كل عنصر في الليست */
+    .chip-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 12px;
+        border-bottom: 1px solid #f1f1f1;
+        cursor: pointer;
+    }
+
+        .chip-item:last-child {
+            border-bottom: none;
+        }
+
+        .chip-item:hover {
+            background: #f8fafc;
+        }
+
+    /* Badge الدور */
+    .item-badge {
+        background: #eef2ff;
+        color: #4338ca;
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+    }
+
+    /* ===== RIGHT PANEL (CHIPS) ===== */
+    #selectedChipsPanel {
+        min-height: 180px;
+        border: 1px dashed #e5e7eb;
+        border-radius: 10px;
+        padding: 14px;
+    }
+
+    /* CHIP */
+    .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: #16a34a;
+        color: #fff;
+        padding: 6px 12px;
+        border-radius: 999px;
+        margin: 6px 6px 0 0;
+        font-size: 13px;
+    }
+
+    .chip-remove {
+        cursor: pointer;
+        font-weight: bold;
+    }
 
 </style>
 <!-- ================= HEADER ================= -->
@@ -280,9 +348,9 @@
 </form>
 
 <script>
-    console.log("JS Loaded");
+    console.log("JS LOADED");
 
-    /* ================= EDIT DATA ================= */
+    /* ===================== EDIT DATA ===================== */
     window.editData = {
         managementTypeId: @Model.Input.ManagementTypeId,
         managementId: @Model.Input.ManagementId,
@@ -294,16 +362,24 @@
                 )
     };
 
-    /* ================= GLOBAL STATE ================= */
-    const assignment = {
+    /* ===================== STATE ===================== */
+    let usersCache = [];
+
+    let assignment = {
         coordinators: [],
         supervisors: [],
         viewers: []
     };
 
-    let isReady = false;
+    /* ===================== HELPERS ===================== */
+    function getUserName(u) {
+        console.log(u)
+    const user = usersCache.find(u => u.id === userId);
+      return user
+          ? (user.fullname || user.name || user.nameEn || user.userName)
+          : `User #${userId}`;
+    }
 
-    /* ================= HELPERS ================= */
     function getAllSelectedIds() {
         return [
             ...assignment.coordinators,
@@ -312,37 +388,72 @@
         ].map(x => x.userId);
     }
 
-    /* ================= INIT CHIP DROPDOWN ================= */
-    function initChipDropdown(wrapperId, fetchUrl) {
+    /* ===================== LOADERS ===================== */
+    async function loadManagements(typeId) {
+        const res = await fetch(`?handler=ManagementsByType&managementTypeId=${typeId}`);
+        const data = await res.json();
 
-        const wrapper = document.getElementById(wrapperId);
-        if (!wrapper) return;
-
-        const select = wrapper.querySelector(".chip-select");
-        const input = select.querySelector(".chip-input");
-        const dropdown = select.querySelector(".chip-dropdown");
-
-        if (select._initialized) return;
-        select._initialized = true;
-
-        fetch(fetchUrl)
-            .then(r => r.json())
-            .then(data => {
-                select._items = Array.isArray(data) ? data : [];
-                renderAll();
-            });
-
-        input.addEventListener("input", renderAll);
+        const select = document.getElementById("managementSelect");
+        select.innerHTML = `<option value="">Select</option>`;
+        data.forEach(m => {
+            select.innerHTML += `<option value="${m.id}">${m.nameEn}</option>`;
+        });
     }
 
-    /* ================= RENDER ALL ================= */
-    function renderAll() {
-        if (!isReady) return;
-        renderDropdowns();
-        renderChips();
+    async function loadClubs(managementId) {
+        const res = await fetch(`?handler=ClubsByManagement&managementId=${managementId}`);
+        const data = await res.json();
+
+        const select = document.getElementById("clubSelect");
+        select.innerHTML = `<option value="">Select</option>`;
+        data.forEach(c => {
+            select.innerHTML += `<option value="${c.id}">${c.nameEn}</option>`;
+        });
     }
 
-    /* ================= RENDER DROPDOWNS ================= */
+    async function loadUsers(managementId) {
+        const res = await fetch(`?handler=UsersByManagement&managementId=${managementId}`);
+        usersCache = await res.json();
+            renderAll();
+
+    }
+
+    /* ===================== DROPDOWNS ===================== */
+    // function renderDropdown(wrapperId, roleId, roleName) {
+
+    //     const wrapper = document.getElementById(wrapperId);
+    //     const input = wrapper.querySelector(".chip-input");
+    //     const dropdown = wrapper.querySelector(".chip-dropdown");
+
+    //     const q = input.value.toLowerCase();
+    //     const usedIds = getAllSelectedIds();
+
+    //     dropdown.innerHTML = "";
+
+    //     usersCache.forEach(u => {
+
+    //         if (usedIds.includes(u.id)) return;
+
+    //         const name = getUserName(u);
+    //         if (q && !name.toLowerCase().includes(q)) return;
+
+    //         const div = document.createElement("div");
+    //         div.className = "chip-item";
+    //         div.innerHTML = `
+    //             <span>${name}</span>
+    //             <span class="item-badge">${roleName}</span>
+    //         `;
+
+    //         div.onclick = () => {
+    //             addAssignment(u.id, name, roleId);
+    //             input.value = "";
+    //             renderAll();
+    //         };
+
+    //         dropdown.appendChild(div);
+    //     });
+    // }
+        /* ===== RENDER DROPDOWNS ===== */
     function renderDropdowns() {
 
         document.querySelectorAll(".chip-select").forEach(select => {
@@ -351,20 +462,21 @@
             const input = select.querySelector(".chip-input");
             const roleId = +select.dataset.roleId;
             const roleName = select.dataset.roleName;
-            const items = Array.isArray(select._items) ? select._items : [];
+            const q = input.value.toLowerCase();
 
             dropdown.innerHTML = "";
 
-            const q = input.value.toLowerCase();
-            const usedIds = getAllSelectedIds();
+            const usedIds = [
+                ...assignment.coordinators,
+                ...assignment.supervisors,
+                ...assignment.viewers
+            ].map(x => x.userId);
 
-            items.forEach(u => {
+            usersCache.forEach(user => {
 
-                if (usedIds.includes(u.id)) return;
+                if (usedIds.includes(user.id)) return;
 
-                const name =
-                    u.fullname || u.name || u.nameEn || u.userName || `User #${u.id}`;
-
+                const name = getUserName(user.id);
                 if (q && !name.toLowerCase().includes(q)) return;
 
                 const div = document.createElement("div");
@@ -375,26 +487,27 @@
                 `;
 
                 div.onclick = () => {
-                    addAssignment(u.id, name, roleId);
+                    addAssignment(user.id, roleId);
                     input.value = "";
                 };
 
                 dropdown.appendChild(div);
             });
-
-            dropdown.style.display = dropdown.children.length ? "block" : "none";
         });
     }
 
-    /* ================= ADD / REMOVE ================= */
-    function addAssignment(userId, userName, roleId) {
+    /* ===================== ASSIGNMENTS ===================== */
+        /* ===== ADD / REMOVE ===== */
+    function addAssignment(userId, roleId) {
 
         const target =
             roleId === 1 ? assignment.coordinators :
             roleId === 2 ? assignment.supervisors :
             assignment.viewers;
 
-        target.push({ userId, roleId, userName });
+        if (target.some(x => x.userId === userId)) return;
+
+        target.push({ userId, roleId });
         renderAll();
     }
 
@@ -415,7 +528,9 @@
         renderAll();
     }
 
-    /* ================= RENDER CHIPS ================= */
+
+    /* ===================== CHIPS ===================== */
+    /* ===== RENDER CHIPS ===== */
     function renderChips() {
 
         const panel = document.getElementById("selectedChipsPanel");
@@ -430,17 +545,19 @@
                 `<h6 class="mb-2">${title}</h6>`
             );
 
-            list.forEach(i => {
+            list.forEach(item => {
+
+                const name = getUserName(item.userId);
 
                 const chip = document.createElement("div");
                 chip.className = "chip";
                 chip.innerHTML = `
-                    ${i.userName}
+                    ${name}
                     <span class="chip-remove">&times;</span>
                 `;
 
                 chip.querySelector(".chip-remove").onclick =
-                    () => removeAssignment(i.userId, roleId);
+                    () => removeAssignment(item.userId, roleId);
 
                 panel.appendChild(chip);
             });
@@ -451,44 +568,47 @@
         draw("Viewers", assignment.viewers, 3);
     }
 
-    /* ================= LOAD EXISTING ASSIGNMENTS ================= */
-    function loadExistingAssignments(list) {
-
-        list.forEach(a => {
-
-            const name = `User #${a.userId}`;
-
-            if (a.activityRoleId === 1)
-                assignment.coordinators.push({ userId: a.userId, roleId: 1, userName: name });
-
-            if (a.activityRoleId === 2)
-                assignment.supervisors.push({ userId: a.userId, roleId: 2, userName: name });
-
-            if (a.activityRoleId === 3)
-                assignment.viewers.push({ userId: a.userId, roleId: 3, userName: name });
-        });
+    /* ===================== RENDER ALL ===================== */
+    function renderAll() {
+       renderDropdowns();
+    renderChips();
     }
 
-    /* ================= EDIT PAGE INIT ================= */
+    /* ===================== INIT EDIT PAGE ===================== */
     document.addEventListener("DOMContentLoaded", async () => {
 
-        // 1️⃣ Load existing assignments
-        loadExistingAssignments(window.editData.assignments || []);
+        console.log("BOOTSTRAP EDIT");
 
-        // 2️⃣ Load users by management
-        if (window.editData.managementId) {
+        // load managements
+        await loadManagements(editData.managementTypeId);
+        document.getElementById("managementSelect").value = editData.managementId;
 
-            const url = `?handler=UsersByManagement&managementId=${window.editData.managementId}`;
+        // load clubs
+        await loadClubs(editData.managementId);
+        if (editData.clubId)
+            document.getElementById("clubSelect").value = editData.clubId;
 
-            ["dropdown1Wrapper", "dropdown2Wrapper", "dropdown3Wrapper"]
-                .forEach(id => initChipDropdown(id, url));
-        }
+        // load users
+        await loadUsers(editData.managementId);
 
-        // 3️⃣ UI ready
-        isReady = true;
+        // load existing assignments
+        editData.assignments.forEach(a => {
+               const user = usersCache.find(u => u.id === a.userId);
+               const name = user? getUserName(user): `User #${a.userId}`; // fallback حقيقي
+                  addAssignment(a.userId, name, a.activityRoleId);
+            });
+
+        // wire inputs
+        document.querySelectorAll(".chip-input").forEach(() => {
+            document.querySelectorAll(".chip-input").forEach(inp => {
+                inp.addEventListener("input", renderAll);
+            });
+        });
+
         renderAll();
     });
 </script>
+
 
 
 
