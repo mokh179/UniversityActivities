@@ -1,0 +1,92 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using UniversityActivities.Application.DTOs.Activities;
+using UniversityActivities.Application.lookup.Dto;
+using UniversityActivities.Application.lookup.Interface;
+using UniversityActivities.Infrastructure.Lookup;
+
+namespace UniversityActivities.Web.Areas.Admin.Pages.Activities
+{
+    [IgnoreAntiforgeryToken]
+    public class EditActivityModel : PageModel
+    {
+
+        [BindProperty]
+        public IFormFile? ImageFile { get; set; }
+
+        [BindProperty]
+        public bool IsImageChanged { get; set; }
+        [BindProperty]
+        public CreateOrUpdateActivityDto Input { get; set; } = new CreateOrUpdateActivityDto();
+        public UiLookupsDto Lookups { get; private set; } = new();
+
+        private readonly IUpdateActivityUseCase _EditUseCase;
+        private readonly IUiLookupsQuery _lookupsQuery;
+        private readonly IfilterLookupQuery _lookupsfilterQuery;
+        private readonly IGetUserManagmentQuery _getUserManagmentQuery;
+        public EditActivityModel(IUpdateActivityUseCase EditUseCase
+                                , IUiLookupsQuery lookupsQuery,
+                                 IfilterLookupQuery lookupsfilterQuery,
+                                 IGetUserManagmentQuery getUserManagmentQuery)
+        {
+            _EditUseCase = EditUseCase;
+            _lookupsQuery = lookupsQuery;
+            _lookupsfilterQuery = lookupsfilterQuery;
+            _getUserManagmentQuery = getUserManagmentQuery;
+        }
+        public async Task OnGetAsync(int id)
+        {
+            Input = await _EditUseCase.GetDetailsAsync(id);
+            Input.ManagementTypeId=3;
+            Lookups = await _lookupsQuery.GetAllAsync();
+        }
+
+        public async Task<JsonResult> OnGetManagementsByTypeAsync(int managementTypeId)
+        {
+            if (managementTypeId <= 0)
+                return new JsonResult(new List<LookupDto>());
+
+            var result = await _lookupsfilterQuery
+                .GetByTypeAsync(managementTypeId);
+
+            return new JsonResult(result);
+        }
+
+        public async Task<JsonResult> OnGetClubsByManagementAsync(int managementId)
+        {
+            if (managementId <= 0)
+                return new JsonResult(new List<LookupDto>());
+
+            var result = await _lookupsfilterQuery
+                .GetByClubAsync(managementId);
+
+            return new JsonResult(result);
+        }
+        public async Task<JsonResult> OnGetUsersByManagementAsync(int managementId,string role)
+        {
+            if (managementId <= 0)
+                return new JsonResult(new List<LookupDto>());
+
+            var result = await _getUserManagmentQuery
+                .GetUsersinManagement(managementId);
+
+            return new JsonResult(result);
+        }
+
+        public async Task<IActionResult> OnPostAsync(int id)
+        {
+        
+            //if (!ModelState.IsValid)
+            //{
+            //    Lookups = await _lookupsQuery.GetAllAsync();
+            //    return Page();
+            //}
+
+            Input.Assignments ??= new List<ActivityAssignmentDto>();
+
+           await _EditUseCase.ExecuteAsync(id, Input,ImageFile);
+
+            return RedirectToPage("ActivityDetails", new { id });
+        }
+    }
+}

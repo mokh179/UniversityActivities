@@ -1,0 +1,68 @@
+﻿.admin-sidebar {
+    width: 260px;
+    min-height: 100vh;
+    background: #1f2937;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-content {
+    flex: 1;
+    padding: 24px;
+}
+
+/* Brand */
+.admin-brand {
+    padding: 20px;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.admin-subtitle {
+    font-size: 0.75rem;
+    color: #9ca3af;
+}
+
+/* Admin User */
+.admin-user {
+    padding: 20px;
+    border-bottom: 1px solid #374151;
+}
+
+.admin-avatar {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: #4f46e5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin: auto;
+}
+
+/* Menu */
+.admin-menu {
+    padding: 10px;
+}
+
+.admin-link {
+    color: #d1d5db;
+    border-radius: 6px;
+    padding: 10px 14px;
+    margin-bottom: 4px;
+}
+
+    .admin-link:hover,
+    .admin-link.active {
+        background: #374151;
+        color: #fff;
+    }
+
+/* Footer */
+.admin-footer {
+    margin-top: auto;
+    padding: 16px;
+    border-top: 1px solid #374151;
+}

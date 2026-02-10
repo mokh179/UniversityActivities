@@ -1,0 +1,91 @@
+﻿@using UniversityActivities.Application.Common.Models
+@using UniversityActivities.Application.DTOs.Activities
+@model PagedResult<ActivityAdminListItemDto>
+<div class="table-responsive">
+    <table class="table table-hover align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>Activity Name</th>
+                <th>Management</th>
+                <th>StartDate</th>
+                <th>EndDate</th>
+                <th class="text-center">Participants</th>
+                <th class="text-center">Coordinators</th>
+                <th class="text-center">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>@item.TitleEn</td>
+                    <td>@item.ManagementNameEn</td>
+                    <td>@item.StartDate.ToString("yyyy-MM-dd")</td>
+                    <td>@item.EndDate.ToString("yyyy-MM-dd")</td>
+
+                    <td class="text-center">
+                        @item.RegisteredCount
+                    </td>
+
+                    <td class="text-center">
+                        @item.CoordinatorsCount
+                    </td>
+
+                    <td class="text-center">
+                        <!-- View details -->
+                        <a asp-page="Details"
+                           asp-route-id="@item.Id"
+                           title="View Details">
+                            👁
+                        </a>
+
+                        <!-- View participants -->
+                        <a asp-page="Participants"
+                           asp-route-activityId="@item.Id"
+                           title="View Participants">
+                            👥
+                        </a>
+
+                        <!-- View coordinators / roles -->
+                        <a asp-page="Roles"
+                           asp-route-activityId="@item.Id"
+                           title="View Coordinators">
+                            🧑‍💼
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<!-- Paging -->
+@if (Model.TotalCount > 1)
+{
+    <nav>
+        <ul class="pagination justify-content-center">
+            <li class="page-item @(Model.PageNumber == 1 ? "disabled" : "")">
+                <a class="page-link"
+                   asp-route-PageNumber="@(Model.PageNumber - 1)">
+                    Previous
+                </a>
+            </li>
+
+            @for (int i = 1; i <= Model.TotalCount; i++)
+            {
+                <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                    <a class="page-link"
+                       asp-route-PageNumber="@i">
+                        @i
+                    </a>
+                </li>
+            }
+
+            <li class="page-item @(Model.PageNumber == Model.TotalCount ? "disabled" : "")">
+                <a class="page-link"
+                   asp-route-PageNumber="@(Model.PageNumber + 1)">
+                    Next
+                </a>
+            </li>
+        </ul>
+    </nav>
+}

@@ -1,0 +1,151 @@
+﻿.admin-page {
+    padding: 24px;
+}
+
+/* ===== Header ===== */
+.admin-header {
+    background: #237a44;
+    color: #fff;
+    padding: 20px 24px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+    .admin-header p {
+        margin: 0;
+        opacity: .85;
+    }
+
+.btn-light-green {
+    background: #fff;
+    color: #237a44;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+/* ===== Stats ===== */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.stat-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px;
+    border-radius: 16px;
+    color: #fff;
+}
+
+    .stat-card .icon {
+        background: rgba(255,255,255,.25);
+        padding: 12px;
+        border-radius: 12px;
+    }
+
+    .stat-card span {
+        font-size: 14px;
+        opacity: .9;
+    }
+
+    .stat-card h3 {
+        margin: 0;
+    }
+
+.purple {
+    background: #9b4dff;
+}
+
+.blue {
+    background: #2b74ff;
+}
+
+.orange {
+    background: #ff9800;
+}
+
+.green {
+    background: #2e7d32;
+}
+
+/* ===== Filter ===== */
+.filter-bar {
+    background: #237a44;
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 24px;
+}
+
+.filter-toggle {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 15px;
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+/* ===== Table ===== */
+.table-card {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 8px 20px rgba(0,0,0,.06);
+    overflow: hidden;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background: #f7f8fa;
+}
+
+th, td {
+    padding: 14px;
+    text-align: center;
+    font-size: 14px;
+}
+
+tbody tr:not(:last-child) {
+    border-bottom: 1px solid #eee;
+}
+
+.actions {
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* ===== Badges ===== */
+.badge {
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+    .badge.upcoming {
+        background: #e3f2fd;
+        color: #1976d2;
+    }
+
+    .badge.progress {
+        background: #fff3cd;
+        color: #ff9800;
+    }
+
+    .badge.done {
+        background: #e8f5e9;
+        color: #2e7d32;
+    }

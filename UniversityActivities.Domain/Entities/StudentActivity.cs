@@ -1,4 +1,6 @@
 
+using UniversityActivities.Domain.Entities;
+
 public class StudentActivity : AuditableEntity
 {
     [Required]
@@ -6,6 +8,7 @@ public class StudentActivity : AuditableEntity
 
     [Required]
     public int ActivityId { get; set; }
+    public Activity Activity { get; set; } = null!;
 
     // Registration
     [Required]

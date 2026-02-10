@@ -1,0 +1,38 @@
+﻿.vibe-header h2 {
+    color: #ff3b6f;
+}
+
+.filter-accordion {
+    background: #fff;
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+.filter-title {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.filter-body {
+    background: #fff;
+    padding: 16px 20px;
+    margin-top: -6px;
+    margin-bottom: 12px;
+    border-radius: 0 0 14px 14px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+}
+
+.apply-filters-btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: 14px;
+    font-weight: 600;
+    color: #fff;
+    border: none;
+    background: linear-gradient(90deg, #ff3b6f, #5a5bd4);
+}

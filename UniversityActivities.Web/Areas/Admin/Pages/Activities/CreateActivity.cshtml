@@ -1,0 +1,162 @@
+﻿@page
+@using UniversityActivities.Web.Areas.Admin.Pages.Activities
+@model CreateActivityModel
+@{
+    ViewData["Title"] = "Create Activity";
+}
+<link href="~/css/areas/admin/Activities/createactivity.css" rel="stylesheet" />
+<form method="post" class="container-lg" id="createActivityForm">
+
+    <!-- ================= Basic Info ================= -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h5 class="mb-3">Basic Information</h5>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <input asp-for="Input.TitleAr" class="form-control" placeholder="Title (Arabic)" />
+                </div>
+                <div class="col-md-6">
+                    <input asp-for="Input.TitleEn" class="form-control" placeholder="Title (English)" />
+                </div>
+                <div class="col-md-6">
+                    <textarea asp-for="Input.DescriptionAr" class="form-control" rows="4"
+                              placeholder="Description (Arabic)"></textarea>
+                </div>
+                <div class="col-md-6">
+                    <textarea asp-for="Input.DescriptionEn" class="form-control" rows="4"
+                              placeholder="Description (English)"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= Schedule ================= -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h5 class="mb-3">Schedule</h5>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Start Date</label>
+                    <input asp-for="Input.StartDate" type="datetime-local" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">End Date</label>
+                    <input asp-for="Input.EndDate" type="datetime-local" class="form-control" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= Management ================= -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h5 class="mb-3">Management</h5>
+
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <select id="managementTypeSelect" class="form-select">
+                        <option value="">Management Type</option>
+                        @foreach (var t in Model.Lookups.ManagementTypes)
+                        {
+                            <option value="@t.Id">@t.NameEn</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <select asp-for="Input.ManagementId" id="managementSelect" class="form-select">
+                        <option value="">Management</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <select asp-for="Input.ClubId" id="clubSelect" class="form-select">
+                        <option value="">Club</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= Settings ================= -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h5 class="mb-3">Settings</h5>
+
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <select asp-for="Input.ActivityTypeId" class="form-select">
+                        <option value="">Activity Type</option>
+                        @foreach (var a in Model.Lookups.ActivityTypes)
+                        {
+                            <option value="@a.Id">@a.NameEn</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col-md-8">
+                    <label class="fw-semibold mb-2 d-block">Attendance Mode</label>
+                    <div class="d-flex gap-4">
+                        @foreach (var m in Model.Lookups.AttendanceModes)
+                        {
+                            <label class="form-check">
+                                <input type="radio" asp-for="Input.AttendanceModeId"
+                                       class="form-check-input" value="@m.Id" />
+                                @m.NameEn
+                            </label>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= Target Audience ================= -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h5 class="mb-3">Target Audience</h5>
+
+            <div class="d-flex flex-wrap gap-3">
+                @foreach (var t in Model.Lookups.TargetAudiences)
+                {
+                    <label class="form-check">
+                        <input type="checkbox"
+                               name="Input.TargetAudienceIds"
+                               value="@t.Id"
+                               class="form-check-input" />
+                        @t.NameEn
+                    </label>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= Roles ================= -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h5>Roles & Responsibilities</h5>
+            <p class="text-muted">Assign coordinators, reviewers and participants</p>
+
+          
+        </div>
+    </div>
+
+    <!-- ================= Publish ================= -->
+    <div class="card shadow-sm">
+        <div class="card-body d-flex justify-content-between align-items-center">
+            <label class="form-check">
+                <input asp-for="Input.IsPublished" class="form-check-input" />
+                Publish Activity
+            </label>
+            <input type="hidden" id="AssignmentsJson" name="AssignmentsJson" />
+
+            <button type="submit" class="btn btn-success px-4">
+                Create Activity
+            </button>
+        </div>
+    </div>
+
+</form>
+<script src="~/js/areas/admin/createactvity.js"></script>

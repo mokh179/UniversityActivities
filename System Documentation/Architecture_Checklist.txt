@@ -1,0 +1,68 @@
+
+ARCHITECTURE CHECKLIST – UNIVERSITY ACTIVITIES SYSTEM
+
+1. Architecture Style
+- Clean Architecture
+- Layered separation
+- Dependency inversion
+
+2. Domain Layer
+- Entities only
+- No EF / No DTOs
+- Stable and reusable
+
+3. Application Layer
+- Use Cases for each business flow
+- Interfaces for all external dependencies
+- DTO-based communication
+- Filters & Paging models
+
+4. Use Cases
+- Encapsulate business logic
+- Handle authorization & validation
+- Coordinate repositories
+
+5. Repositories
+- Data access only
+- Explicit queries
+- No business rules
+
+6. Queries
+- JOIN-based
+- Projection to DTOs
+- Optimized for performance
+
+7. DTO Strategy
+- Input DTOs for commands
+- View DTOs for output
+- No entities exposed
+
+8. Admin vs Student Separation
+- Different use cases
+- Different repositories
+- Clear authorization boundaries
+
+9. Evaluation Design
+- Student submits evaluations
+- Admin views aggregated results only
+
+10. Unit of Work
+- Manages transactions
+- Aggregates repositories
+- No business logic
+
+11. Infrastructure
+- EF Core
+- Identity
+- Repository implementations
+
+12. Authorization
+- Implemented at Use Case or UI layer
+- Role-based access
+
+13. Logging & Tracing
+- Implemented in Use Cases
+- Supports auditing and debugging
+
+FINAL STATUS:
+Architecture locked and production-ready.

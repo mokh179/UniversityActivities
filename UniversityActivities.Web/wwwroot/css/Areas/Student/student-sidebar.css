@@ -1,0 +1,93 @@
+﻿/* Layout */
+.sidebar {
+    width: 260px;
+    min-height: 100vh;
+    background-color: #ffffff;
+    border-right: 1px solid #e5e7eb;
+    display: flex;
+    flex-direction: column;
+}
+
+.content {
+    flex: 1;
+    padding: 24px;
+}
+
+/* Brand */
+.sidebar-brand {
+    padding: 20px;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.sidebar-subtitle {
+    font-size: 0.75rem;
+    color: #6c757d;
+}
+
+/* User / Avatar */
+.sidebar-user {
+    padding: 20px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin: 0 auto 10px;
+    background-size: cover;
+    background-position: center;
+}
+
+/* Avatar by gender */
+.avatar-male {
+    background-image: url("/images/male_avater.png");
+}
+
+.avatar-female {
+    background-image: url("/images/female_avater.png");
+}
+
+.username {
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.management {
+    font-size: 0.75rem;
+    color: #6c757d;
+}
+
+/* Menu */
+.sidebar-menu {
+    padding: 10px;
+}
+
+.sidebar-link {
+    color: #2c3e50;
+    border-radius: 6px;
+    padding: 8px 12px;
+    margin-bottom: 4px;
+}
+
+    .sidebar-link:hover {
+        background-color: #f1f3f5;
+        color: #4caf50;
+    }
+
+    .sidebar-link.active {
+        background-color: #e8f5e9;
+        color: #4caf50;
+        font-weight: 600;
+    }
+
+/* Footer */
+.sidebar-footer {
+    margin-top: auto;
+    padding: 16px;
+    border-top: 1px solid #e5e7eb;
+}
+
+
+

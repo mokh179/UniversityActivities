@@ -1,7 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <Compile Remove="UserCases\Activities\Admin\Student\**" />
+    <EmbeddedResource Remove="UserCases\Activities\Admin\Student\**" />
+    <None Remove="UserCases\Activities\Admin\Student\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\UniversityActivities.Domain\UniversityActivities.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.9" />
   </ItemGroup>
 
   <PropertyGroup>
