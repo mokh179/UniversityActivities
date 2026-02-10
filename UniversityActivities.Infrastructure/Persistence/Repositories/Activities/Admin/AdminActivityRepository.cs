@@ -32,7 +32,7 @@ namespace UniversityActivities.Infrastructure.Persistence.Repositories.Activitie
             try
             {
                 _context.Activities.Add(activity);
-                await _context.SaveChangesAsync();
+                //await _context.SaveChangesAsync();
                 return activity.Id;
             }
             catch (Exception ex)
@@ -66,7 +66,7 @@ namespace UniversityActivities.Infrastructure.Persistence.Repositories.Activitie
                 return;
 
             activity.IsDeleted = true;
-            await _context.SaveChangesAsync();
+            //await _context.SaveChangesAsync();
         }
 
         public Task SetPublishStatusAsync(int activityId, bool isPublished)

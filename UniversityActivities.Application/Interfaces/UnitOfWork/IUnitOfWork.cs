@@ -39,5 +39,6 @@ namespace UniversityActivities.Application.Interfaces.IUnitOfWork
         // Persistence
         // =========================
         Task<int> SaveChangesAsync();
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }

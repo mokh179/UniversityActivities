@@ -63,6 +63,10 @@ namespace UniversityActivities.Infrastructure.Persistence
         {
             return await _context.SaveChangesAsync();
         }
+        public async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
+        {
+            return await _context.SaveChangesAsync(cancellationToken);
+        }
 
         public void Dispose()
         {

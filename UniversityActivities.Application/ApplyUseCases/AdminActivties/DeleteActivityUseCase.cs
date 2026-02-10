@@ -24,16 +24,9 @@ namespace UniversityActivities.Application.ApplyUseCases.AdminActivties
             // =========================
             //  Load entity
             // =========================
-            var activity = await _adminActivityRepository
-                .GetEntityAsync(activityId);
+             await _adminActivityRepository
+                .DeleteAsync(activityId);
 
-            if (activity == null)
-                throw new InvalidOperationException("Activity not found.");
-
-            // =========================
-            //  Soft delete
-            // =========================
-            activity.IsDeleted = true;
 
             // =========================
             //  Commit
