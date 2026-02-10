@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.Net.NetworkInformation;
 using System.Text;
 using UniversityActivities.Application.DTOs.Activities;
 using UniversityActivities.Application.Interfaces.ImageStorage;
@@ -49,9 +50,14 @@ namespace UniversityActivities.Application.ApplyUseCases.AdminActivties
             // =========================
             //  Validation
             // =========================
+            int status= 0;
+           
             if (dto.StartDate >= dto.EndDate)
-                throw new InvalidOperationException(
-                    "Activity start date must be before end date.");
+                throw new InvalidOperationException("Activity start date must be before end date.");
+            if (dto.StartDate.Day == DateTime.Now.Day)
+                status = 1;
+            if (dto.StartDate > DateTime.Now)
+                status = 3;
 
             // =========================
             //  Load existing activity
@@ -63,37 +69,42 @@ namespace UniversityActivities.Application.ApplyUseCases.AdminActivties
                 throw new InvalidOperationException("Activity not found.");
 
 
-            var ImageUrl = await _imageStorageService.SaveOrReplaceActivityImageAsync(image, Guid.NewGuid(), activity.TitleEn, null);
             var activityDto = _mapper.Map<Activity>(dto);
+            activity.Id = activity.Id;
             // =========================
             // Image Saving
             // =========================
+            if (image!=null)
+            {
+                var ImageUrl = await _imageStorageService.SaveOrReplaceActivityImageAsync(image, Guid.NewGuid(), activity.TitleEn, activity.ImageUrl);
+                activityDto.ImageUrl = ImageUrl;
+
+            }
             // =========================
             // 3️ Update core fields
             // =========================
-            activity.TitleAr = dto.TitleAr;
-            activity.TitleEn = dto.TitleEn;
-            activity.DescriptionAr = dto.DescriptionAr;
-            activity.DescriptionEn = dto.DescriptionEn;
+            //activity.TitleAr = dto.TitleAr;
+            //activity.TitleEn = dto.TitleEn;
+            //activity.DescriptionAr = dto.DescriptionAr;
+            //activity.DescriptionEn = dto.DescriptionEn;
 
-            activity.ImageUrl = ImageUrl;
-            activity.StartDateTime = dto.StartDate;
-            activity.EndDateTime = dto.EndDate;
+            //activity.ImageUrl = ImageUrl;
+            //activity.StartDateTime = dto.StartDate;
+            //activity.EndDateTime = dto.EndDate;
 
-            activity.LocationAr = dto.LocationAr;
-            activity.LocationEn = dto.LocationEn;
-            activity.OnlineLink = dto.OnlineLink;
+            //activity.LocationAr = dto.LocationAr;
+            //activity.LocationEn = dto.LocationEn;
+            //activity.OnlineLink = dto.OnlineLink;
 
-            activity.ManagementId = dto.ManagementId;
-            activity.ActivityTypeId = dto.ActivityTypeId;
-            activity.AttendanceModeId = dto.AttendanceModeId;
+            //activity.ManagementId = dto.ManagementId;
+            //activity.ActivityTypeId = dto.ActivityTypeId;
+            //activity.AttendanceModeId = dto.AttendanceModeId;
 
-            activity.IsPublished = dto.IsPublished;
-
+            //activity.IsPublished = dto.IsPublished;
             // =========================
             // 4️⃣ Persist core update
             // =========================
-            await _adminActivityRepository.UpdateAsync(activity);
+            await _adminActivityRepository.UpdateAsync(activityDto);
 
             // =========================
             // 5️⃣ Replace Target Audiences
@@ -103,6 +114,16 @@ namespace UniversityActivities.Application.ApplyUseCases.AdminActivties
                 await _targetAudienceRepository
                     .ReplaceAsync(activityId, dto.TargetAudienceIds);
             }
+            if (dto.Assignments != null) 
+            {
+                await _assignmentRepository
+                    .ReplaceAsync(activityId, dto.Assignments);
+            }
+
+            // =========================
+            //  Commit
+            // =========================
+            await _unitOfWork.SaveChangesAsync();
         }
     }
 }

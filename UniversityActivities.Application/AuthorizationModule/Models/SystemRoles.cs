@@ -8,6 +8,8 @@ namespace UniversityActivities.Application.AuthorizationModule.Models
     {
         public const string SuperAdmin = "SuperAdmin";
         public const string ManagementSupervisor = "Supervisor";
+        public const string ManagementCoordinator = "Coordinator";
+        public const string ManagementViewer = "Viewer";
         public const string Student = "Student";
     }
 }

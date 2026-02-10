@@ -61,6 +61,8 @@ namespace UniversityActivities.Infrastructure.Persistence.Repositories.Activitie
                             sa.ActivityId == a.Id &&
                             sa.StudentId == studentId)==5,
 
+                ActivityFinished = a.EndDateTime < DateTime.UtcNow
+
             }).FirstOrDefaultAsync();
         }
 

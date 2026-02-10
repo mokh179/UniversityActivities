@@ -32,7 +32,7 @@ namespace UniversityActivities.Infrastructure.Persistence.Repositories.Activitie
             try
             {
                 _context.Activities.Add(activity);
-                await _context.SaveChangesAsync();
+              //  await _context.SaveChangesAsync();
                 return activity.Id;
             }
             catch (Exception ex)
@@ -45,8 +45,16 @@ namespace UniversityActivities.Infrastructure.Persistence.Repositories.Activitie
 
         public async Task UpdateAsync(Activity activity)
         {
-            _context.Activities.Update(activity);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Activities.Update(activity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+
+                throw new BusinessException("Error occured");
+            }
         }
 
         public async Task DeleteAsync(int activityId)

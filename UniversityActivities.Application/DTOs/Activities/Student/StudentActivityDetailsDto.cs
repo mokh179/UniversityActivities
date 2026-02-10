@@ -36,5 +36,6 @@ namespace UniversityActivities.Application.DTOs.Activities.Student
         public bool IsRegistered { get; set; }
         public bool IsAttended { get; set; }
         public bool IsRated { get; set; }
+        public bool ActivityFinished { get; set; }
     }
 }

@@ -15,8 +15,10 @@ public static class IdentitySeed
 
 
         var superAdminPassword="Admin@123";
+
+        #region Students
         List<ApplicationUser> Users = new List<ApplicationUser>
-        { 
+        {
           new ApplicationUser {
                 UserName = "AdminMK17",
                 FirstName = "Mohammed",
@@ -52,7 +54,7 @@ public static class IdentitySeed
                 Email = "mk47@ub.edu.sa",
                 EmailConfirmed = true
             },
-        }; 
+        };
         foreach (var user in Users)
         {
             var existingUser = await userManager.FindByEmailAsync(user.Email);
@@ -64,10 +66,106 @@ public static class IdentitySeed
                 var Role = await userManager.AddToRoleAsync(user, SystemRoles.Student);
 
             }
-        }
-     
+        } 
+        #endregion
 
-       
+        #region coordinator
+        var coordinator = new ApplicationUser
+        {
+            UserName = "coordinatorMK17",
+            FirstName = "Mohammed",
+            MiddleName = "Khaled",
+            LastName = "Ahmed",
+            Gender = Application.AuthorizationModule.Models.AuthModels.Gender.Male,
+            ManagementId = 1,
+            NationalId = "2628",
+            TargetaudienceId = 1,
+            Email = "coordinator@ub.edu.sa",
+            EmailConfirmed = true
+        };
+        if (await userManager.FindByEmailAsync(coordinator.Email) == null)
+        {
+            var result = await userManager.CreateAsync(coordinator, superAdminPassword);
+            if (!result.Succeeded)
+                throw new Exception($"Failed to create user {coordinator.Email}");
+            var Role = await userManager.AddToRoleAsync(coordinator, SystemRoles.ManagementCoordinator);
+        }
+        #endregion
+
+        #region supervisor
+        var supervisor = new ApplicationUser
+        {
+            UserName = "supervisorMK17",
+            FirstName = "Mohammed",
+            MiddleName = "Khaled",
+            LastName = "Ahmed",
+            Gender = Application.AuthorizationModule.Models.AuthModels.Gender.Male,
+            ManagementId = 1,
+            NationalId = "2628",
+            TargetaudienceId = 1,
+            Email = "supervisor@ub.edu.sa",
+            EmailConfirmed = true
+        };
+        if (await userManager.FindByEmailAsync(supervisor.Email) == null)
+        {
+            var result = await userManager.CreateAsync(supervisor, superAdminPassword);
+            if (!result.Succeeded)
+                throw new Exception($"Failed to create user {supervisor.Email}");
+            var Role = await userManager.AddToRoleAsync(supervisor, SystemRoles.ManagementSupervisor);
+        }
+        #endregion
+
+        #region Viewer
+        var viewer = new ApplicationUser
+        {
+            UserName = "viewerMK17",
+            FirstName = "Mohammed",
+            MiddleName = "Khaled",
+            LastName = "Ahmed",
+            Gender = Application.AuthorizationModule.Models.AuthModels.Gender.Male,
+            ManagementId = 1,
+            NationalId = "2628",
+            TargetaudienceId = 1,
+            Email = "viewer@ub.edu.sa",
+            EmailConfirmed = true
+        };
+        if (await userManager.FindByEmailAsync(viewer.Email) == null)
+        {
+            var result = await userManager.CreateAsync(viewer, superAdminPassword);
+            if (!result.Succeeded)
+                throw new Exception($"Failed to create user {viewer.Email}");
+            var Role = await userManager.AddToRoleAsync(viewer, SystemRoles.ManagementViewer);
+        }
+        #endregion
+
+
+        #region Super Admin
+        var superadmin = new ApplicationUser
+        {
+            UserName = "superadminMK17",
+            FirstName = "Mohammed",
+            MiddleName = "Khaled",
+            LastName = "Ahmed",
+            Gender = Application.AuthorizationModule.Models.AuthModels.Gender.Male,
+            ManagementId = 1,
+            NationalId = "2628",
+            TargetaudienceId = 1,
+            Email = "superadmin@ub.edu.sa",
+            EmailConfirmed = true
+        };
+        if (await userManager.FindByEmailAsync(superadmin.Email) == null)
+        {
+            var result = await userManager.CreateAsync(superadmin, superAdminPassword);
+            if (!result.Succeeded)
+                throw new Exception($"Failed to create user {viewer.Email}");
+            var Role = await userManager.AddToRoleAsync(superadmin, SystemRoles.SuperAdmin);
+        } 
+        #endregion
+
+
+
+
+
         await context.SaveChangesAsync();
 
     }

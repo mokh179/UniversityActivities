@@ -205,6 +205,7 @@ public static class InfrastructureServiceRegistration
         services.AddScoped<IGetUserManagmentQuery, GetUserManagmentQuery>();
         services.AddScoped<IImageStorageService, ImageStorageService>();
         services.AddScoped<IGenerateAttendanceCertificateUseCase, GenerateAttendanceCertificateUseCase>();
+        services.AddScoped<IAdminActivityDetailsQuery, AdminActivityDetailsQuery>();
         return services;
     }
 }

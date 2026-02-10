@@ -76,11 +76,11 @@ namespace UniversityActivities.Web.Areas.Admin.Pages.Activities
         public async Task<IActionResult> OnPostAsync(int id)
         {
         
-            if (!ModelState.IsValid)
-            {
-                Lookups = await _lookupsQuery.GetAllAsync();
-                return Page();
-            }
+            //if (!ModelState.IsValid)
+            //{
+            //    Lookups = await _lookupsQuery.GetAllAsync();
+            //    return Page();
+            //}
 
             Input.Assignments ??= new List<ActivityAssignmentDto>();
 

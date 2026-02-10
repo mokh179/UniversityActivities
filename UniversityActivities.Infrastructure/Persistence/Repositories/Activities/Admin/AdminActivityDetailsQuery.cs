@@ -1,7 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Net.NetworkInformation;
 using System.Text;
+using UniversityActivities.Application.AuthorizationModule.Models.AuthModels;
+using UniversityActivities.Application.Common.Models;
+using UniversityActivities.Application.DTOs.Activities;
 using UniversityActivities.Application.DTOs.Activities.ActivityParticipationView;
 using UniversityActivities.Application.Interfaces.Repositories.Activies.AdminActivies;
 
@@ -54,47 +58,87 @@ namespace UniversityActivities.Infrastructure.Persistence.Repositories.Activitie
         // =========================
         // Table: Participants
         // =========================
-        public async Task<List<ActivityParticipantDto>> GetParticipantsAsync(
-          int activityId,
-          string? search = null)
+        public async Task<PagedResult<ActivityParticipantDto>> GetParticipantsAsync(ActivityParticipantFilter filter)
         {
-            var query =
-                from sa in _context.StudentActivities
-                join u in _context.Users
-                    on sa.StudentId equals u.Id
-                join m in _context.Managements
-                    on u.ManagementId equals m.Id
-                where sa.ActivityId == activityId
-                select new { sa, u, m };
+            var baseQuery =
+              from sa in _context.StudentActivities
+               join u in _context.Users
+                   on sa.StudentId equals u.Id
+               join m in _context.Managements
+                   on u.ManagementId equals m.Id
+               where sa.ActivityId == filter.ActivityId
+               select new { sa, u, m };
 
-            if (!string.IsNullOrWhiteSpace(search))
+            if (!string.IsNullOrWhiteSpace(filter.Search))
             {
-                query = query.Where(x =>
-                    x.u.FirstName.Contains(search)|| x.u.MiddleName.Contains(search)|| x.u.LastName.Contains(search));
+                baseQuery = baseQuery.Where(x =>
+                    x.u.FirstName.Contains(filter.Search) || x.u.MiddleName.Contains(filter.Search) || x.u.LastName.Contains(filter.Search));
             }
 
-            return await query
+            if (filter.IsAttended.HasValue)
+            {
+                baseQuery = filter.IsAttended.Value
+                    ? baseQuery.Where(x => x.sa.AttendedAt != null)
+                    : baseQuery.Where(x => x.sa.AttendedAt == null);
+            }
+
+            if (filter.HasEvaluated.HasValue)
+            {
+                baseQuery = filter.HasEvaluated.Value
+                    ? baseQuery.Where(x =>
+                        _context.ActivityEvaluations.Any(e =>
+                            e.ActivityId == filter.ActivityId &&
+                            e.StudentId == x.sa.StudentId))
+                    : baseQuery.Where(x =>
+                        !_context.ActivityEvaluations.Any(e =>
+                            e.ActivityId == filter.ActivityId &&
+                            e.StudentId == x.sa.StudentId));
+            }
+
+            var totalCount = await baseQuery.CountAsync();
+
+            var items = await baseQuery
+                .OrderBy(x => x.u.FirstName)
+                .Skip((filter.PageNumber - 1) * filter.PageSize)
+                .Take(filter.PageSize)
                 .Select(x => new ActivityParticipantDto
                 {
                     StudentId = x.sa.StudentId,
-                    StudentFullName = x.u.FirstName + ' ' + x.u.MiddleName + ' ' + x.u.LastName,
+                    StudentFullName = x.u.FirstName+' '+x.u.MiddleName+' '+x.u.LastName,
                     ManagementName = x.m.NameEn,
-
+                    ManagementNameAr = x.m.NameAr,
+                    
                     IsAttended = x.sa.AttendedAt != null,
+                    NationalId=x.u.NationalId,
+                    TargetAudienceName = _context.TargetAudiences
+                        .Where(ta =>ta.Id == x.u.TargetaudienceId )
+                        .Select(ta => ta.NameEn)
+                        .FirstOrDefault() ?? string.Empty,
+
+                    TargetAudienceNameAR = _context.TargetAudiences
+                        .Where(ta =>ta.Id == x.u.TargetaudienceId )
+                        .Select(ta => ta.NameAr)
+                        .FirstOrDefault() ?? string.Empty,
+
+                    Gender = (Gender)x.u.Gender,
 
                     HasEvaluated = _context.ActivityEvaluations
                         .Any(e =>
-                            e.ActivityId == activityId &&
+                            e.ActivityId == filter.ActivityId &&
                             e.StudentId == x.sa.StudentId),
+
+
 
                     StudentAverageRate = _context.ActivityEvaluations
                         .Where(e =>
-                            e.ActivityId == activityId &&
+                            e.ActivityId == filter.ActivityId &&
                             e.StudentId == x.sa.StudentId)
                         .Select(e => (double?)e.Value)
                         .Average()
                 })
                 .ToListAsync();
+
+            return new PagedResult<ActivityParticipantDto>(items,totalCount,filter.PageNumber,filter.PageSize);
         }
 
         // =========================
@@ -133,22 +177,22 @@ namespace UniversityActivities.Infrastructure.Persistence.Repositories.Activitie
         // =========================
         // Certificate Check
         // =========================
-        public async Task<bool>
-            CanViewCertificateAsync(int activityId, int studentId)
-        {
-            var attended = await _context.StudentActivities
-                .AnyAsync(sa =>
-                    sa.ActivityId == activityId &&
-                    sa.StudentId == studentId &&
-                    sa.AttendedAt != null);
+        //private async Task<bool>
+        //    CanViewCertificateAsync(int activityId, int studentId)
+        //{
+        //    var attended = await _context.StudentActivities
+        //        .AnyAsync(sa =>
+        //            sa.ActivityId == activityId &&
+        //            sa.StudentId == studentId &&
+        //            sa.AttendedAt != null);
 
-            var evaluated = await _context.ActivityEvaluations
-                .AnyAsync(e =>
-                    e.ActivityId == activityId &&
-                    e.StudentId == studentId);
+        //    var evaluated = await _context.ActivityEvaluations
+        //        .AnyAsync(e =>
+        //            e.ActivityId == activityId &&
+        //            e.StudentId == studentId);
 
-            return attended && evaluated;
-        }
+        //    return attended && evaluated;
+        //}
     }
 
 

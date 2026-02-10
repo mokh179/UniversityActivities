@@ -16,11 +16,13 @@ namespace UniversityActivities.Web.Areas.Student.Pages
         {
                 _generateAttendanceCertificateUseCase = generateAttendanceCertificateUseCase;   
         }
-        public async Task<IActionResult> OnGet(int activityId)
+        public async Task<IActionResult> OnGet(int activityId,int? studentId)
         {
+            var stid = CurrentUserId;
+            if (studentId != null)
+                stid = studentId.Value;
 
-
-            CertificateDto = await  _generateAttendanceCertificateUseCase.ExecuteAsync(CurrentUserId, activityId);
+            CertificateDto = await  _generateAttendanceCertificateUseCase.ExecuteAsync(stid, activityId);
 
             var pdfBytes = GenerateCertificatePdf(CertificateDto);
 

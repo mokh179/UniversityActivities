@@ -5,7 +5,7 @@ public class CreateOrUpdateActivityDto
     public string TitleAr { get; set; } = null!;
     public string TitleEn { get; set; } = null!;
 
-    public string DescriptionAr { get; set; } = null!;
+    public string? DescriptionAr { get; set; } = null!;
     public string DescriptionEn { get; set; } = null!;
     public string ActivityCode { get; set; } = null!;
 
@@ -31,4 +31,5 @@ public class CreateOrUpdateActivityDto
     public bool IsPublished { get; set; }
 
     public List<ActivityAssignmentDto> Assignments { get; set; } = new();
+    public int? Id { get; set; }
 }

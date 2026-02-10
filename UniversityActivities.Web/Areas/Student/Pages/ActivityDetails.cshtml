@@ -37,7 +37,7 @@
             }
 
             @* REGISTERED BUT NOT ATTENDED *@
-            @if (Model.Activity.IsRegistered && !Model.Activity.IsAttended)
+            @if (Model.Activity.IsRegistered && Model.Activity.IsAttended)
             {
                 <div class="card side-card mb-4">
                     <div class="card-body text-center">

@@ -16,6 +16,8 @@ namespace UniversityActivities.Infrastructure.Seed
                         "SuperAdmin",
                         "Supervisor",
                         "Student",
+                        "Coordinator",
+                        "Viewer"
                     };
 
 

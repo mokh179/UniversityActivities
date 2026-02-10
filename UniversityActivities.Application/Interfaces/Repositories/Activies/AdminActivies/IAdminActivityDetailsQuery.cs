@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using UniversityActivities.Application.Common.Models;
 using UniversityActivities.Application.DTOs.Activities.ActivityParticipationView;
 
 namespace UniversityActivities.Application.Interfaces.Repositories.Activies.AdminActivies
@@ -11,9 +12,8 @@ namespace UniversityActivities.Application.Interfaces.Repositories.Activies.Admi
         Task<ActivityAttendanceStatsDto> GetActivityStatsAsync(int activityId);
 
         // Table (Registered Users + Search)
-        Task<List<ActivityParticipantDto>> GetParticipantsAsync(
-            int activityId,
-            string? search = null);
+        Task<PagedResult<ActivityParticipantDto>> GetParticipantsAsync(
+            ActivityParticipantFilter filter);
 
         // Modal (View Evaluation)
         Task<StudentEvaluationModalDto?> GetStudentEvaluationAsync(
@@ -21,9 +21,9 @@ namespace UniversityActivities.Application.Interfaces.Repositories.Activies.Admi
             int studentId);
 
         // Certificate (Check availability)
-        Task<bool> CanViewCertificateAsync(
-            int activityId,
-            int studentId);
+        //Task<bool> CanViewCertificateAsync(
+        //    int activityId,
+        //    int studentId);
     }
 
 }

@@ -17,14 +17,14 @@ namespace UniversityActivities.Web.Areas.Student.Pages
             _generateAttendanceCertificateUseCase = generateAttendanceCertificateUseCase;
         }
 
-        //public string StudentName { get; set; } = null!;
-        //public string ActivityTitle { get; set; } = null!;
-        //public string ActivityDate { get; set; } = null!;
-        //public string Organization { get; set; } = null!;
 
-        public async Task  OnGet(int activityId)
+        public async Task  OnGet(int activityId,
+            int? studentId)
         {
-            CertificateDto = await _generateAttendanceCertificateUseCase.ExecuteAsync(CurrentUserId, activityId);
+            var stid = CurrentUserId;
+            if (studentId != null)
+                stid = studentId.Value;
+            CertificateDto = await _generateAttendanceCertificateUseCase.ExecuteAsync(stid, activityId);
         }
       
     }
