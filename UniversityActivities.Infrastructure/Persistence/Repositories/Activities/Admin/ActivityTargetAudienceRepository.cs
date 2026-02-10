@@ -17,7 +17,7 @@ namespace UniversityActivities.Infrastructure.Persistence.Repositories.Activitie
         public async Task ReplaceAsync(int activityId, List<int> targetAudienceIds)
         {
             // 🔹 Remove existing links
-            await _context.ActivityTargetAudiences
+            await _context.ActivityTargetAudiences.AsNoTracking()
                 .Where(x => x.ActivityId == activityId)
                 .ExecuteDeleteAsync();
 

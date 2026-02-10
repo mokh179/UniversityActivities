@@ -19,7 +19,7 @@ namespace UniversityActivities.Infrastructure.Persistence.Repositories.Activitie
         List<ActivityAssignmentDto> assignments)
         {
             //  Remove existing assignments
-            await _context.ActivityUsers
+            await _context.ActivityUsers.AsNoTracking()
                 .Where(x => x.ActivityId == activityId)
                 .ExecuteDeleteAsync();
 
