@@ -6,6 +6,7 @@ using System.Text;
 using UniversityActivities.Application.lookup.Dto;
 using UniversityActivities.Application.lookup.Interface;
 using UniversityActivities.Infrastructure.Identity;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace UniversityActivities.Infrastructure.Lookup
 {
@@ -25,6 +26,13 @@ namespace UniversityActivities.Infrastructure.Lookup
             {
                 var queryRole = await _userManager.GetUsersInRoleAsync(role);
                 var users=queryRole.Where(u => u.ManagementId == id);
+                if (!string.IsNullOrWhiteSpace(name))
+                {
+                        users = users.Where(u =>
+                    u.UserName!.Contains(name) || u.NationalId!.Contains(name)||
+                    u.Email!.Contains(name));
+                }
+
                 foreach (var user in users)
                 {
                     result.Add(new ManagementUsersDto
