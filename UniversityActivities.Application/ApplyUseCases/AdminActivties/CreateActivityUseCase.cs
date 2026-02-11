@@ -14,21 +14,15 @@ namespace UniversityActivities.Application.ApplyUseCases.AdminActivties
     public class CreateActivityUseCase : ICreateActivityUseCase
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IAdminActivityRepository _adminActivityRepository;
-        private readonly IActivityTargetAudienceRepository _targetAudienceRepository;
-        private readonly IActivityAssignmentRepository _assignmentRepository;
         private readonly IImageStorageService _imageStorageService;
         private readonly IMapper _mapper;
         public CreateActivityUseCase(IUnitOfWork unitOfWork,
-            IAdminActivityRepository adminActivityRepository,
-            IActivityTargetAudienceRepository targetAudienceRepository,
-            IActivityAssignmentRepository assignmentRepository,
+            //IAdminActivityRepository adminActivityRepository,
+            //IActivityTargetAudienceRepository targetAudienceRepository,
+            //IActivityAssignmentRepository assignmentRepository,
             IImageStorageService imageStorageService,IMapper mapper)
         {
             _unitOfWork = unitOfWork;
-            _adminActivityRepository = adminActivityRepository;
-            _targetAudienceRepository = targetAudienceRepository;
-            _assignmentRepository = assignmentRepository;
             _imageStorageService = imageStorageService;
             _mapper = mapper;
         }
@@ -52,7 +46,7 @@ namespace UniversityActivities.Application.ApplyUseCases.AdminActivties
                 // =========================
                 //  Persist Activity
                 // =========================
-                var activityId = await _adminActivityRepository
+                var activityId = await _unitOfWork.AdminActivities
                      .CreateAsync(activity);
 
                 // =========================
@@ -61,7 +55,7 @@ namespace UniversityActivities.Application.ApplyUseCases.AdminActivties
 
                 if (dto.TargetAudienceIds != null && dto.TargetAudienceIds.Count > 0)
                 {
-                    await _targetAudienceRepository
+                    await _unitOfWork.ActivityTargetAudiences
                         .ReplaceAsync(activityId, dto.TargetAudienceIds);
                 }
 
@@ -70,7 +64,7 @@ namespace UniversityActivities.Application.ApplyUseCases.AdminActivties
                 // =========================
                 if (dto.Assignments != null && dto.Assignments.Count > 0)
                 {
-                    await _assignmentRepository
+                    await _unitOfWork.ActivityAssignments
                         .ReplaceAsync(activityId, dto.Assignments);
                 }
 

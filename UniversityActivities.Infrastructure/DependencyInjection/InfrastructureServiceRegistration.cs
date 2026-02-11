@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Text;
 using UniversityActivities.Application.ApplyUseCases.AdminActivties;
+using UniversityActivities.Application.ApplyUseCases.AdminActivties.NewFolder;
 using UniversityActivities.Application.ApplyUseCases.AdminDashboard;
 using UniversityActivities.Application.ApplyUseCases.BackgroundServices.Activity;
 using UniversityActivities.Application.ApplyUseCases.Evaluations;
@@ -167,7 +168,7 @@ public static class InfrastructureServiceRegistration
                            PublishActivityUseCase>();
 
         services.AddScoped<IViewAdminActivitiesUseCase, ViewAdminActivitiesUseCase>();
-        //services.AddScoped<IViewActivityEvaluationUseCase,ViewActivityEvaluationUseCase>();
+        services.AddScoped<IViewActivityEvaluationUseCase,ViewActivityEvaluationUseCase>();
 
         // =========================
         // Use Cases - Activity (Student)

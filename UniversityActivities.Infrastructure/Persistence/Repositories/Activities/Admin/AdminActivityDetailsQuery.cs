@@ -174,25 +174,7 @@ namespace UniversityActivities.Infrastructure.Persistence.Repositories.Activitie
             };
         }
 
-        // =========================
-        // Certificate Check
-        // =========================
-        //private async Task<bool>
-        //    CanViewCertificateAsync(int activityId, int studentId)
-        //{
-        //    var attended = await _context.StudentActivities
-        //        .AnyAsync(sa =>
-        //            sa.ActivityId == activityId &&
-        //            sa.StudentId == studentId &&
-        //            sa.AttendedAt != null);
-
-        //    var evaluated = await _context.ActivityEvaluations
-        //        .AnyAsync(e =>
-        //            e.ActivityId == activityId &&
-        //            e.StudentId == studentId);
-
-        //    return attended && evaluated;
-        //}
+        
     }
 
 

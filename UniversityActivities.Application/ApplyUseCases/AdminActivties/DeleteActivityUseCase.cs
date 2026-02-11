@@ -10,21 +10,21 @@ namespace UniversityActivities.Application.ApplyUseCases.AdminActivties
     public class DeleteActivityUseCase:IDeleteActivityUseCase
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IAdminActivityRepository _adminActivityRepository;
+        //private readonly IAdminActivityRepository _adminActivityRepository;
 
         public DeleteActivityUseCase(
-            IUnitOfWork unitOfWork,
-            IAdminActivityRepository adminActivityRepository)
+            IUnitOfWork unitOfWork
+           )
         {
             _unitOfWork = unitOfWork;
-            _adminActivityRepository = adminActivityRepository;
+            //_adminActivityRepository = adminActivityRepository;
         }
         public async Task ExecuteAsync(int activityId)
         {
             // =========================
             //  Load entity
             // =========================
-             await _adminActivityRepository
+             await _unitOfWork.AdminActivities
                 .DeleteAsync(activityId);
 
 

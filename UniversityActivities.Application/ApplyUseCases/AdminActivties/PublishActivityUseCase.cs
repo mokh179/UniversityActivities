@@ -11,14 +11,13 @@ namespace UniversityActivities.Application.ApplyUseCases.AdminActivties
     {
 
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IAdminActivityRepository _adminActivityRepository;
+        //private readonly IAdminActivityRepository _adminActivityRepository;
 
         public PublishActivityUseCase(
-            IUnitOfWork unitOfWork,
-            IAdminActivityRepository adminActivityRepository)
+            IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _adminActivityRepository = adminActivityRepository;
+           // _adminActivityRepository = adminActivityRepository;
         }
 
         public async Task ExecuteAsync(int activityId, bool isPublished)
@@ -26,7 +25,7 @@ namespace UniversityActivities.Application.ApplyUseCases.AdminActivties
             // =========================
             //  Load entity
             // =========================
-            var activity = await _adminActivityRepository
+            var activity = await _unitOfWork.AdminActivities
                 .GetEntityAsync(activityId);
 
             if (activity == null)
