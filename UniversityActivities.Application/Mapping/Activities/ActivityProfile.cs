@@ -18,66 +18,90 @@ public class ActivityProfile : Profile
     private void MapCreateOrUpdate()
     {
         CreateMap<CreateOrUpdateActivityDto, Activity>()
-     // DTO ➜ Entity
-     .ForMember(dest => dest.StudentClubId,
-         opt => opt.MapFrom(src => src.ClubId))
 
-     .ForMember(dest => dest.StartDateTime,
-         opt => opt.MapFrom(src => src.StartDate))
+          // Basic
+          .ForMember(d => d.TitleAr, o => o.MapFrom(s => s.TitleAr))
+          .ForMember(d => d.TitleEn, o => o.MapFrom(s => s.TitleEn))
+          .ForMember(d => d.DescriptionAr, o => o.MapFrom(s => s.DescriptionAr ?? string.Empty))
+          .ForMember(d => d.DescriptionEn, o => o.MapFrom(s => s.DescriptionEn))
+          .ForMember(d => d.ImageUrl, o => o.MapFrom(s => s.ImageUrl))
+          .ForMember(d => d.ActivityCode, o => o.MapFrom(s => s.ActivityCode))
 
-     .ForMember(dest => dest.EndDateTime,
-         opt => opt.MapFrom(src => src.EndDate))
+          // Ownership
+          .ForMember(d => d.ManagementId, o => o.MapFrom(s => s.ManagementId))
+          .ForMember(d => d.StudentClubId, o => o.MapFrom(s => s.ClubId))
 
-     .ForMember(dest => dest.ActivityTargetAudiences,
-         opt => opt.MapFrom(src =>
-             src.TargetAudienceIds.Select(id =>
-                 new ActivityTargetAudience
-                 {
-                     TargetAudienceId = id
-                 })))
+          // Lookups
+          .ForMember(d => d.ActivityTypeId, o => o.MapFrom(s => s.ActivityTypeId))
+          .ForMember(d => d.AttendanceModeId, o => o.MapFrom(s => s.AttendanceModeId))
+          .ForMember(d => d.AttendanceScopeId, o => o.MapFrom(s => s.AttendanceScopeId))
 
-     .ForMember(dest => dest.ActivityUsers,
-         opt => opt.MapFrom(src =>
-             src.Assignments.Select(a =>
-                 new ActivityUser
-                 {
-                     UserId = a.UserId,
-                     ActivityRoleId = a.ActivityRoleId
-                 })))
+          // Time
+          .ForMember(d => d.StartDateTime, o => o.MapFrom(s => s.StartDate))
+          .ForMember(d => d.EndDateTime, o => o.MapFrom(s => s.EndDate))
 
-     .ForMember(dest => dest.ActivityStatusId, opt => opt.Ignore())
-     .ForMember(dest => dest.ActivityType, opt => opt.Ignore())
-     .ForMember(dest => dest.AttendanceMode, opt => opt.Ignore())
-     .ForMember(dest => dest.AttendanceScope, opt => opt.Ignore())
+          .ForMember(d => d.IsPublished, o => o.MapFrom(s => s.IsPublished))
 
-     // 🔁 Entity ➜ DTO
-     .ReverseMap()
+          // Target Audiences
+          .ForMember(d => d.ActivityTargetAudiences,
+              o => o.MapFrom(s =>
+                  s.TargetAudienceIds.Select(id =>
+                      new ActivityTargetAudience
+                      {
+                          TargetAudienceId = id
+                      })))
 
-     .ForMember(dest => dest.ClubId,
-         opt => opt.MapFrom(src => src.StudentClubId))
+          // Ignore Navigations
+          .ForMember(d => d.Management, o => o.Ignore())
+          .ForMember(d => d.StudentClub, o => o.Ignore())
+          .ForMember(d => d.ActivityStatus, o => o.Ignore())
+          .ForMember(d => d.ActivityType, o => o.Ignore())
+          .ForMember(d => d.AttendanceScope, o => o.Ignore())
+          .ForMember(d => d.AttendanceMode, o => o.Ignore())
+          .ForMember(d => d.ActivityUsers, o => o.Ignore())
+          .ForMember(d => d.StudentActivities, o => o.Ignore())
+          .ForMember(d => d.Evaluations, o => o.Ignore());
 
-     .ForMember(dest => dest.StartDate,
-         opt => opt.MapFrom(src => src.StartDateTime))
 
-     .ForMember(dest => dest.EndDate,
-         opt => opt.MapFrom(src => src.EndDateTime))
 
-     .ForMember(dest => dest.ManagementTypeId,
-         opt => opt.MapFrom(src =>
-             src.Management.ManagementTypeId))
+        // ==============================
+        // Entity ➜ DTO
+        // ==============================
+        CreateMap<Activity, CreateOrUpdateActivityDto>()
 
-     .ForMember(dest => dest.TargetAudienceIds,
-         opt => opt.MapFrom(src =>
-             src.ActivityTargetAudiences
-                 .Select(x => x.TargetAudienceId)))
+            // Basic
+            .ForMember(d => d.TitleAr, o => o.MapFrom(s => s.TitleAr))
+            .ForMember(d => d.TitleEn, o => o.MapFrom(s => s.TitleEn))
+            .ForMember(d => d.DescriptionAr, o => o.MapFrom(s => s.DescriptionAr))
+            .ForMember(d => d.DescriptionEn, o => o.MapFrom(s => s.DescriptionEn))
+            .ForMember(d => d.ImageUrl, o => o.MapFrom(s => s.ImageUrl))
+            .ForMember(d => d.ActivityCode, o => o.MapFrom(s => s.ActivityCode))
 
-     .ForMember(dest => dest.Assignments,
-         opt => opt.MapFrom(src =>
-             src.ActivityUsers.Select(u => new ActivityAssignmentDto
-             {
-                 UserId = u.UserId,
-                 ActivityRoleId = u.ActivityRoleId
-             })));
+            // Ownership
+            .ForMember(d => d.ManagementId, o => o.MapFrom(s => s.ManagementId))
+            .ForMember(d => d.ClubId, o => o.MapFrom(s => s.StudentClubId))
+
+            // Lookups
+            .ForMember(d => d.ActivityTypeId, o => o.MapFrom(s => s.ActivityTypeId))
+            .ForMember(d => d.AttendanceModeId, o => o.MapFrom(s => s.AttendanceModeId))
+            .ForMember(d => d.AttendanceScopeId, o => o.MapFrom(s => s.AttendanceScopeId))
+
+            // Time
+            .ForMember(d => d.StartDate, o => o.MapFrom(s => s.StartDateTime))
+            .ForMember(d => d.EndDate, o => o.MapFrom(s => s.EndDateTime))
+
+            .ForMember(d => d.IsPublished, o => o.MapFrom(s => s.IsPublished))
+
+            // Target Audiences reverse
+            .ForMember(d => d.TargetAudienceIds,
+                o => o.MapFrom(s =>
+                    s.ActivityTargetAudiences
+                     .Select(x => x.TargetAudienceId)
+                     .ToList()))
+
+            // Ignore DTO-only fields
+            .ForMember(d => d.Assignments, o => o.Ignore())
+            .ForMember(d => d.ManagementTypeId, o => o.Ignore());
 
     }
 }

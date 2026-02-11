@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using UniversityActivities.Application.Common.Helpers;
 using UniversityActivities.Application.DTOs.Activities;
 using UniversityActivities.Application.Interfaces.ImageStorage;
 using UniversityActivities.Application.Interfaces.IUnitOfWork;
@@ -16,96 +18,78 @@ namespace UniversityActivities.Application.ApplyUseCases.AdminActivties
         private readonly IActivityTargetAudienceRepository _targetAudienceRepository;
         private readonly IActivityAssignmentRepository _assignmentRepository;
         private readonly IImageStorageService _imageStorageService;
+        private readonly IMapper _mapper;
         public CreateActivityUseCase(IUnitOfWork unitOfWork,
             IAdminActivityRepository adminActivityRepository,
             IActivityTargetAudienceRepository targetAudienceRepository,
             IActivityAssignmentRepository assignmentRepository,
-            IImageStorageService imageStorageService)
+            IImageStorageService imageStorageService,IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _adminActivityRepository = adminActivityRepository;
             _targetAudienceRepository = targetAudienceRepository;
             _assignmentRepository = assignmentRepository;
             _imageStorageService = imageStorageService;
+            _mapper = mapper;
         }
 
         public async Task<int> ExecuteAsync(CreateOrUpdateActivityDto dto,IFormFile image)
         {
-            int status = 0;
-            // =========================
-            // 1️⃣ Validation (basic)
-            // =========================
-            if (dto.StartDate >= dto.EndDate)
-                throw new InvalidOperationException("Activity start date must be before end date.");
-            if (dto.StartDate.Day == DateTime.Now.Day)
-                status = 1;
-            if (dto.StartDate > DateTime.Now)
-                status = 3;
-
-            // =========================
-            // 2️⃣ Create Activity Entity
-            // =========================
-            var activity = new Domain.Entities.Activity
+            try
             {
-                TitleAr = dto.TitleAr,
-                TitleEn = dto.TitleEn,
-                DescriptionAr = dto.DescriptionAr,
-                DescriptionEn = dto.DescriptionEn,
+                // =========================
+                // 2️⃣ Create Activity Entity
+                // =========================
 
-                ImageUrl = dto.ImageUrl,
+                var activity = _mapper.Map<Domain.Entities.Activity>(dto);
+                activity.ActivityStatusId = Helpers.CalculateActivityStatus(dto.StartDate, dto.EndDate);
 
-                StartDateTime = dto.StartDate,
-                EndDateTime = dto.EndDate,
-                AttendanceScopeId=dto.AttendanceScopeId,
-                LocationAr = dto.LocationAr,
-                LocationEn = dto.LocationEn,
-                OnlineLink = dto.OnlineLink,
-                ActivityStatusId=status,
-                ManagementId = dto.ManagementId,
-                ActivityTypeId = dto.ActivityTypeId,
-                AttendanceModeId = dto.AttendanceModeId,
-                IsPublished = dto.IsPublished,
-                StudentClubId = dto.ClubId,
-                
-            };
+                // =========================
+                // Image Saving
+                // =========================
+                var ImageUrl = await _imageStorageService.SaveOrReplaceActivityImageAsync(image, Guid.NewGuid(), activity.TitleEn, null);
+                activity.ImageUrl = ImageUrl;
+                // =========================
+                //  Persist Activity
+                // =========================
+                var activityId = await _adminActivityRepository
+                     .CreateAsync(activity);
 
-            // =========================
-            // Image Saving
-            // =========================
-             var ImageUrl=await _imageStorageService.SaveOrReplaceActivityImageAsync(image,Guid.NewGuid(),activity.TitleEn,null);
-            activity.ImageUrl = ImageUrl;
-           // =========================
-           //  Persist Activity
-           // =========================
-           var activityId = await _adminActivityRepository
-                .CreateAsync(activity);
+                // =========================
+                //  Assign Target Audiences
+                // =========================
 
-            // =========================
-            //  Assign Target Audiences
-            // =========================
-            if (dto.TargetAudienceIds != null && dto.TargetAudienceIds.Count > 0)
+                if (dto.TargetAudienceIds != null && dto.TargetAudienceIds.Count > 0)
+                {
+                    await _targetAudienceRepository
+                        .ReplaceAsync(activityId, dto.TargetAudienceIds);
+                }
+
+                // =========================
+                //  Assign Roles (Supervisors / Coordinators / Viewers)
+                // =========================
+                if (dto.Assignments != null && dto.Assignments.Count > 0)
+                {
+                    await _assignmentRepository
+                        .ReplaceAsync(activityId, dto.Assignments);
+                }
+
+
+
+                // =========================
+                //  Commit
+                // =========================
+                await _unitOfWork.SaveChangesAsync();
+
+                return activityId;
+            }
+            catch (Exception ex)
             {
-                await _targetAudienceRepository
-                    .ReplaceAsync(activityId, dto.TargetAudienceIds);
+
+                throw ex;
             }
 
-            // =========================
-            //  Assign Roles (Supervisors / Coordinators / Viewers)
-            // =========================
-            if (dto.Assignments != null && dto.Assignments.Count > 0)
-            {
-                await _assignmentRepository
-                    .ReplaceAsync(activityId, dto.Assignments);
-            }
-
-           
-
-            // =========================
-            //  Commit
-            // =========================
-            await _unitOfWork.SaveChangesAsync();
-
-            return activityId;
+            
         }
     }
 }

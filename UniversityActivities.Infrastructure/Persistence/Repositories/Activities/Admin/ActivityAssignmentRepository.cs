@@ -26,38 +26,47 @@ namespace UniversityActivities.Infrastructure.Persistence.Repositories.Activitie
         int activityId,
         List<ActivityAssignmentDto> assignments)
         {
-            foreach (var assignment in assignments)
+            try
             {
-                if (!assignment.Isnew.Value)
-                    continue;
+                //  Add new assignments
+                if (assignments == null || assignments.Count == 0)
+                    return;
+                foreach (var assignment in assignments)
+                {
+                    if (assignment.Isnew.Value)
+                    {
+                        var user = await _userManager.FindByIdAsync(assignment.UserId.ToString());
+                        if (user == null)
+                            throw new Exception($"User with ID {assignment.UserId} not found.");
+                        string roleName = assignment.ActivityRoleId switch { 1 => "Supervisor", 2 => "Coordinator", 3 => "Viewer", _ => "employee" };
+                        if (!await _userManager.IsInRoleAsync(user, roleName))
+                            await _userManager.AddToRoleAsync(user, roleName);
 
-                var user = await _userManager.FindByIdAsync(assignment.UserId.ToString());
-                if (user == null)
-                    throw new Exception($"User with ID {assignment.UserId} not found.");
-                string roleName = assignment.ActivityRoleId switch { 1 => "Supervisor", 2 => "Coordinator", 3 => "Viewer", _ => "employee" };
-                if (!await _userManager.IsInRoleAsync(user, roleName))
-                    await _userManager.AddToRoleAsync(user, roleName);
+                    }
+                }
+                //  Remove existing assignments
+                await _context.ActivityUsers.AsNoTracking()
+                    .Where(x => x.ActivityId == activityId)
+                    .ExecuteDeleteAsync();
+                var entities = assignments
+               .GroupBy(x => new { x.UserId, x.ActivityRoleId })
+               .Select(g => g.First())
+               .Select(x => new ActivityUser
+               {
+                   ActivityId = activityId,
+                   UserId = x.UserId,
+                   ActivityRoleId = x.ActivityRoleId
+               })
+               .ToList();
+
+                await _context.ActivityUsers.AddRangeAsync(entities);
             }
-            //  Remove existing assignments
-            await _context.ActivityUsers.AsNoTracking()
-                .Where(x => x.ActivityId == activityId)
-                .ExecuteDeleteAsync();
+            catch (Exception ex)
+            {
 
-            //  Add new assignments
-            if (assignments == null || assignments.Count == 0)
-                return;
-            var entities = assignments
-           .GroupBy(x => new { x.UserId, x.ActivityRoleId })
-           .Select(g => g.First())
-           .Select(x => new ActivityUser
-           {
-               ActivityId = activityId,
-               UserId = x.UserId,
-               ActivityRoleId = x.ActivityRoleId
-           })
-           .ToList();
+                throw ex;
+            }
 
-            await _context.ActivityUsers.AddRangeAsync(entities);
         }
 
     }

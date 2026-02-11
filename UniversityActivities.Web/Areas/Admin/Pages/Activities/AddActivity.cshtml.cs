@@ -63,13 +63,13 @@ namespace UniversityActivities.Web.Areas.Admin.Pages.Activities
             return new JsonResult(result);
         }
 
-        public async Task<JsonResult> OnGetUsersByManagementAsync(int managementId,string role)
+        public async Task<JsonResult> OnGetUsersByManagementAsync(int managementId,string? role=null)
          {
             if (managementId <= 0)
                 return new JsonResult(new List<LookupDto>());
 
             var result = await _getUserManagmentQuery
-                .GetUsersinManagement(managementId);
+                .GetUsersinManagement(managementId,role= "Supervisor");
 
             return new JsonResult(result);
         }
