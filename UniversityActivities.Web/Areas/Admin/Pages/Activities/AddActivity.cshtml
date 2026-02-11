@@ -3,189 +3,1525 @@
 @{
 }
 <style>
-
-    .section-dot {
-        width: 14px;
-        height: 14px;
-        background-color: #dff2e6;
-        border-radius: 50%;
-        margin-top: 4px;
-        flex-shrink: 0;
-    }
-
-    .upload-badge {
-        width: 40px;
-        height: 40px;
-        background-color: #e9f6ef;
-        color: #198754;
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .upload-area {
-        border: 2px dashed #d0d7de;
-        border-radius: 12px;
-        padding: 40px;
-        min-height: 220px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .img-preview {
-        max-height: 220px;
-        max-width: 100%;
-        object-fit: contain;
-        border-radius: 10px;
-    }
-
-    .beneficiary-wrapper {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        padding: 10px;
-        border: 1px solid #dee2e6;
-        border-radius: 8px;
-        background-color: #fff;
-    }
-
-    .beneficiary-pill {
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-    }
-
-        .beneficiary-pill input {
-            display: none;
-        }
-
-        .beneficiary-pill span {
-            padding: 6px 14px;
-            border-radius: 20px;
-            border: 1px solid #ced4da;
-            font-size: 14px;
-            background-color: #f8f9fa;
-            transition: all 0.2s ease;
-        }
-
-        .beneficiary-pill input:checked + span {
-            background-color: #198754;
-            color: #fff;
-            border-color: #198754;
-        }
-
-    .chip-select {
-        position: relative;
-    }
-
-    .chip-dropdown {
-        position: relative;
-        margin-top: 6px;
-        border: 1px solid #e5e7eb;
-        border-radius: 8px;
-        background: #fff;
-        max-height: 240px;
+    /* Multi-select menu styles */
+    .multi-select-menu {
+        max-height: 300px;
         overflow-y: auto;
     }
 
+    .multi-select-item {
+        transition: background-color 0.2s;
+    }
+
+        .multi-select-item:hover {
+            background-color: #f3f4f6;
+        }
+
+    .dark .multi-select-item:hover {
+        background-color: #374151;
+    }
+
+    .multi-select-item.bg-main-50,
+    .dark .multi-select-item.bg-main-900\/20 {
+        background-color: rgba(27, 131, 84, 0.1);
+    }
+
+    .dark .multi-select-item.bg-main-900\/20 {
+        background-color: rgba(27, 131, 84, 0.2);
+    }
+
+    /* Flatpickr Date Picker Styles - Light Mode */
+    .flatpickr-calendar {
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        font-family: inherit;
+        padding: 0;
+    }
+
+    .flatpickr-months {
+        background-color: #ffffff !important;
+    }
+
+    .flatpickr-month {
+        background-color: #ffffff !important;
+        color: #111827 !important;
+        border-bottom: 1px solid #e5e7eb;
+        padding: 12px 10px;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    html:not(.dark) .flatpickr-months,
+    html:not(.dark) .flatpickr-month {
+        background-color: #ffffff !important;
+        color: #111827 !important;
+    }
+
+    .flatpickr-current-month {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #111827 !important;
+        background: transparent !important;
+    }
+
+    html:not(.dark) .flatpickr-current-month,
+    html:not(.dark) .flatpickr-current-month .cur-month,
+    html:not(.dark) .flatpickr-current-month .numInput.cur-year,
+    html:not(.dark) .flatpickr-current-month .flatpickr-monthDropdown-months,
+    html:not(.dark) .flatpickr-current-month .flatpickr-monthDropdown-months .flatpickr-monthDropdown-month {
+        background-color: #ffffff !important;
+        background: #ffffff !important;
+        color: #111827 !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+    html:not(.dark) .flatpickr-monthDropdown-months,
+    html:not(.dark) .flatpickr-monthDropdown-months .flatpickr-monthDropdown-month {
+        background-color: #ffffff !important;
+        color: #111827 !important;
+    }
+
+        html:not(.dark) .flatpickr-monthDropdown-months .flatpickr-monthDropdown-month:hover {
+            background-color: #f3f4f6 !important;
+        }
+
+    .flatpickr-weekdays {
+        background: #ffffff !important;
+        border-bottom: 1px solid #e5e7eb;
+        padding: 8px 0;
+    }
+
+    .flatpickr-weekday {
+        color: #111827 !important;
+        font-weight: 500;
+        font-size: 0.875rem;
+        cursor: default;
+    }
+
+    html:not(.dark) .flatpickr-weekdays {
+        background: #ffffff !important;
+    }
+
+    html:not(.dark) .flatpickr-weekday {
+        color: #111827 !important;
+    }
+
+    .flatpickr-days {
+        padding: 8px;
+    }
+
+    .flatpickr-day {
+        color: #111827;
+        border-radius: 50%;
+        border: 2px solid transparent;
+        width: 36px;
+        height: 36px;
+        line-height: 32px;
+        margin: 2px;
+        font-size: 0.875rem;
+        transition: all 0.2s;
+    }
+
+        .flatpickr-day.today {
+            border-color: #1B8354;
+            color: #1B8354;
+        }
+
+        .flatpickr-day:hover {
+            background: #f3f4f6;
+            border-color: transparent;
+        }
+
+        .flatpickr-day.selected {
+            background: #1B8354;
+            border-color: #1B8354;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+            .flatpickr-day.selected.startRange,
+            .flatpickr-day.selected.endRange {
+                background: #1B8354;
+                border-color: #1B8354;
+                color: #ffffff;
+            }
+
+        .flatpickr-day.flatpickr-disabled,
+        .flatpickr-day.prevMonthDay,
+        .flatpickr-day.nextMonthDay {
+            color: #d1d5db;
+            opacity: 0.5;
+        }
+
+    .flatpickr-prev-month,
+    .flatpickr-next-month {
+        color: #111827 !important;
+        padding: 4px 8px;
+        border-radius: 4px;
+        transition: all 0.2s;
+        background: transparent !important;
+    }
+
+    html:not(.dark) .flatpickr-prev-month,
+    html:not(.dark) .flatpickr-next-month,
+    html:not(.dark) .flatpickr-prev-month svg,
+    html:not(.dark) .flatpickr-next-month svg {
+        color: #111827 !important;
+        fill: #111827 !important;
+        stroke: #111827 !important;
+    }
+
+    .flatpickr-prev-month:hover,
+    .flatpickr-next-month:hover {
+        background: #f3f4f6 !important;
+    }
+
+    html:not(.dark) .flatpickr-weekdaycontainer,
+    html:not(.dark) .flatpickr-weekdaycontainer .flatpickr-weekday {
+        background: #ffffff !important;
+    }
+
+    /* Time picker arrows styling - Light Mode */
+    html:not(.dark) .flatpickr-time .arrowUp,
+    html:not(.dark) .flatpickr-time .arrowDown,
+    html:not(.dark) .numInputWrapper .arrowUp,
+    html:not(.dark) .numInputWrapper .arrowDown {
+        border-top-color: #111827 !important;
+        border-bottom-color: #111827 !important;
+    }
+
+        html:not(.dark) .flatpickr-time .arrowUp::after,
+        html:not(.dark) .flatpickr-time .arrowDown::after,
+        html:not(.dark) .numInputWrapper .arrowUp::after,
+        html:not(.dark) .numInputWrapper .arrowDown::after {
+            border-top-color: #111827 !important;
+            border-bottom-color: #111827 !important;
+        }
+
+        html:not(.dark) .flatpickr-time .arrowUp:hover,
+        html:not(.dark) .flatpickr-time .arrowDown:hover,
+        html:not(.dark) .numInputWrapper .arrowUp:hover,
+        html:not(.dark) .numInputWrapper .arrowDown:hover {
+            border-top-color: #1B8354 !important;
+            border-bottom-color: #1B8354 !important;
+        }
+
+            html:not(.dark) .flatpickr-time .arrowUp:hover::after,
+            html:not(.dark) .flatpickr-time .arrowDown:hover::after,
+            html:not(.dark) .numInputWrapper .arrowUp:hover::after,
+            html:not(.dark) .numInputWrapper .arrowDown:hover::after {
+                border-top-color: #1B8354 !important;
+                border-bottom-color: #1B8354 !important;
+            }
+
+    /* Time picker input styling - Light Mode */
+    html:not(.dark) .flatpickr-time .numInput,
+    html:not(.dark) .numInputWrapper .numInput {
+        color: #111827 !important;
+    }
+
+        html:not(.dark) .flatpickr-time .numInput:hover,
+        html:not(.dark) .numInputWrapper .numInput:hover {
+            background: #f3f4f6 !important;
+        }
+
+    html:not(.dark) .flatpickr-prev-month:hover,
+    html:not(.dark) .flatpickr-next-month:hover,
+    html:not(.dark) .flatpickr-prev-month:hover svg,
+    html:not(.dark) .flatpickr-next-month:hover svg {
+        color: #1B8354 !important;
+        fill: #1B8354 !important;
+        stroke: #1B8354 !important;
+    }
+
+    .flatpickr-prev-month svg,
+    .flatpickr-next-month svg {
+        width: 12px;
+        height: 12px;
+        color: inherit;
+        fill: currentColor;
+        stroke: currentColor;
+    }
+
+    /* Flatpickr Date Picker Styles - Dark Mode */
+    .dark .flatpickr-calendar {
+        background: #111827;
+        border-color: #374151;
+        color: #e5e7eb;
+    }
+
+    .dark .flatpickr-months {
+        background-color: #111827;
+    }
+
+    .dark .flatpickr-month {
+        background-color: #111827;
+        border-bottom-color: #374151;
+        color: #e5e7eb;
+    }
+
+    html.dark .flatpickr-months,
+    html.dark .flatpickr-month {
+        background-color: #111827 !important;
+        color: #e5e7eb !important;
+    }
+
+    html.dark .flatpickr-prev-month,
+    html.dark .flatpickr-next-month {
+        color: #e5e7eb !important;
+    }
+
+    .dark .flatpickr-current-month {
+        color: #e5e7eb;
+    }
+
+    html.dark .flatpickr-current-month .cur-month,
+    html.dark .flatpickr-current-month .numInput.cur-year {
+        background-color: #111827 !important;
+        color: #e5e7eb !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+    .dark .flatpickr-weekdays {
+        border-bottom-color: #374151;
+    }
+
+    .dark .flatpickr-weekday {
+        color: #9ca3af;
+    }
+
+    .dark .flatpickr-day {
+        color: #e5e7eb;
+    }
+
+        .dark .flatpickr-day.today {
+            border-color: #1B8354;
+            color: #1B8354;
+        }
+
+        .dark .flatpickr-day:hover {
+            background: #374151;
+        }
+
+        .dark .flatpickr-day.selected,
+        .dark .flatpickr-day.startRange,
+        .dark .flatpickr-day.endRange {
+            background: #1B8354;
+            border-color: #1B8354;
+            color: #ffffff;
+        }
+
+        .dark .flatpickr-day.flatpickr-disabled,
+        .dark .flatpickr-day.prevMonthDay,
+        .dark .flatpickr-day.nextMonthDay {
+            color: #4b5563;
+            opacity: 0.5;
+        }
+
+    .dark .flatpickr-prev-month,
+    .dark .flatpickr-next-month {
+        color: #e5e7eb;
+    }
+
+        .dark .flatpickr-prev-month:hover,
+        .dark .flatpickr-next-month:hover {
+            background: #374151;
+            color: #1B8354;
+        }
+
+    /* Selected tags styles */
+    .remove-tag {
+        cursor: pointer;
+        transition: opacity 0.2s;
+        display: inline-flex;
+        align-items: center;
+    }
+
+    .remove-tag:hover {
+        opacity: 0.7;
+    }
+
+    /* Chip Select Styles */
+    .chip-select {
+        position: relative;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        background: #fff;
+        transition: border .2s, box-shadow .2s;
+    }
+
+    .dark .chip-select {
+        border-color: #4b5563;
+        background: #1f2937;
+    }
+
+    .chip-select:focus-within {
+        border-color: #1B8354;
+        box-shadow: 0 0 0 3px rgba(27, 131, 84, .15);
+    }
+
+    .chip-input {
+        border: none;
+        outline: none;
+        width: 100%;
+        font-size: 0.875rem;
+        padding: 0.5rem;
+        background: transparent;
+    }
+
+    .dark .chip-input {
+        color: #e5e7eb;
+    }
+
+    .chip-input::placeholder {
+        color: #9ca3af;
+    }
+
+    .chip-dropdown {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        margin-top: 4px;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        background: #fff;
+        max-height: 220px;
+        overflow-y: auto;
+        box-shadow: 0 10px 25px rgba(0,0,0,.08);
+        z-index: 1000;
+        display: none;
+    }
+
+    .dark .chip-dropdown {
+        background: #1f2937;
+        border-color: #4b5563;
+    }
+
+    .chip-dropdown::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .chip-dropdown::-webkit-scrollbar-thumb {
+        background: #d1d5db;
+        border-radius: 10px;
+    }
+
     .chip-item {
-        padding: 10px 12px;
+        padding: 0.5rem 0.75rem;
+        border-radius: 6px;
+        font-size: 0.875rem;
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 10px;
+        transition: background-color 0.2s;
     }
 
-        .chip-item + .chip-item {
-            border-top: 1px solid #f1f1f1;
-        }
-        .chip-item:hover {
-            background-color: #f8f9fa;
-        }
-
-        .chip-item .item-text {
-            display: flex;
-            flex-direction: column;
-        }
-
-    .chips-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 6px;
-        margin-bottom: 6px;
+    .chip-item:hover {
+        background: #f3f4f6;
     }
 
-    .chip {
-        background-color: #198754;
-        color: #fff;
-        padding: 4px 10px;
-        border-radius: 20px;
-        font-size: 13px;
-        display: flex;
-        align-items: center;
-        gap: 6px;
+    .dark .chip-item:hover {
+        background: #374151;
     }
 
-        .chip span {
-            cursor: pointer;
-        }
+    .item-text {
+        flex: 1;
+    }
+
+    .item-badge {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        background: #ecfdf5;
+        color: #065f46;
+    }
+
+    .dark .item-badge {
+        background: #064e3b;
+        color: #a7f3d0;
+    }
 
     .selected-panel {
-        min-height: 180px;
-        border: 1px dashed #dcdcdc;
-        border-radius: 8px;
-        padding: 12px;
-        background: #fafafa;
-    }
-
-    .chips-container {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
+        min-height: 200px;
     }
 
     .chip {
-        background: #e9f5ee;
-        border: 1px solid #cce7d6;
-        color: #155724;
-        padding: 6px 10px;
-        border-radius: 6px;
-        display: flex;
-        justify-content: space-between;
+        display: inline-flex;
         align-items: center;
+        gap: 8px;
+        padding: 6px 12px;
+        background: #ecfdf5;
+        color: #065f46;
+        border-radius: 999px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        border: 1px solid #a7f3d0;
+        margin: 4px;
     }
 
-        .chip span {
-            cursor: pointer;
-            font-weight: bold;
-        }
+    .dark .chip {
+        background: #064e3b;
+        color: #a7f3d0;
+        border-color: #065f46;
+    }
 
-    .chip-item .item-text .name {
-        font-weight: 600;
+    .chip-remove {
+        border: none;
+        background: #d1fae5;
+        color: #065f46;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
         font-size: 14px;
-        color: #111827;
+        line-height: 1;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.2s;
     }
 
-    .chip-item .item-text .sub {
-        font-size: 12px;
-        color: #6b7280;
+    .dark .chip-remove {
+        background: #065f46;
+        color: #a7f3d0;
     }
 
-    .chip-item .item-badge {
-        font-size: 11px;
-        padding: 4px 8px;
-        border-radius: 12px;
-        background: #eef2ff;
-        color: #3730a3;
-        white-space: nowrap;
+    .chip-remove:hover {
+        background: #86efac;
     }
 
+    .dark .chip-remove:hover {
+        background: #047857;
+    }
+
+    /* Checkbox and Radio Button Colors - Green (main-600) */
+    input[type="checkbox"],
+    input[type="radio"] {
+        accent-color: #1B8354 !important;
+    }
+
+    input[type="checkbox"]:checked,
+    input[type="radio"]:checked {
+        background-color: #1B8354 !important;
+        border-color: #1B8354 !important;
+    }
+
+    input[type="checkbox"]:focus,
+    input[type="radio"]:focus {
+        ring-color: #1B8354 !important;
+        border-color: #1B8354 !important;
+    }
+
+    /* Tailwind checkbox and radio custom styling */
+    input[type="checkbox"].w-4,
+    input[type="radio"].w-4 {
+        accent-color: #1B8354 !important;
+    }
+
+    /* Ensure green color for all checkboxes and radios */
+    input[type="checkbox"].text-main-600:checked,
+    input[type="radio"].text-main-600:checked {
+        background-color: #1B8354 !important;
+        border-color: #1B8354 !important;
+    }
+
+    input[type="checkbox"].focus\:ring-main-500:focus,
+    input[type="radio"].focus\:ring-main-500:focus {
+        --tw-ring-color: #1B8354 !important;
+    }
 </style>
 
-<!-- Page Header Section -->
+<section class="animate-fade-in px-6 pb-8">
+    <div class="mb-4 space-y-4">
+        <!-- Welcome banner -->
+        <div class="rounded-2xl border border-neutral-200 bg-gradient-green-2 p-5 shadow-sm dark:border-neutral-700 dark:bg-gray-900">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center gap-4">
+                    <a href="/Admin/Activities/Index"
+                       class="p-2.5 bg-white/20 hover:bg-white/30 rounded-lg transition-all hover:scale-105">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22"
+                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                             stroke-linecap="round" stroke-linejoin="round"
+                             class="lucide lucide-arrow-right text-white" aria-hidden="true">
+                            <path d="M5 12h14"></path>
+                            <path d="m12 5 7 7-7 7"></path>
+                        </svg>
+                    </a>
+                    <div class="flex flex-col justify-between gap-1">
+                        <h2 class="text-sm tracking-tight text-white sm:text-lg lg:text-lg">
+                            إضافة نشاط جديد
+
+                        </h2>
+                        <p class="text-white text-sm">
+                            قم بإكمال النموذج أدناه لإضافة نشاط طلابي جديد إلى المنصة
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Form -->
+        <form class="space-y-6">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-200 dark:border-gray-700">
+                <div class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 px-6 py-3 border-b border-gray-200 dark:border-gray-700">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-main-600 p-2 rounded-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                 stroke-linejoin="round" class="lucide lucide-image text-white"
+                                 aria-hidden="true">
+                                <rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect>
+                                <circle cx="9" cy="9" r="2"></circle>
+                                <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-medium text-gray-800 dark:text-gray-200">صورة النشاط</h3>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">اختر صورة توضيحية للنشاط</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4">
+                    <div class="border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg p-4 hover:border-main-600 transition-all bg-gradient-to-br from-gray-50 to-white dark:from-gray-700 dark:to-gray-800">
+                        <label class="flex items-center gap-4 cursor-pointer group">
+                            <input type="file"
+                                   accept="image/*" id="activityImage" name="image" class="hidden">
+                            <div class="bg-gradient-to-br from-main-600/10 to-main-700/10 p-4 rounded-lg group-hover:scale-110 transition-transform">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                     class="lucide lucide-image text-main-600" aria-hidden="true">
+                                    <rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect>
+                                    <circle cx="9" cy="9" r="2"></circle>
+                                    <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path>
+                                </svg>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-gray-700 font-medium mb-1 text-sm dark:text-gray-200">
+                                    اضغط لاختيار صورة
+                                    النشاط
+                                </p>
+                                <p class="text-gray-500 text-xs dark:text-gray-400">PNG, JPG, GIF - الحجم الأقصى 10MB</p>
+                            </div>
+                            <div class="flex items-center gap-2 bg-gradient-to-r from-main-600 to-main-700 text-white px-6 py-2.5 rounded-lg shadow-md group-hover:shadow-lg transition-all group-hover:scale-105">
+                                <svg class="text-white dark:text-gray-200"
+                                     xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                     class="lucide lucide-upload" aria-hidden="true">
+                                    <path d="M12 3v12"></path>
+                                    <path d="m17 8-5-5-5 5"></path>
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                </svg><span class="text-sm text-white dark:text-gray-200">اختيار صورة</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 overflow-visible">
+                <div class="bg-gradient-to-r from-gray-50 to-gray-100 px-6 py-4 border-b border-gray-200">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-info-600 p-2 rounded-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                 stroke-linejoin="round" class="lucide lucide-file-text text-white"
+                                 aria-hidden="true">
+                                <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
+                                </path>
+                                <path d="M14 2v5a1 1 0 0 0 1 1h5"></path>
+                                <path d="M10 9H8"></path>
+                                <path d="M16 13H8"></path>
+                                <path d="M16 17H8"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-medium text-gray-800 dark:text-gray-200">المعلومات الأساسية</h3>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">المعلومات الأساسية للنشاط</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-6 space-y-5">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-2 text-sm font-medium text-gray-700">
+                                <span>عنوان النشاط</span><span class="text-red-500">*</span>
+                            </label><input type="text" asp-for="Input.TitleAr"
+                                           class="form-input" placeholder="أدخل عنوان النشاط بالعربية" required="">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-2 text-sm font-medium text-gray-700">
+                                <span>
+                                    عنوان النشاط
+                                    بالإنجليزي
+                                </span><span class="text-red-500">*</span>
+                            </label><input type="text" asp-for="Input.TitleEn"
+                                           class="form-input" placeholder="Enter activity title in English" dir="ltr" required="">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-2 text-sm font-medium text-gray-700">
+                                <span>نوع الشطر</span><span class="text-red-500">*</span>
+                            </label>
+                            <div class="flex flex-wrap items-center gap-4 p-4 bg-gray-50 dark:bg-gray-500  rounded-lg border-2 border-gray-200 dark:border-gray-700">
+                                <label class="flex items-center gap-2 cursor-pointer px-4 py-2 rounded-lg hover:bg-white dark:hover:bg-gray-700 transition-colors">
+                                    <input type="radio" asp-for="Input.AttendanceScopeId"
+                                           class="w-4 h-4 text-main-600 focus:ring-main-600" value="1"
+                                           checked=""><span class="text-gray-700 font-medium dark:text-gray-200">طلاب</span>
+                                </label><label class="flex items-center gap-2 cursor-pointer px-4 py-2 rounded-lg hover:bg-white dark:hover:bg-gray-700 transition-colors">
+                                    <input type="radio" asp-for="Input.AttendanceScopeId"
+                                           class="w-4 h-4 text-main-600 focus:ring-main-600"
+                                           value="2"><span class="text-gray-700 font-medium dark:text-gray-200">طالبات</span>
+                                </label><label class="flex items-center gap-2 cursor-pointer px-4 py-2 rounded-lg hover:bg-white dark:hover:bg-gray-700 transition-colors">
+                                    <input type="radio" asp-for="Input.AttendanceScopeId"
+                                           class="w-4 h-4 text-main-600 focus:ring-main-600"
+                                           value="3"><span class="text-gray-700 font-medium dark:text-gray-200">
+                                        كلا
+                                        الجنسين
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-2 text-sm font-medium text-gray-700">
+                                <span>الجهة المنظمة</span><span class="text-red-500">*</span>
+                            </label>
+                            <div class="relative">
+                                <select id="managementTypeSelect" class="form-select" required="" asp-for="Input.ManagementTypeId">
+                                    <option value="">اختر نوع الجهة المنظمة</option>
+                                    @foreach (var mt in Model.Lookups?.ManagementTypes ?? new List<UniversityActivities.Application.lookup.Dto.LookupDto>())
+                                    {
+                                        <option value="@mt.Id">@mt.NameEn</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="space-y-2 d-none" id="managementFieldWrapper">
+                                <label class="flex items-center gap-2 text-sm font-medium text-gray-700">
+                                    <span>الإدارة</span><span class="text-red-500">*</span>
+                                </label>
+                                <div class="relative">
+                                    <select id="managementSelect" asp-for="Input.ManagementId" class="form-select">
+                                        <option value="">اختر الإدارة</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="space-y-2 d-none" id="clubFieldWrapper">
+                                <label class="flex items-center gap-2 text-sm font-medium text-gray-700">
+                                    <span>النادي</span>
+                                </label>
+                                <div class="relative">
+                                    <select id="clubSelect" asp-for="Input.ClubId" class="form-select">
+                                        <option value="">اختر النادي</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-2 text-sm font-medium text-gray-700">
+                                <span>الفئة المستفيدة</span><span class="text-red-500">*</span><span class="text-xs text-gray-500">
+                                    (يمكن اختيار أكثر من
+                                    فئة)
+                                </span>
+                            </label>
+                            <div class="relative">
+                                <input type="hidden" id="hidden-beneficiaryCategory" name="beneficiaryCategory" value="[]">
+                                <!-- Hidden checkboxes for form submission -->
+                                @foreach (var item in Model.Lookups?.TargetAudiences ?? new List<UniversityActivities.Application.lookup.Dto.LookupDto>())
+                                {
+                                    <input type="checkbox" name="Input.TargetAudienceIds" value="@item.Id" class="hidden target-audience-checkbox" id="targetAudience_@item.Id">
+                                }
+                                <button type="button" data-multi-select="menu-beneficiaryCategory" data-input-id="hidden-beneficiaryCategory" data-placeholder="اختر الفئة المستفيدة"
+                                        class="form-select w-full text-right">
+                                    <span class="text-gray-700 dark:text-gray-200">اختر الفئة المستفيدة</span>
+                                </button>
+                                <div id="selected-beneficiaryCategory" class="flex flex-wrap gap-2 mt-2"></div>
+                                <div id="menu-beneficiaryCategory" class="multi-select-menu hidden absolute z-[9999] w-full mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg overflow-hidden">
+                                    @foreach (var item in Model.Lookups?.TargetAudiences ?? new List<UniversityActivities.Application.lookup.Dto.LookupDto>())
+                                    {
+                                        <div class="multi-select-item px-4 py-2 cursor-pointer flex items-center gap-2 border-b border-gray-200 dark:border-gray-700" data-value="@item.Id">
+                                            <input type="checkbox" class="w-4 h-4 text-main-600 rounded focus:ring-main-500 pointer-events-none">
+                                            <span class="text-gray-700 dark:text-gray-200">@item.NameEn</span>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-2 text-sm font-medium text-gray-700">
+                                <span>مجال النشاط</span><span class="text-red-500">*</span>
+                            </label>
+                            <div class="relative">
+                                <select id="activityField" asp-for="Input.ActivityTypeId" class="form-select" required="">
+                                    <option value="">اختر مجال النشاط</option>
+                                    @foreach (var at in Model.Lookups?.ActivityTypes ?? new List<UniversityActivities.Application.lookup.Dto.LookupDto>())
+                                    {
+                                        <option value="@at.Id">@at.NameEn</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-2 text-sm font-medium text-gray-700">
+                                <span>الوصف بالإنجليزي</span><span class="text-red-500">*</span>
+                            </label><textarea asp-for="Input.DescriptionEn" class="form-input" placeholder="Enter activity description in English..."
+                                              required="" rows="4"></textarea>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-2 text-sm font-medium text-gray-700">
+                                <span>الوصف بالعربية</span><span class="text-red-500">*</span>
+                            </label><textarea asp-for="Input.DescriptionAr" class="form-input" placeholder="أدخل وصفاً تفصيلياً للنشاط، يشمل الأهداف والفعاليات والمخرجات المتوقعة..."
+                                              required="" rows="4"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-200 dark:border-gray-700">
+                <div class="bg-gradient-to-r from-gray-50 to-gray-100 px-6 py-4 border-b border-gray-200">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-orange-600 p-2 rounded-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                 stroke-linecap="round" stroke-linejoin="round"
+                                 class="lucide lucide-map-pin text-white" aria-hidden="true">
+                                <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0">
+                                </path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-medium text-gray-800 dark:text-gray-200">تفاصيل الحضور والمكان</h3>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">نوع الحضور ومكان أو رابط النشاط</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-6 space-y-5">
+                    <div class="space-y-2">
+                        <label class="flex items-center gap-2 ">
+                            <span class="form-label">نوع الحضور</span><span class="text-red-500">*</span>
+                        </label>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <label class="flex items-center gap-3 cursor-pointer p-4 border-2 border-gray-200 rounded-lg hover:border-main-600 transition-all hover:shadow-md bg-white">
+                                <input type="radio" name="AttendanceType" asp-for="Input.AttendanceModeId"
+                                       class="w-4 h-4 text-main-600 focus:ring-main-600"
+                                       value="1" checked="">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                     stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                     stroke-linejoin="round" class="lucide lucide-map-pin text-main-600"
+                                     aria-hidden="true">
+                                    <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0">
+                                    </path>
+                                    <circle cx="12" cy="10" r="3"></circle>
+                                </svg><span class="text-gray-700 font-medium">حضوري</span>
+                            </label><label class="flex items-center gap-3 cursor-pointer p-4 border-2 border-gray-200 rounded-lg hover:border-main-600 transition-all hover:shadow-md bg-white">
+                                <input type="radio" name="AttendanceType" asp-for="Input.AttendanceModeId"
+                                       class="w-4 h-4 text-main-600 focus:ring-main-600"
+                                       value="2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20"
+                                     height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                     class="lucide lucide-globe text-main-600" aria-hidden="true">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+                                    <path d="M2 12h20"></path>
+                                </svg><span class="text-gray-700 font-medium">
+                                    إلكتروني ( أونلاين
+                                    )
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="space-y-2 animate-fadeIn" id="locationWrapper">
+                        <label class="flex items-center gap-2 text-sm font-medium text-gray-700">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                 stroke-linejoin="round" class="lucide lucide-map-pin text-main-600"
+                                 aria-hidden="true">
+                                <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0">
+                                </path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg><span>مكان النشاط</span><span class="text-red-500">*</span>
+                        </label><input type="text" asp-for="Input.LocationEn"
+                                       class="form-input" placeholder="أدخل مكان النشاط" required="">
+                    </div>
+                    <div class="space-y-2 d-none" id="linkWrapper">
+                        <label class="flex items-center gap-2 text-sm font-medium text-gray-700">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                 stroke-linecap="round" stroke-linejoin="round"
+                                 class="lucide lucide-globe text-main-600" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+                                <path d="M2 12h20"></path>
+                            </svg><span>رابط الاجتماع</span><span class="text-red-500">*</span>
+                        </label><input type="url" asp-for="Input.OnlineLink"
+                                       class="form-input" placeholder="أدخل رابط الاجتماع" required="">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="flex items-center gap-2 text-sm font-medium text-gray-700">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                 stroke-linecap="round" stroke-linejoin="round"
+                                 class="lucide lucide-file-text text-main-600" aria-hidden="true">
+                                <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
+                                </path>
+                                <path d="M14 2v5a1 1 0 0 0 1 1h5"></path>
+                                <path d="M10 9H8"></path>
+                                <path d="M16 13H8"></path>
+                                <path d="M16 17H8"></path>
+                            </svg><span class="form-label">دليل الترميز</span><span class="text-xs text-gray-500 font-normal">(اختياري)</span>
+                        </label><input type="text" asp-for="Input.ActivityCode"
+                                       class="form-input" placeholder="أدخل دليل الترميز">
+                        <p class="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1.5 mr-1">
+                            <svg class="w-3.5 h-3.5 text-amber-500 flex-shrink-0" fill="currentColor"
+                                 viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                                      clip-rule="evenodd"></path>
+                            </svg><span class="form-label">سيتم إضافة هذا الدليل في شهادات النشاط</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-200 dark:border-gray-700">
+                <div class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-lavender-600 p-2 rounded-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                 stroke-linecap="round" stroke-linejoin="round"
+                                 class="lucide lucide-users text-white" aria-hidden="true">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                <path d="M16 3.128a4 4 0 0 1 0 7.744"></path>
+                                <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-medium text-gray-800 dark:text-gray-200">الأدوار والمسؤوليات</h3>
+                            <p class="text-xs text-gray-500">تحدي�� المنسقين والمعتمدين والمشاركين</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-6 space-y-6">
+                    <div class="space-y-2">
+                        <label class="flex items-center gap-2 text-sm font-medium text-gray-700">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                 stroke-linecap="round" stroke-linejoin="round"
+                                 class="lucide lucide-briefcase text-main-600" aria-hidden="true">
+                                <path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                                <rect width="20" height="14" x="2" y="6" rx="2"></rect>
+                            </svg><span class="form-label">منسق النشاط</span><span class="text-xs text-gray-500 dark:text-gray-400">
+                                (يمكن
+                                اختيار أكثر من منسق)
+                            </span>
+                        </label>
+                        <div class="relative">
+                            <input type="hidden" id="hidden-coordinators" name="coordinators" value="[]">
+                            <button type="button" data-multi-select="menu-coordinators" data-input-id="hidden-coordinators" data-placeholder="اختر المنسقين"
+                                    class="form-select w-full text-right">
+                                <span class="text-gray-700 dark:text-gray-200">اختر المنسقين</span>
+                            </button>
+                            <div id="selected-coordinators" class="flex flex-wrap gap-2 mt-2"></div>
+                            <div id="menu-coordinators" class="multi-select-menu hidden absolute z-[9999] w-full mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg overflow-hidden">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="flex items-center gap-2 text-sm font-medium text-gray-700">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                 stroke-linecap="round" stroke-linejoin="round"
+                                 class="lucide lucide-award text-info-600" aria-hidden="true">
+                                <path d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526">
+                                </path>
+                                <circle cx="12" cy="8" r="6"></circle>
+                            </svg><span class="form-label">المشرف</span><span class="text-xs text-gray-500 dark:text-gray-400">
+                                (يمكن اختيار
+                                أكثر من مشرف)
+                            </span>
+                        </label>
+                        <div class="relative">
+                            <input type="hidden" id="hidden-supervisors" name="supervisors" value="[]">
+                            <button type="button" data-multi-select="menu-supervisors" data-input-id="hidden-supervisors" data-placeholder="اختر المشرفين"
+                                    class="form-select w-full text-right">
+                                <span class="text-gray-700 dark:text-gray-200">اختر المشرفين</span>
+                            </button>
+                            <div id="selected-supervisors" class="flex flex-wrap gap-2 mt-2"></div>
+                            <div id="menu-supervisors" class="multi-select-menu hidden absolute z-[9999] w-full mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg overflow-hidden">
+                                <!-- سيتم ملؤها ديناميكياً من JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="flex items-center gap-2 text-sm font-medium text-gray-700">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                 stroke-linecap="round" stroke-linejoin="round"
+                                 class="lucide lucide-user-check text-purple-600" aria-hidden="true">
+                                <path d="m16 11 2 2 4-4"></path>
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                            </svg><span class="form-label">المشاهد</span><span class="text-xs text-gray-500 dark:text-gray-400">
+                                (يمكن اختيار
+                                أكثر من مشاهد)
+                            </span>
+                        </label>
+                        <div class="relative">
+                            <input type="hidden" id="hidden-viewers" name="viewers" value="[]">
+                            <button type="button" data-multi-select="menu-viewers" data-input-id="hidden-viewers" data-placeholder="اختر المشاهدين"
+                                    class="form-select w-full text-right">
+                                <span class="text-gray-700 dark:text-gray-200">اختر المشاهدين</span>
+                            </button>
+                            <div id="selected-viewers" class="flex flex-wrap gap-2 mt-2"></div>
+                            <div id="menu-viewers" class="multi-select-menu hidden absolute z-[9999] w-full mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg overflow-hidden">
+                                <!-- سيتم ملؤها ديناميكياً من JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-200 dark:border-gray-700">
+                <div class="bg-gradient-to-r from-gray-50 to-gray-100 px-6 py-4 border-b border-gray-200">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-teal-600 p-2 rounded-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                 stroke-linejoin="round" class="lucide lucide-calendar text-white"
+                                 aria-hidden="true">
+                                <path d="M8 2v4"></path>
+                                <path d="M16 2v4"></path>
+                                <rect width="18" height="18" x="3" y="4" rx="2"></rect>
+                                <path d="M3 10h18"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-medium text-gray-800 dark:text-gray-200">التاريخ والوقت</h3>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">حدد موعد بداية ونهاية النشاط</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-6 space-y-5">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-2 text-sm font-medium text-gray-700">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                     stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                     stroke-linejoin="round" class="lucide lucide-calendar text-teal-600"
+                                     aria-hidden="true">
+                                    <path d="M8 2v4"></path>
+                                    <path d="M16 2v4"></path>
+                                    <rect width="18" height="18" x="3" y="4" rx="2"></rect>
+                                    <path d="M3 10h18"></path>
+                                </svg><span>تاريخ ووقت البداية</span><span class="text-red-500">*</span>
+                            </label><input type="datetime-local" id="startDateTime"
+                                           class="form-input" required="">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-2 text-sm font-medium text-gray-700">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                     stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                     stroke-linejoin="round" class="lucide lucide-calendar text-teal-600"
+                                     aria-hidden="true">
+                                    <path d="M8 2v4"></path>
+                                    <path d="M16 2v4"></path>
+                                    <rect width="18" height="18" x="3" y="4" rx="2"></rect>
+                                    <path d="M3 10h18"></path>
+                                </svg><span>تاريخ ووقت النهاية</span><span class="text-red-500">*</span>
+                            </label><input type="datetime-local" id="endDateTime"
+                                           class="form-input" required="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-200 dark:border-gray-700">
+                <div class="bg-gradient-to-r from-gray-50 to-gray-100 px-6 py-4 border-b border-gray-200">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-purple-600 p-2 rounded-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                 stroke-linecap="round" stroke-linejoin="round"
+                                 class="lucide lucide-globe text-white" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+                                <path d="M2 12h20"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-medium text-gray-800 dark:text-gray-200">العرض على الموقع الرسمي</h3>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">
+                                هل تريد عرض هذا النشاط على الموقع الرسمي
+                                للجامعة؟
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div class="space-y-2">
+                        <label class="flex items-center gap-2 text-sm font-medium text-gray-700">
+                            <span>العرض على الموقع</span><span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative">
+                            <div class="flex items-center gap-3">
+                                <input type="checkbox" id="publishCheckbox" asp-for="Input.IsPublished"
+                                       class="w-4 h-4 text-main-600 rounded focus:ring-main-500">
+                                <label for="publishCheckbox" class="text-sm font-medium text-gray-700 dark:text-gray-200 cursor-pointer">
+                                    نشر النشاط على الموقع الرسمي
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex gap-4">
+                <a href="/Admin/Activities/Index"
+                   class="px-6 py-2.5 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all font-semibold text-sm">
+                    إلغاء
+                </a><button type="button" id="createActivityBtn"
+                             class="px-6 py-2.5 rounded-lg transition-all font-bold text-sm bg-gradient-to-r from-main-600 to-main-700 text-white hover:shadow-xl">
+                    إضافة
+                    النشاط
+                </button>
+            </div>
+        </form>
+    </div>
+</section>
+<script>
+         document.addEventListener('DOMContentLoaded', function() {
+        // Initialize assignment object if not exists
+        if (!window.assignment) {
+            window.assignment = {
+                coordinators: [],
+                supervisors: [],
+                viewers: []
+            };
+        }
+
+        // Function to get current theme
+        const getTheme = () => document.documentElement.classList.contains('dark') ? 'dark' : 'default';
+
+        // Initialize Flatpickr for date inputs
+        const dateInputs = document.querySelectorAll('input[type="date"]');
+        const datePickers = [];
+        dateInputs.forEach(input => {
+            const picker = flatpickr(input, {
+                locale: 'ar',
+                dateFormat: 'Y-m-d',
+                enableTime: false,
+                theme: getTheme(),
+                allowInput: true,
+                clickOpens: true,
+                wrap: false
+            });
+            datePickers.push(picker);
+        });
+
+        // Initialize Flatpickr for time inputs - مُبسط وفعال
+        const timeInputs = document.querySelectorAll('input[name="startTime"], input[name="endTime"]');
+        const timePickers = [];
+
+        timeInputs.forEach(input => {
+            const picker = flatpickr(input, {
+                locale: 'ar',
+                enableTime: true,
+                noCalendar: true,
+                dateFormat: 'h:i K',
+                time_24hr: false,
+                theme: getTheme(),
+                allowInput: true,
+                clickOpens: true,
+                minuteIncrement: 1,
+                // إضافة static mode لمنع أي مشاكل في الموضع
+                static: false,
+                // Force time only mode
+                onReady: function(selectedDates, dateStr, instance) {
+                    // تأكد من إخفاء التقويم تماماً
+                    const calendar = instance.calendarContainer;
+                    if (calendar) {
+                        // إخفاء جميع عناصر التقويم
+                        const calendarElements = calendar.querySelectorAll('.flatpickr-months, .flatpickr-days, .flatpickr-weekdays');
+                        calendarElements.forEach(el => {
+                            el.style.display = 'none';
+                        });
+
+                        // التأكد من ظهور Time picker فقط
+                        const timeContainer = calendar.querySelector('.flatpickr-time');
+                        if (timeContainer) {
+                            timeContainer.style.display = 'block';
+                            timeContainer.style.borderTop = 'none';
+                        }
+                    }
+                }
+            });
+            timePickers.push(picker);
+        });
+
+        // Update theme when dark mode changes
+        const observer = new MutationObserver(() => {
+            const theme = getTheme();
+            datePickers.forEach(picker => {
+                if (picker && picker.config && picker.config.theme !== theme) {
+                    const currentValue = picker.input.value;
+                    picker.destroy();
+                    const newPicker = flatpickr(picker.input, {
+                        locale: 'ar',
+                        dateFormat: 'Y-m-d',
+                        enableTime: false,
+                        theme: theme,
+                        allowInput: true,
+                        clickOpens: true,
+                        defaultDate: currentValue
+                    });
+                    datePickers[datePickers.indexOf(picker)] = newPicker;
+                }
+            });
+
+            timePickers.forEach(picker => {
+                if (picker && picker.config && picker.config.theme !== theme) {
+                    const currentValue = picker.input.value;
+                    picker.destroy();
+                    const newPicker = flatpickr(picker.input, {
+                        locale: 'ar',
+                        enableTime: true,
+                        noCalendar: true,
+                        dateFormat: 'h:i K',
+                        time_24hr: false,
+                        theme: theme,
+                        allowInput: true,
+                        clickOpens: true,
+                        minuteIncrement: 1,
+                        defaultDate: currentValue,
+                        onReady: function(selectedDates, dateStr, instance) {
+                            const calendar = instance.calendarContainer;
+                            if (calendar) {
+                                const calendarElements = calendar.querySelectorAll('.flatpickr-months, .flatpickr-days, .flatpickr-weekdays');
+                                calendarElements.forEach(el => {
+                                    el.style.display = 'none';
+                                });
+                                const timeContainer = calendar.querySelector('.flatpickr-time');
+                                if (timeContainer) {
+                                    timeContainer.style.display = 'block';
+                                    timeContainer.style.borderTop = 'none';
+                                }
+                            }
+                        }
+                    });
+                    timePickers[timePickers.indexOf(picker)] = newPicker;
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['class']
+        });
+
+        // Load users when management is selected
+        const managementSelect = document.getElementById('managementSelect');
+        if (managementSelect) {
+            managementSelect.addEventListener('change', async function() {
+                const managementId = this.value;
+                if (!managementId) return;
+
+                const url = `/Admin/Activities/AddActivity?handler=UsersByManagement&managementId=${managementId}`;
+                
+                try {
+                    const response = await fetch(url);
+                    const users = await response.json();
+                    
+                    if (!users || users.length === 0) return;
+
+                    // Populate all three multi-select menus
+                    populateMultiSelectMenu('menu-coordinators', users, 1);
+                    populateMultiSelectMenu('menu-supervisors', users, 2);
+                    populateMultiSelectMenu('menu-viewers', users, 3);
+                } catch (err) {
+                    console.error('Error loading users:', err);
+                }
+            });
+        }
+
+        // Function to populate multi-select menu
+        function populateMultiSelectMenu(menuId, users, roleId) {
+            const menu = document.getElementById(menuId);
+            if (!menu) return;
+
+            menu.innerHTML = '';
+
+            users.forEach(user => {
+                const displayName = user.fullname || user.fullName || user.nameEn || user.userName || '';
+                const userId = user.id;
+
+                const item = document.createElement('div');
+                item.className = 'multi-select-item px-4 py-2 cursor-pointer flex items-center gap-2 border-b border-gray-200 dark:border-gray-700';
+                item.setAttribute('data-value', userId);
+                item.setAttribute('data-role-id', roleId);
+                item.innerHTML = `
+                    <input type="checkbox" class="w-4 h-4 text-main-600 rounded focus:ring-main-500 pointer-events-none">
+                    <span class="text-gray-700 dark:text-gray-200">${displayName}</span>
+                `;
+                menu.appendChild(item);
+            });
+
+            // Re-initialize multi-select for this menu (reset initialization flag)
+            const button = document.querySelector(`[data-multi-select="${menuId}"]`);
+            if (button) {
+                button._initialized = false;
+                initializeMultiSelect(button);
+            }
+        }
+
+        // Function to initialize multi-select for a button
+        function initializeMultiSelect(button) {
+            const menuId = button.getAttribute('data-multi-select');
+            const menu = document.getElementById(menuId);
+            const hiddenInput = document.getElementById(button.getAttribute('data-input-id'));
+            const selectedContainerId = 'selected-' + menuId.replace('menu-', '');
+            const selectedContainer = document.getElementById(selectedContainerId);
+
+            if (!menu || !hiddenInput) return;
+
+            // Prevent re-initialization
+            if (button._initialized) return;
+            button._initialized = true;
+
+            let selectedValues = [];
+            let valueToTextMap = {};
+
+            // Build value to text map
+            const buildValueMap = () => {
+                valueToTextMap = {};
+                const menuItems = menu.querySelectorAll('.multi-select-item');
+                menuItems.forEach(item => {
+                    const value = item.getAttribute('data-value');
+                    const text = item.querySelector('span').textContent.trim();
+                    valueToTextMap[value] = text;
+                });
+            };
+            
+            buildValueMap();
+            
+            // Rebuild map when menu is updated
+            const menuObserver = new MutationObserver(() => {
+                buildValueMap();
+            });
+            menuObserver.observe(menu, { childList: true, subtree: true });
+
+            // Function to update selected tags
+            const updateSelectedTags = () => {
+                if (!selectedContainer) return;
+
+                selectedContainer.innerHTML = '';
+
+                selectedValues.forEach(value => {
+                    const text = valueToTextMap[value] || value;
+                    const tag = document.createElement('div');
+                    tag.className = 'inline-flex items-center gap-1.5 px-3 py-1.5 bg-main-100 dark:bg-main-900/30 text-main-700 dark:text-main-300 rounded-lg text-sm';
+                    tag.innerHTML = `
+                        <span>${text}</span>
+                        <button type="button" class="remove-tag" data-value="${value}" aria-label="إزالة">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x">
+                                <path d="M18 6 6 18"></path>
+                                <path d="M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    `;
+                    selectedContainer.appendChild(tag);
+                });
+
+                // Add remove event listeners
+                selectedContainer.querySelectorAll('.remove-tag').forEach(removeBtn => {
+                    removeBtn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const valueToRemove = this.getAttribute('data-value');
+                        selectedValues = selectedValues.filter(v => v !== valueToRemove);
+
+                        // Update checkbox
+                        const item = menu.querySelector(`[data-value="${valueToRemove}"]`);
+                        if (item) {
+                            const checkbox = item.querySelector('input[type="checkbox"]');
+                            checkbox.checked = false;
+                            item.classList.remove('bg-main-50', 'dark:bg-main-900/20');
+                            
+                            // Check if this is beneficiary category
+                            const isBeneficiaryCategory = menuId === 'menu-beneficiaryCategory';
+                            if (isBeneficiaryCategory) {
+                                const formCheckbox = document.getElementById(`targetAudience_${valueToRemove}`);
+                                if (formCheckbox) {
+                                    formCheckbox.checked = false;
+                                }
+                            } else {
+                                // Remove from assignment object
+                                const roleId = parseInt(item.getAttribute('data-role-id')) || 1;
+                                if (roleId === 1) {
+                                    window.assignment.coordinators = window.assignment.coordinators.filter(x => x.userId !== parseInt(valueToRemove));
+                                } else if (roleId === 2) {
+                                    window.assignment.supervisors = window.assignment.supervisors.filter(x => x.userId !== parseInt(valueToRemove));
+                                } else if (roleId === 3) {
+                                    window.assignment.viewers = window.assignment.viewers.filter(x => x.userId !== parseInt(valueToRemove));
+                                }
+                            }
+                        }
+
+                        // Update hidden input
+                        hiddenInput.value = JSON.stringify(selectedValues);
+
+                        // Update button text
+                        const buttonSpan = button.querySelector('span');
+                        if (selectedValues.length === 0) {
+                            buttonSpan.textContent = button.getAttribute('data-placeholder') || 'اختر';
+                        } else {
+                            buttonSpan.textContent = `${selectedValues.length} ${selectedValues.length === 1 ? 'عنصر محدد' : 'عناصر محددة'}`;
+                        }
+
+                        // Update tags
+                        updateSelectedTags();
+                    });
+                });
+            };
+
+            // Toggle menu
+            button.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const isHidden = menu.classList.contains('hidden');
+
+                // Close all other menus
+                document.querySelectorAll('.multi-select-menu').forEach(m => {
+                    if (m !== menu) {
+                        m.classList.add('hidden');
+                    }
+                });
+
+                if (isHidden) {
+                    menu.classList.remove('hidden');
+                } else {
+                    menu.classList.add('hidden');
+                }
+            });
+
+            // Handle item selection - use event delegation for dynamic items
+            menu.addEventListener('click', function(e) {
+                const item = e.target.closest('.multi-select-item');
+                if (!item) return;
+                
+                e.stopPropagation();
+                const value = item.getAttribute('data-value');
+                const roleId = parseInt(item.getAttribute('data-role-id')) || null;
+                const checkbox = item.querySelector('input[type="checkbox"]');
+                const userName = item.querySelector('span').textContent.trim();
+
+                // Check if this is beneficiary category (no roleId)
+                const isBeneficiaryCategory = menuId === 'menu-beneficiaryCategory';
+
+                if (checkbox.checked) {
+                    selectedValues = selectedValues.filter(v => v !== value);
+                    checkbox.checked = false;
+                    item.classList.remove('bg-main-50', 'dark:bg-main-900/20');
+                    
+                    // Update form checkbox for beneficiary category
+                    if (isBeneficiaryCategory) {
+                        const formCheckbox = document.getElementById(`targetAudience_${value}`);
+                        if (formCheckbox) {
+                            formCheckbox.checked = false;
+                        }
+                    } else if (roleId) {
+                        // Remove from assignment object
+                        if (roleId === 1) {
+                            window.assignment.coordinators = window.assignment.coordinators.filter(x => x.userId !== parseInt(value));
+                        } else if (roleId === 2) {
+                            window.assignment.supervisors = window.assignment.supervisors.filter(x => x.userId !== parseInt(value));
+                        } else if (roleId === 3) {
+                            window.assignment.viewers = window.assignment.viewers.filter(x => x.userId !== parseInt(value));
+                        }
+                    }
+                } else {
+                    selectedValues.push(value);
+                    checkbox.checked = true;
+                    item.classList.add('bg-main-50', 'dark:bg-main-900/20');
+                    
+                    // Update form checkbox for beneficiary category
+                    if (isBeneficiaryCategory) {
+                        const formCheckbox = document.getElementById(`targetAudience_${value}`);
+                        if (formCheckbox) {
+                            formCheckbox.checked = true;
+                        }
+                    } else if (roleId) {
+                        // Add to assignment object
+                        const assignmentItem = {
+                            id: 0,
+                            userId: parseInt(value),
+                            userName: userName,
+                            roleId: roleId,
+                            activeId: 0
+                        };
+                        
+                        if (roleId === 1) {
+                            window.assignment.coordinators.push(assignmentItem);
+                        } else if (roleId === 2) {
+                            window.assignment.supervisors.push(assignmentItem);
+                        } else if (roleId === 3) {
+                            window.assignment.viewers.push(assignmentItem);
+                        }
+                    }
+                }
+
+                // Update hidden input
+                hiddenInput.value = JSON.stringify(selectedValues);
+
+                // Update button text
+                const buttonSpan = button.querySelector('span');
+                if (selectedValues.length === 0) {
+                    buttonSpan.textContent = button.getAttribute('data-placeholder') || 'اختر';
+                } else {
+                    buttonSpan.textContent = `${selectedValues.length} ${selectedValues.length === 1 ? 'عنصر محدد' : 'عناصر محددة'}`;
+                }
+
+                // Update tags
+                updateSelectedTags();
+            });
+
+
+            // Close menu when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!button.contains(e.target) && !menu.contains(e.target)) {
+                    menu.classList.add('hidden');
+                }
+            });
+        }
+
+        // Initialize multi-select for existing buttons (if menus are already populated)
+        const multiSelectButtons = document.querySelectorAll('[data-multi-select]');
+        multiSelectButtons.forEach(button => {
+            const menuId = button.getAttribute('data-multi-select');
+            const menu = document.getElementById(menuId);
+            if (menu && menu.querySelectorAll('.multi-select-item').length > 0) {
+                initializeMultiSelect(button);
+            }
+        });
+
+
+    });
+</script>
+@* <!-- Page Header Section -->
 <div class="card mb-4 border-0">
     <div class="card-body p-0">
         <div class="bg-success rounded-3 text-white p-4 d-flex justify-content-between align-items-center">
@@ -699,10 +2035,10 @@
 
     </div>
 </div>
+ *@
 
 
-
-<script src="~/js/areas/admin/addactivity.js"></script>
+<script src="~/js/Areas/Admin/AddActivity.js"></script>
 
 
 
