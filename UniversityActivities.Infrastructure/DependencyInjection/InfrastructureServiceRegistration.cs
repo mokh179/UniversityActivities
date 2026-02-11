@@ -26,6 +26,7 @@ using UniversityActivities.Application.Interfaces.Repositories.Roles;
 using UniversityActivities.Application.lookup.Interface;
 using UniversityActivities.Application.Mapping.Activities;
 using UniversityActivities.Application.UserCases.Activities.Admin;
+using UniversityActivities.Application.UserCases.Activities.Scan;
 using UniversityActivities.Application.UserCases.Activities.Student;
 using UniversityActivities.Application.UserCases.Admin;
 using UniversityActivities.Application.UserCases.BackgroundServices.Interface.Activity;
@@ -216,6 +217,7 @@ public static class InfrastructureServiceRegistration
         services.AddScoped<IUpdateActivityStatusUseCase, UpdateActivityStatusUseCase>();
         services.Configure<ActivityStatusBackgroundOptions>(configuration.GetSection("ActivityStatusBackground"));
         services.AddHostedService<ActivityStatusBackgroundService>();
+        services.AddScoped<IHandleActivityScanUseCase, HandleActivityScanUseCase>();
         return services;
     }
 }

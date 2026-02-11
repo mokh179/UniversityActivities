@@ -6,11 +6,13 @@ using System.Text;
 using UniversityActivities.Application.Interfaces.IUnitOfWork;
 using UniversityActivities.Application.Interfaces.Repositories;
 using UniversityActivities.Application.Interfaces.Repositories.Activies.AdminActivies;
+using UniversityActivities.Application.Interfaces.Repositories.Activies.Scan;
 using UniversityActivities.Application.Interfaces.Repositories.Activies.StudentActivies;
 using UniversityActivities.Application.Interfaces.Repositories.Roles;
 using UniversityActivities.Infrastructure.Identity;
 using UniversityActivities.Infrastructure.Persistence.Repositories.Activities.Admin;
 using UniversityActivities.Infrastructure.Persistence.Repositories.Activities.Evaluation;
+using UniversityActivities.Infrastructure.Persistence.Repositories.Activities.Scan;
 using UniversityActivities.Infrastructure.Persistence.Repositories.Activities.Students;
 using UniversityActivities.Infrastructure.Persistence.Repositories.Roles;
 
@@ -60,6 +62,8 @@ namespace UniversityActivities.Infrastructure.Persistence
         //// =========================
         public IManagementSupervisorRepository ManagementSupervisors
             => new ManagementSupervisorRepository(_context);
+        public IActivityScanRepository ActivityScanRepository
+            => new ActivityScanRepository(_context);
 
         // =========================
         // Save
