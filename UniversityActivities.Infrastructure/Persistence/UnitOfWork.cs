@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,6 +8,7 @@ using UniversityActivities.Application.Interfaces.Repositories;
 using UniversityActivities.Application.Interfaces.Repositories.Activies.AdminActivies;
 using UniversityActivities.Application.Interfaces.Repositories.Activies.StudentActivies;
 using UniversityActivities.Application.Interfaces.Repositories.Roles;
+using UniversityActivities.Infrastructure.Identity;
 using UniversityActivities.Infrastructure.Persistence.Repositories.Activities.Admin;
 using UniversityActivities.Infrastructure.Persistence.Repositories.Activities.Evaluation;
 using UniversityActivities.Infrastructure.Persistence.Repositories.Activities.Students;
@@ -17,10 +19,13 @@ namespace UniversityActivities.Infrastructure.Persistence
     public class UnitOfWork:IUnitOfWork
     {
         private readonly AppDbContext _context;
-
-        public UnitOfWork(AppDbContext context)
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole<int>> _roleManager;
+        public UnitOfWork(AppDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole<int>> roleManager)
         {
             _context = context;
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
         // =========================
         // Admin Activity
@@ -31,7 +36,7 @@ namespace UniversityActivities.Infrastructure.Persistence
             => new ActivityTargetAudienceRepository(_context);
 
         public IActivityAssignmentRepository ActivityAssignments
-            => new ActivityAssignmentRepository(_context);
+            => new ActivityAssignmentRepository(_context, _roleManager, _userManager);
 
         //// =========================
         //// Student Activity

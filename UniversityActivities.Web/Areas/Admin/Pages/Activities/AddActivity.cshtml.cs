@@ -63,7 +63,7 @@ namespace UniversityActivities.Web.Areas.Admin.Pages.Activities
             return new JsonResult(result);
         }
 
-        public async Task<JsonResult> OnGetUsersByManagementAsync(int managementId)
+        public async Task<JsonResult> OnGetUsersByManagementAsync(int managementId,string role)
          {
             if (managementId <= 0)
                 return new JsonResult(new List<LookupDto>());
