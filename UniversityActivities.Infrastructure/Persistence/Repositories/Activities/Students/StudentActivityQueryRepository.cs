@@ -196,7 +196,7 @@ namespace UniversityActivities.Infrastructure.Persistence.Repositories.Activitie
                     paging.PageSize);
             }
             return new PagedResult<StudentActivityListItemDto>(
-              null,
+              new List<StudentActivityListItemDto>(),
               totalCount,
               paging.PageNumber,
               paging.PageSize);
