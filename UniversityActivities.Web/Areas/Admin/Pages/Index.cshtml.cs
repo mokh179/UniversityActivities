@@ -8,7 +8,7 @@ using UniversityActivities.Web.Common;
 
 namespace UniversityActivities.Web.Areas.Admin.Pages
 {
-    [Authorize(Roles = "ManagementSupervisor,SuperAdmin")]
+    //[Authorize(Roles = "ManagementSupervisor,SuperAdmin")]
     public class IndexModel : BaseModel
     {
         private readonly IAdminDashboardUseCase _useCase;

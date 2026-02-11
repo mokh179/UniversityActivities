@@ -20,7 +20,7 @@ namespace UniversityActivities.Infrastructure.Persistence.Repositories.Activitie
             await _context.ActivityTargetAudiences.AsNoTracking()
                 .Where(x => x.ActivityId == activityId)
                 .ExecuteDeleteAsync();
-
+            _context.ChangeTracker.Clear();
             // 🔹 Add new links
             if (targetAudienceIds == null || targetAudienceIds.Count == 0)
                 return;
