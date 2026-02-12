@@ -1,7 +1,8 @@
 ﻿
 
 
-console.log("Welcome In js");
+console.log("🔵 Welcome In js - AddActivity.js loaded");
+console.log("🔵 Current window.assignment:", window.assignment);
 
 document.getElementById("activityImage")
     .addEventListener("change", function (e) {
@@ -120,11 +121,16 @@ toggleAttendanceFields(
     GLOBAL ASSIGNMENT STATE (FINAL SHAPE)
     ===================================================== */
 
-    window.assignment = {
-        coordinators: [],
-    supervisors: [],
-    viewers: []
-    };
+    if (!window.assignment) {
+        window.assignment = {
+            coordinators: [],
+            supervisors: [],
+            viewers: []
+        };
+        console.log("🔵 Initialized window.assignment:", window.assignment);
+    } else {
+        console.log("🔵 window.assignment already exists:", window.assignment);
+    }
 
     const pageUrl = '/Admin/Activities/AddActivity';
 
@@ -132,52 +138,122 @@ toggleAttendanceFields(
        UPDATE UI (ONE ENTRY POINT)
     ===================================================== */
     function updateUI() {
+        console.log(`\n🟡 updateUI called`);
         renderChips();
     renderAllDropdowns();
+        console.log(`✅ updateUI completed\n`);
     }
 
     /* =====================================================
        INIT CHIP DROPDOWN
     ===================================================== */
     function initChipDropdown(wrapperId, fetchUrl) {
+        console.log(`\n🔵 initChipDropdown called - wrapperId: ${wrapperId}, fetchUrl: ${fetchUrl}`);
 
         const wrapper = document.getElementById(wrapperId);
-    if (!wrapper) return;
+        console.log(`  - Wrapper element:`, wrapper);
+        
+    if (!wrapper) {
+            console.error(`  ❌ Wrapper not found for id: ${wrapperId}`);
+            return;
+        }
 
     const select = wrapper.querySelector(".chip-select");
+        console.log(`  - Chip-select element:`, select);
+        
+    if (!select) {
+            console.error(`  ❌ .chip-select not found inside wrapper ${wrapperId}`);
+            return;
+        }
+        
     const input = select.querySelector(".chip-input");
+        console.log(`  - Chip-input element:`, input);
+        
+    if (!input) {
+            console.error(`  ❌ .chip-input not found inside chip-select`);
+            return;
+        }
+        
     const dropdown = select.querySelector(".chip-dropdown");
+        console.log(`  - Chip-dropdown element:`, dropdown);
+        
+    if (!dropdown) {
+            console.error(`  ❌ .chip-dropdown not found inside chip-select`);
+            return;
+        }
 
     // prevent re-init
-    if (select._initialized) return;
+    if (select._initialized) {
+            console.log(`  ⚠️ Already initialized, skipping`);
+            return;
+        }
+        
     select._initialized = true;
+        console.log(`  ✅ Marked as initialized`);
 
+        console.log(`  - Fetching data from: ${fetchUrl}`);
     fetch(fetchUrl)
-            .then(r => r.json())
+            .then(r => {
+                console.log(`  - Fetch response status:`, r.status);
+                return r.json();
+            })
             .then(data => {
+                console.log(`  - Fetched data:`, data);
+                console.log(`  - Data length:`, data?.length || 0);
+                
         select._cachedItems = data || [];
-    updateUI();
+                console.log(`  - Cached items count:`, select._cachedItems.length);
+                
+        updateUI();
+                console.log(`  ✅ updateUI called`);
+            })
+            .catch(error => {
+                console.error(`  ❌ Fetch error:`, error);
             });
 
     input.addEventListener("input", updateUI);
+        console.log(`  ✅ Input event listener added`);
     }
 
     /* =====================================================
        RENDER ALL DROPDOWNS
     ===================================================== */
     function renderAllDropdowns() {
+        console.log(`\n🔵 renderAllDropdowns called`);
 
-        document.querySelectorAll(".chip-select").forEach(select => {
+        const chipSelects = document.querySelectorAll(".chip-select");
+        console.log(`  - Found ${chipSelects.length} .chip-select elements`);
+        
+        if (chipSelects.length === 0) {
+            console.warn(`  ⚠️ No .chip-select elements found in the page!`);
+        }
+
+        chipSelects.forEach((select, index) => {
+            console.log(`\n  📦 Processing chip-select ${index + 1}:`, select);
 
             const dropdown = select.querySelector(".chip-dropdown");
             const input = select.querySelector(".chip-input");
+            
+            if (!dropdown) {
+                console.error(`    ❌ .chip-dropdown not found`);
+                return;
+            }
+            
+            if (!input) {
+                console.error(`    ❌ .chip-input not found`);
+                return;
+            }
+            
             const items = select._cachedItems || [];
+            console.log(`    - Cached items:`, items.length);
 
             dropdown.innerHTML = "";
 
             const roleId = parseInt(select.dataset.roleId); // 1 | 2 | 3
             const roleName = select.dataset.roleName;
             const q = input.value.toLowerCase();
+            
+            console.log(`    - roleId: ${roleId}, roleName: ${roleName}, search query: "${q}"`);
 
             const targetList =
                 roleId === 1 ? assignment.coordinators :
@@ -205,6 +281,10 @@ toggleAttendanceFields(
                 `;
 
                 div.onclick = () => {
+                    console.log(`\n🟢 Chip item clicked - Adding user to role ${roleId}`);
+                    console.log(`  - User ID: ${item.id}`);
+                    console.log(`  - Display Name: ${displayName}`);
+                    console.log(`  - Target list before:`, [...targetList]);
 
                     targetList.push({
                         id: 0,
@@ -214,6 +294,9 @@ toggleAttendanceFields(
                         activeId: 0
                     });
 
+                    console.log(`  - Target list after:`, [...targetList]);
+                    console.log(`  - Full assignment object:`, assignment);
+
                     input.value = "";
                     updateUI();
                 };
@@ -222,25 +305,41 @@ toggleAttendanceFields(
             });
 
             dropdown.style.display = "block";
+            console.log(`    ✅ Rendered ${dropdown.children.length} items in dropdown`);
         });
+        
+        console.log(`\n✅ renderAllDropdowns completed`);
     }
 
     /* =====================================================
        REMOVE ASSIGNMENT ITEM
     ===================================================== */
     function removeAssignment(userId, roleId) {
+        console.log(`\n🔴 removeAssignment called - userId: ${userId}, roleId: ${roleId}`);
 
-        if (roleId === 1)
+        if (roleId === 1) {
+            console.log(`  - Removing from coordinators`);
+            console.log(`  - Before:`, [...assignment.coordinators]);
     assignment.coordinators =
                 assignment.coordinators.filter(x => x.userId !== userId);
+            console.log(`  - After:`, [...assignment.coordinators]);
+        }
 
-    if (roleId === 2)
+    if (roleId === 2) {
+            console.log(`  - Removing from supervisors`);
+            console.log(`  - Before:`, [...assignment.supervisors]);
     assignment.supervisors =
                 assignment.supervisors.filter(x => x.userId !== userId);
+            console.log(`  - After:`, [...assignment.supervisors]);
+        }
 
-    if (roleId === 3)
+    if (roleId === 3) {
+            console.log(`  - Removing from viewers`);
+            console.log(`  - Before:`, [...assignment.viewers]);
     assignment.viewers =
                 assignment.viewers.filter(x => x.userId !== userId);
+            console.log(`  - After:`, [...assignment.viewers]);
+        }
 
     updateUI();
     }
@@ -249,20 +348,37 @@ toggleAttendanceFields(
        RENDER CHIPS (NO FORM / NO INPUTS)
     ===================================================== */
     function renderChips() {
+        console.log(`\n🔵 renderChips called`);
+        console.log(`  - assignment.coordinators:`, assignment.coordinators);
+        console.log(`  - assignment.supervisors:`, assignment.supervisors);
+        console.log(`  - assignment.viewers:`, assignment.viewers);
 
         const panel = document.getElementById("selectedChipsPanel");
+        console.log(`  - selectedChipsPanel element:`, panel);
+        
+    if (!panel) {
+            console.error(`  ❌ selectedChipsPanel not found!`);
+            return;
+        }
+        
     panel.innerHTML = "";
 
         const renderGroup = (title, list, roleId) => {
+            console.log(`    📋 renderGroup - title: ${title}, list length: ${list.length}, roleId: ${roleId}`);
 
-            if (list.length === 0) return;
+            if (list.length === 0) {
+                console.log(`    ⚠️ List is empty, skipping ${title}`);
+                return;
+            }
 
     panel.insertAdjacentHTML(
     "beforeend",
     `<h6 class="mt-3">${title}</h6>`
     );
+            console.log(`    ✅ Added title "${title}" to panel`);
 
-            list.forEach(item => {
+            list.forEach((item, index) => {
+                console.log(`      🏷️ Creating chip ${index + 1} for user: ${item.userName} (userId: ${item.userId})`);
 
                 const chip = document.createElement("div");
     chip.className = "chip";
@@ -275,6 +391,7 @@ toggleAttendanceFields(
                     () => removeAssignment(item.userId, roleId);
 
     panel.appendChild(chip);
+                console.log(`      ✅ Chip added to panel`);
             });
         };
 
@@ -294,27 +411,19 @@ toggleAttendanceFields(
 
     /* =====================================================
        MANAGEMENT CHANGE → INIT DROPDOWNS
+       NOTE: This code is handled by the inline script in AddActivity.cshtml
+       which uses the multi-select system. This section is kept for reference
+       but the actual implementation is in the page's inline script.
     ===================================================== */
     document.addEventListener("DOMContentLoaded", function () {
-
-  
+        console.log("🔵 DOMContentLoaded - AddActivity.js loaded");
+        console.log("🔵 Note: Management select handling is done by inline script in AddActivity.cshtml");
+        console.log("🔵 Current window.assignment:", window.assignment);
         
-        const managementSelect = document.getElementById("managementSelect");
-
-    managementSelect.addEventListener("change", function () {
-
-            const managementId = this.value;
-    if (!managementId) return;
-
-    const url =
-    `${pageUrl}?handler=UsersByManagement&managementId=${managementId}`;
-
-    ["dropdown1Wrapper", "dropdown2Wrapper", "dropdown3Wrapper"]
-                .forEach(id => {
-        document.getElementById(id).classList.remove("d-none");
-    initChipDropdown(id, url);
-                });
-        });
+        // The multi-select system in AddActivity.cshtml handles:
+        // - Loading users when management is selected
+        // - Populating menu-coordinators, menu-supervisors, menu-viewers
+        // - Updating window.assignment when users are selected/deselected
     });
 
 
@@ -394,8 +503,16 @@ toggleAttendanceFields(
 
     // ✅ Assignments (FINAL SHAPE)
     assignments: flattenAssignments(),
-    isPublished:
-    document.getElementById("publishCheckbox")?.checked ?? false
+    isPublished: (() => {
+            const publishSelect = document.getElementById("publishSelect");
+            if (publishSelect && publishSelect.value === "true") {
+                return true;
+            } else if (publishSelect && publishSelect.value === "false") {
+                return false;
+            }
+            // Fallback to checkbox if select doesn't exist
+            return document.getElementById("publishCheckbox")?.checked ?? false;
+        })()
         };
 
     return payload;
