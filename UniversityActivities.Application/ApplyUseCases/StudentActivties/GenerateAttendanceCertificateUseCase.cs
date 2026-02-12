@@ -24,13 +24,15 @@ namespace UniversityActivities.Application.ApplyUseCases.StudentActivties
         {
             var attended = await _studentActivityRepo.HasAttendedAsync(studentId, activityId);
             if (!attended)
-                throw new Exception("Student did not attend activity");
+                return null;
+               // throw new Exception("Student did not attend activity");
 
             var evaluated = await _evaluationRepo.HasEvaluatedAsync(studentId, activityId);
             if (!evaluated)
-                throw new Exception("Evaluation required");
+                return null;
+            //throw new Exception("Evaluation required");
 
-            var activity = await _activityQuery.GetCertificateDetails(studentId,activityId);
+            var activity = await _activityQuery.GetCertificateDetails(activityId, studentId);
             return new AttendanceCertificateDto
             {
                 StudentName = activity.StudentName,

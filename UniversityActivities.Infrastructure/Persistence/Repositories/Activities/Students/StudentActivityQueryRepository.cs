@@ -5,6 +5,7 @@ using System.Text;
 using UniversityActivities.Application.Common.Models;
 using UniversityActivities.Application.DTOs.Activities.Student;
 using UniversityActivities.Application.Interfaces.Repositories.Activies.StudentActivies;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace UniversityActivities.Infrastructure.Persistence.Repositories.Activities.Students
 {
@@ -69,19 +70,54 @@ namespace UniversityActivities.Infrastructure.Persistence.Repositories.Activitie
 
         public async Task<StudentActivityCertificateDto?> GetCertificateDetails(int activityId, int studentId)
         {
-            return await (
-            from a in _context.Activities.AsNoTracking()
-            join m in _context.Managements on a.ManagementId equals m.Id
-            join AU in _context.ActivityUsers on a.Id equals AU.ActivityId
-            join u in _context.Users on AU.UserId equals u.Id
-            where a.Id == activityId && a.IsPublished
-            select new StudentActivityCertificateDto
+            try
             {
-                StudentName = u.FirstName +'\t'+u.MiddleName + '\t'+u.LastName,
-                ActivityTitle = a.TitleEn,
-                ManagementName = m.NameEn,
-                ActivityDate = a.StartDateTime.ToString("MMMM dd, yyyy")
-            }).FirstOrDefaultAsync();
+
+                
+                var data = await (
+                from a in _context.Activities.AsNoTracking()
+                join m in _context.Managements on a.ManagementId equals m.Id
+                join sa in _context.StudentActivities on a.Id equals sa.ActivityId
+                join u in _context.Users on sa.StudentId equals u.Id
+                where a.Id == activityId && a.IsPublished==true && sa.StudentId == studentId
+                select new 
+                {
+                    StudentName=u.FirstName + '\t' + u.MiddleName + '\t' + u.LastName,
+                    a.TitleEn,
+                     m.NameEn,
+                     a.StartDateTime
+                }).FirstOrDefaultAsync();
+                if (data != null)
+                {
+                        return new StudentActivityCertificateDto
+                        {
+                            StudentName = data.StudentName,
+                            ActivityTitle = data.TitleEn,
+                            ManagementName = data.NameEn,
+                            ActivityDate = data.StartDateTime.ToString("MM/dd/yyyy")
+                        };
+
+                }
+                return null;
+                //return await (
+                //from a in _context.Activities.AsNoTracking()
+                //join m in _context.Managements on a.ManagementId equals m.Id
+                //join sa in _context.StudentActivities on a.Id equals sa.ActivityId
+                //join u in _context.Users on sa.StudentId equals u.Id
+                //where a.Id == activityId && a.IsPublished&& sa.StudentId == studentId
+                //select new StudentActivityCertificateDto
+                //{
+                //    StudentName = u.FirstName +'\t'+u.MiddleName + '\t'+u.LastName,
+                //    ActivityTitle = a.TitleEn,
+                //    ManagementName = m.NameEn,
+                //    ActivityDate = a.StartDateTime.ToString("MMMM dd, yyyy")
+                //}).FirstOrDefaultAsync();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
 
