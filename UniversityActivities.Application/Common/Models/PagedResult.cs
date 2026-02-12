@@ -6,16 +6,19 @@ public class PagedResult<T>
     public int TotalCount { get; }
     public int PageNumber { get; }
     public int PageSize { get; }
+    public int TotalPages { get; }
 
     public PagedResult(
         IReadOnlyList<T> items,
         int totalCount,
         int pageNumber,
-        int pageSize)
+        int pageSize,
+        int totalPages)
     {
         Items = items;
         TotalCount = totalCount;
         PageNumber = pageNumber;
         PageSize = pageSize;
+        TotalPages = totalPages;
     }
 }
