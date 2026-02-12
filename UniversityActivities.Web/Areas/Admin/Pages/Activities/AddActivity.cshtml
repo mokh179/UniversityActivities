@@ -1167,24 +1167,33 @@
                         <label class="flex items-center gap-2 text-sm font-medium text-gray-700">
                             <span>العرض على الموقع</span><span class="text-red-500">*</span>
                         </label>
-                        <div class="relative">
-                            <select id="publishSelect" class="form-select" required>
-                                <option value="">اختر</option>
-                                <option value="true">نعم</option>
-                                <option value="false">لا</option>
-                            </select>
-                            <input type="hidden" id="publishCheckbox" asp-for="Input.IsPublished" />
-                        </div>
-                        <div id="publishInfoBox" class="hidden mt-3 p-4 rounded-lg border-2">
-                            <div class="flex items-start gap-3">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0 mt-0.5">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
-                                    <path d="M2 12h20"></path>
-                                </svg>
-                                <div class="flex-1">
-                                    <p id="publishInfoTitle" class="text-sm font-semibold mb-1"></p>
-                                    <p id="publishInfoDescription" class="text-xs"></p>
+                        <div class="space-y-3">
+                            <!-- Select التحكم في النشر -->
+                            <div class="relative">
+                                <select id="publishSelect" class="form-select" required>
+                                    <option value="" selected>اختر</option>
+                                    <option value="true">نعم</option>
+                                    <option value="false">لا</option>
+                                </select>
+                                <!-- الحقل المربوط بالموديل -->
+                                <input type="hidden" id="publishCheckbox" asp-for="Input.IsPublished" />
+                            </div>
+
+                            <!-- صندوق المعلومات المتغير -->
+                            <div id="publishInfoBox" class="hidden mt-1 p-4 rounded-lg border-2">
+                                <div class="flex items-start gap-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                         stroke-linecap="round" stroke-linejoin="round"
+                                         class="flex-shrink-0 mt-0.5">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+                                        <path d="M2 12h20"></path>
+                                    </svg>
+                                    <div class="flex-1">
+                                        <p id="publishInfoTitle" class="text-sm font-semibold mb-1"></p>
+                                        <p id="publishInfoDescription" class="text-xs"></p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1334,58 +1343,63 @@
             attributeFilter: ['class']
         });
 
-        // Handle publish select change
+        /* ================================
+           PUBLISH SELECT (عرض على الموقع)
+        ================================= */
         const publishSelect = document.getElementById('publishSelect');
         const publishCheckbox = document.getElementById('publishCheckbox');
         const publishInfoBox = document.getElementById('publishInfoBox');
         const publishInfoTitle = document.getElementById('publishInfoTitle');
         const publishInfoDescription = document.getElementById('publishInfoDescription');
 
-        if (publishSelect && publishCheckbox && publishInfoBox) {
-            publishSelect.addEventListener('change', function() {
-                const value = this.value;
-                const hiddenInput = publishCheckbox;
-                
-                if (value === '') {
-                    // No selection - hide info box
-                    publishInfoBox.classList.add('hidden');
-                    hiddenInput.value = '';
-                } else if (value === 'true') {
-                    // Yes - show green info box
-                    hiddenInput.value = 'true';
-                    publishInfoBox.classList.remove('hidden');
-                    publishInfoBox.className = 'mt-3 p-4 rounded-lg border-2 bg-gradient-to-r from-main-50 to-main-100/50 border-main-200';
-                    
-                    // Update icon color
-                    const icon = publishInfoBox.querySelector('svg');
-                    if (icon) {
-                        icon.className = 'flex-shrink-0 mt-0.5 text-main-600';
-                    }
-                    
-                    // Update text
-                    publishInfoTitle.textContent = 'سيتم نشر النشاط';
-                    publishInfoTitle.className = 'text-sm font-semibold mb-1 text-main-800';
-                    publishInfoDescription.textContent = 'في حالة اختيار "نعم" سيتم نشر النشاط على الموقع الرسمي للجامعة وسيكون مرئياً لجميع الزوار والمستخدمين';
-                    publishInfoDescription.className = 'text-xs text-main-700';
-                } else if (value === 'false') {
-                    // No - show gray info box
-                    hiddenInput.value = 'false';
-                    publishInfoBox.classList.remove('hidden');
-                    publishInfoBox.className = 'mt-3 p-4 rounded-lg border-2 bg-gray-50 border-gray-200';
-                    
-                    // Update icon color
-                    const icon = publishInfoBox.querySelector('svg');
-                    if (icon) {
-                        icon.className = 'flex-shrink-0 mt-0.5 text-gray-600';
-                    }
-                    
-                    // Update text
-                    publishInfoTitle.textContent = 'لن يتم عرض النشاط';
-                    publishInfoTitle.className = 'text-sm font-semibold mb-1 text-gray-800';
-                    publishInfoDescription.textContent = 'في حالة اختيار "لا" لن يتم عرض النشاط على الموقع الرسمي وسيبقى داخلياً في النظام فقط';
-                    publishInfoDescription.className = 'text-xs text-gray-600';
+        function updatePublishUI(value) {
+            if (!publishInfoBox || !publishCheckbox) return;
+
+            const icon = publishInfoBox.querySelector('svg');
+
+            if (value === '') {
+                // لا يوجد اختيار
+                publishInfoBox.classList.add('hidden');
+                publishCheckbox.value = '';
+            } else if (value === 'true') {
+                // نعم → نشر على الموقع (صندوق أخضر)
+                publishCheckbox.value = 'true';
+                publishInfoBox.classList.remove('hidden');
+                publishInfoBox.className = 'mt-1 p-4 rounded-lg border-2 bg-gradient-to-r from-main-50 to-main-100/50 border-main-200';
+
+                if (icon) {
+                    icon.className = 'flex-shrink-0 mt-0.5 text-main-600';
                 }
+
+                publishInfoTitle.textContent = 'سيتم نشر النشاط';
+                publishInfoTitle.className = 'text-sm font-semibold mb-1 text-main-800';
+                publishInfoDescription.textContent = 'في حالة اختيار \"نعم\" سيتم نشر النشاط على الموقع الرسمي للجامعة وسيكون مرئياً لجميع الزوار والمستخدمين';
+                publishInfoDescription.className = 'text-xs text-main-700';
+            } else if (value === 'false') {
+                // لا → لن يُعرض على الموقع (صندوق رمادي)
+                publishCheckbox.value = 'false';
+                publishInfoBox.classList.remove('hidden');
+                publishInfoBox.className = 'mt-1 p-4 rounded-lg border-2 bg-gray-50 border-gray-200';
+
+                if (icon) {
+                    icon.className = 'flex-shrink-0 mt-0.5 text-gray-600';
+                }
+
+                publishInfoTitle.textContent = 'لن يتم عرض النشاط';
+                publishInfoTitle.className = 'text-sm font-semibold mb-1 text-gray-800';
+                publishInfoDescription.textContent = 'في حالة اختيار \"لا\" لن يتم عرض النشاط على الموقع الرسمي وسيبقى داخلياً في النظام فقط';
+                publishInfoDescription.className = 'text-xs text-gray-600';
+            }
+        }
+
+        if (publishSelect) {
+            publishSelect.addEventListener('change', function () {
+                updatePublishUI(this.value);
             });
+
+            // تهيئة الحالة الابتدائية - دائماً "اختر" كقيمة افتراضية
+            publishSelect.value = '';
+            updatePublishUI('');
         }
 
         // Initialize search form handlers

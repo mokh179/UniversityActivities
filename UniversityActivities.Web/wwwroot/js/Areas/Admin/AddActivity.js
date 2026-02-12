@@ -503,16 +503,8 @@ toggleAttendanceFields(
 
     // ✅ Assignments (FINAL SHAPE)
     assignments: flattenAssignments(),
-    isPublished: (() => {
-            const publishSelect = document.getElementById("publishSelect");
-            if (publishSelect && publishSelect.value === "true") {
-                return true;
-            } else if (publishSelect && publishSelect.value === "false") {
-                return false;
-            }
-            // Fallback to checkbox if select doesn't exist
-            return document.getElementById("publishCheckbox")?.checked ?? false;
-        })()
+    isPublished:
+    document.getElementById("publishCheckbox")?.checked ?? false
         };
 
     return payload;

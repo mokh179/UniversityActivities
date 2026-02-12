@@ -155,6 +155,48 @@
             .dark #dataTable thead th.sortable-header div {
                 color: #E5E7EB !important;
             }
+
+    /* إصلاح القائمة لتظهر خارج الجدول */
+    #dataTable {
+        position: relative;
+    }
+
+    .action-menu {
+        position: fixed !important;
+        z-index: 9999 !important;
+        min-width: 160px;
+        max-height: 300px;
+        overflow-y: auto;
+    }
+
+    /* التأكد من أن القائمة تظهر بشكل صحيح */
+    .relative.inline-block {
+        position: relative;
+    }
+
+    /* إصلاح overflow للجدول - السماح للقائمة بالخروج */
+    .rounded-xl.overflow-hidden {
+        position: relative;
+    }
+
+    .w-full.overflow-auto {
+        position: relative;
+        overflow-x: auto;
+    }
+    
+    /* التأكد من أن القائمة لا تقطعها overflow */
+    #dataTable_wrapper {
+        position: relative;
+    }
+    
+    /* السماح للقائمة بالخروج من الجدول */
+    table.dataTable tbody td {
+        overflow: visible !important;
+    }
+    
+    table.dataTable tbody tr {
+        overflow: visible !important;
+    }
 </style>
 <section class="animate-fade-in px-6 pb-8">
     <!-- Welcome + KPI Cards -->
@@ -296,7 +338,7 @@
             <div id="filter-content"
                  class="transition-all duration-500 ease-in-out opacity-0 max-h-0 mt-0 overflow-hidden hidden">
                 <div class="relative bg-white dark:bg-gray-800 p-6 rounded-xl border-2 border-gray-200 dark:border-gray-700 shadow-inner">
-                    <form id="searchForm" onsubmit="return false;">
+                    <form id="searchForm" onsubmit="return false;" onclick="event.stopPropagation();">
                     <div class="relative z-10">
                         <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
                             <div>
@@ -674,7 +716,7 @@
                                                             <circle cx="12" cy="19" r="1"></circle>
                                                         </svg>
                                                     </button>
-                                                    <div id="menu-@item.v.Id" class="action-menu hidden absolute left-0 w-40 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50" style="top: calc(100% + 0.25rem);">
+                                                    <div id="menu-@item.v.Id" class="action-menu hidden absolute left-0 w-40 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-[1000]" style="top: calc(100% + 0.25rem); min-width: 160px;">
                                                         <a href="/Admin/Activities/ActivityDetails/@item.v.Id" class="menu-item w-full text-right px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors border-b border-gray-200 dark:border-gray-700 block">
                                                             <div class="flex items-center gap-2 justify-end">
                                                                 <span class="dark:text-gray-200">عرض</span>
@@ -777,7 +819,7 @@
         </div>
     </div>
 </div> *@
-
+<script src="~/js/Areas/Admin/IndexActivity.js"></script>
 <script>
     window.participantsUrl = '@Url.Page("/Activities/Index", "Participants", new { area = "Admin" })';
          $(document).ready(function () {
@@ -1039,8 +1081,22 @@
                     setTimeout(() => {
                         applyPaginationStyles();
                         applyButtonStyles();
+                        // إعادة تهيئة القوائم بعد رسم الجدول
+                        document.querySelectorAll('.action-menu-btn').forEach(btn => {
+                            btn.removeAttribute('data-menu-initialized');
+                        });
+                        // إغلاق جميع القوائم المفتوحة
+                        document.querySelectorAll('.action-menu').forEach(menu => {
+                            menu.classList.add('hidden');
+                        });
+                        initActionMenus();
                     }, 50);
                 });
+
+                // استدعاء initActionMenus بعد تحميل الجدول
+                setTimeout(() => {
+                    initActionMenus();
+                }, 100);
             }
         });
 
@@ -1080,62 +1136,156 @@
             table.columns.adjust().responsive.recalc();
         });
 
-        // Toggle filter section
-        const filterToggle = document.getElementById('filter-toggle');
-        const filterContent = document.getElementById('filter-content');
-        const filterChevron = document.getElementById('filter-chevron');
-        const filterToggleText = document.getElementById('filter-toggle-text');
+        // Toggle filter section - يتم استدعاؤه بعد تحميل الصفحة
+        function initFilterToggle() {
+            const filterToggle = document.getElementById('filter-toggle');
+            const filterContent = document.getElementById('filter-content');
+            const filterChevron = document.getElementById('filter-chevron');
+            const filterToggleText = document.getElementById('filter-toggle-text');
 
-        if (filterToggle && filterContent) {
-            filterToggle.addEventListener('click', function() {
+            if (!filterToggle || !filterContent) {
+                console.warn('Filter toggle elements not found');
+                return false;
+            }
+
+            // التحقق من أن الـ listener غير موجود مسبقاً
+            if (filterToggle.hasAttribute('data-filter-initialized')) {
+                return true;
+            }
+
+            // إضافة علامة لتجنب إعادة التهيئة
+            filterToggle.setAttribute('data-filter-initialized', 'true');
+
+            // إضافة event listener مع استخدام capture phase لمنع التداخل
+            filterToggle.addEventListener('click', function(e) {
+                // منع propagation بشكل أقوى
+                e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation();
+                
                 const isHidden = filterContent.classList.contains('hidden');
                 if (isHidden) {
                     filterContent.classList.remove('hidden');
                     filterContent.classList.remove('opacity-0', 'max-h-0', 'mt-0');
                     filterContent.classList.add('opacity-100', 'max-h-[2000px]', 'mt-4');
-                    filterChevron.style.transform = 'rotate(180deg)';
-                    filterToggleText.textContent = 'انقر لإخفاء خيارات البحث والفلترة';
+                    if (filterChevron) {
+                        filterChevron.style.transform = 'rotate(180deg)';
+                    }
+                    if (filterToggleText) {
+                        filterToggleText.textContent = 'انقر لإخفاء خيارات البحث والفلترة';
+                    }
                 } else {
                     filterContent.classList.add('opacity-0', 'max-h-0', 'mt-0');
                     filterContent.classList.remove('opacity-100', 'max-h-[2000px]', 'mt-4');
                     setTimeout(() => {
                         filterContent.classList.add('hidden');
                     }, 500);
-                    filterChevron.style.transform = 'rotate(0deg)';
-                    filterToggleText.textContent = 'انقر لإظهار خيارات البحث والفلترة';
+                    if (filterChevron) {
+                        filterChevron.style.transform = 'rotate(0deg)';
+                    }
+                    if (filterToggleText) {
+                        filterToggleText.textContent = 'انقر لإظهار خيارات البحث والفلترة';
+                    }
+                }
+                
+                return false;
+            }, true); // استخدام capture phase
+
+            return true;
+        }
+
+        // استدعاء الدالة بعد تحميل الصفحة - مع إعادة المحاولة إذا فشلت
+        function tryInitFilterToggle(retries = 5) {
+            if (initFilterToggle()) {
+                return;
+            }
+            if (retries > 0) {
+                setTimeout(() => {
+                    tryInitFilterToggle(retries - 1);
+                }, 100);
+            }
+        }
+
+        tryInitFilterToggle();
+
+        // Action menu toggle - يتم استدعاؤه بعد تحميل الجدول
+        function initActionMenus() {
+            // إضافة event listeners للقوائم
+            document.querySelectorAll('.action-menu-btn').forEach(btn => {
+                // تجنب إضافة event listener مكرر
+                if (btn.hasAttribute('data-menu-initialized')) {
+                    return;
+                }
+                btn.setAttribute('data-menu-initialized', 'true');
+
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const menuId = this.getAttribute('data-menu-id');
+                    const menu = document.getElementById(menuId);
+                    
+                    if (!menu) return;
+                    
+                    // Close all other menus
+                    document.querySelectorAll('.action-menu').forEach(m => {
+                        if (m.id !== menuId) {
+                            m.classList.add('hidden');
+                        }
+                    });
+                    
+                    // Toggle current menu
+                    menu.classList.toggle('hidden');
+                    
+                    // إصلاح موضع القائمة لتظهر خارج الجدول
+                    if (!menu.classList.contains('hidden')) {
+                        setTimeout(() => {
+                            const btnRect = this.getBoundingClientRect();
+                            const menuRect = menu.getBoundingClientRect();
+                            const viewportWidth = window.innerWidth;
+                            const viewportHeight = window.innerHeight;
+                            
+                            // حساب الموضع المثالي للقائمة
+                            let top = btnRect.bottom + 4;
+                            let left = btnRect.left;
+                            
+                            // التحقق من أن القائمة لا تخرج عن حدود الشاشة
+                            if (left + menuRect.width > viewportWidth) {
+                                left = viewportWidth - menuRect.width - 10;
+                            }
+                            if (left < 10) {
+                                left = 10;
+                            }
+                            
+                            // التحقق من أن القائمة لا تخرج من الأسفل
+                            if (top + menuRect.height > viewportHeight) {
+                                top = btnRect.top - menuRect.height - 4;
+                            }
+                            
+                            // تطبيق الموضع
+                            menu.style.position = 'fixed';
+                            menu.style.top = top + 'px';
+                            menu.style.left = left + 'px';
+                            menu.style.right = 'auto';
+                            menu.style.zIndex = '9999';
+                        }, 10);
+                    }
+                });
+            });
+        }
+
+        // Close menus when clicking outside (مرة واحدة فقط)
+        let menuCloseListenerAdded = false;
+        if (!menuCloseListenerAdded) {
+            menuCloseListenerAdded = true;
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.action-menu-btn') && !e.target.closest('.action-menu')) {
+                    document.querySelectorAll('.action-menu').forEach(menu => {
+                        menu.classList.add('hidden');
+                    });
                 }
             });
         }
 
-        // Action menu toggle
-        document.querySelectorAll('.action-menu-btn').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                const menuId = this.getAttribute('data-menu-id');
-                const menu = document.getElementById(menuId);
-                
-                // Close all other menus
-                document.querySelectorAll('.action-menu').forEach(m => {
-                    if (m.id !== menuId) {
-                        m.classList.add('hidden');
-                    }
-                });
-                
-                // Toggle current menu
-                if (menu) {
-                    menu.classList.toggle('hidden');
-                }
-            });
-        });
-
-        // Close menus when clicking outside
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('.action-menu-btn') && !e.target.closest('.action-menu')) {
-                document.querySelectorAll('.action-menu').forEach(menu => {
-                    menu.classList.add('hidden');
-                });
-            }
-        });
     });
 
     // Functions for filtering and searching
@@ -1288,7 +1438,8 @@
         });
     }
 </script>
-<script src="~/js/Areas/Admin/IndexActivity.js"></script>
+
+
 @* <div class="container mt-4">
    
     <div class="row g-3">
