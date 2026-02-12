@@ -1,4 +1,124 @@
-﻿@page
+﻿@page "{activityId:int}"
 @model UniversityActivities.Web.Areas.Student.Pages.ScanQRCodeModel
 @{
+    ViewData["Title"] = "Activity Check-In";
+}
+
+<div class="scan-wrapper">
+
+    <div class="scan-card">
+
+        <div class="scan-icon">
+            <i class="bi bi-qr-code-scan"></i>
+        </div>
+
+        <h3 class="scan-title">
+            University Activity Check-In
+        </h3>
+
+        <p class="scan-subtitle">
+            Please wait while we verify your attendance...
+        </p>
+
+        <div id="loadingSection" class="loading-section">
+            <div class="spinner-border text-light"></div>
+        </div>
+
+        <div id="resultSection" style="display:none;">
+            <div id="resultMessage" class="result-message"></div>
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const activityId = @Model.ActivityId;
+
+            fetch(`/Student/ScanQRCode?handler=Process&activityId=${activityId}`)
+                .then(res => res.json())
+                .then(data => {
+
+                    document.getElementById("loadingSection").style.display = "none";
+                    handleScanResult(data);
+
+                })
+                .catch(() => {
+                    showResult("حدث خطأ غير متوقع", "error");
+                });
+        });
+
+        function handleScanResult(data) {
+
+            switch (data.action) {
+
+                case 0:
+                    window.location.href =
+                        `/login?returnUrl=/activities/scan/${data.activityId}`;
+                    break;
+
+                case 1:
+                    showResult("النشاط لم يبدأ بعد", "warning");
+                    break;
+
+                case 2:
+                    callHandler("Register", data.activityId);
+                    break;
+
+                case 3:
+                    callHandler("MarkAttendance", data.activityId);
+                    break;
+
+                case 4:
+                    showResult("تم تسجيل حضورك مسبقًا", "info");
+                    break;
+
+                case 5:
+                    window.location.href = `/student/evaluate/${data.activityId}`;
+                    break;
+
+                case 6:
+                    window.location.href = `/student/certificate/${data.activityId}`;
+                    break;
+
+                default:
+                    showResult("النشاط مغلق", "error");
+                    break;
+            }
+        }
+
+        function callHandler(handlerName, activityId) {
+
+            fetch(`/ActivityDetails?handler=${handlerName}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ activityId: activityId })
+            })
+            .then(res => res.json())
+            .then(data => {
+                showResult(data.message ?? "تم التنفيذ بنجاح", "success");
+            })
+            .catch(() => {
+                showResult("فشل تنفيذ العملية", "error");
+            });
+        }
+
+        function showResult(message, type) {
+
+            const section = document.getElementById("resultSection");
+            const messageBox = document.getElementById("resultMessage");
+
+            section.style.display = "block";
+
+            messageBox.innerText = message;
+            messageBox.className = "result-message " + type;
+        }
+
+    </script>
 }
