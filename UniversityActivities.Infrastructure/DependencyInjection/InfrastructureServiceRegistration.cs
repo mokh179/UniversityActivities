@@ -6,19 +6,20 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Text;
-using UniversityActivities.Application.ApplyUseCases.AdminActivties;
-using UniversityActivities.Application.ApplyUseCases.AdminActivties.NewFolder;
-using UniversityActivities.Application.ApplyUseCases.AdminDashboard;
-using UniversityActivities.Application.ApplyUseCases.BackgroundServices.Activity;
-using UniversityActivities.Application.ApplyUseCases.Evaluations;
-using UniversityActivities.Application.ApplyUseCases.lookup;
-using UniversityActivities.Application.ApplyUseCases.StudentActivties;
-using UniversityActivities.Application.ApplyUseCases.StudentAuth;
 using UniversityActivities.Application.AuthorizationModule.Services.Interfaces;
-using UniversityActivities.Application.AuthorizationModule.Services.Services;
 using UniversityActivities.Application.Common.Models.Background;
+using UniversityActivities.Application.Implementation.ApplyUseCases.AdminActivties;
+using UniversityActivities.Application.Implementation.ApplyUseCases.AdminActivties.Scan;
+using UniversityActivities.Application.Implementation.ApplyUseCases.AdminDashboard;
+using UniversityActivities.Application.Implementation.ApplyUseCases.BackgroundServices.Activity;
+using UniversityActivities.Application.Implementation.ApplyUseCases.Evaluations;
+using UniversityActivities.Application.Implementation.ApplyUseCases.lookup;
+using UniversityActivities.Application.Implementation.ApplyUseCases.StudentActivties;
+using UniversityActivities.Application.Implementation.ApplyUseCases.StudentAuth;
+using UniversityActivities.Application.Implementation.Services;
 using UniversityActivities.Application.Interfaces.ImageStorage;
 using UniversityActivities.Application.Interfaces.IUnitOfWork;
+using UniversityActivities.Application.Interfaces.QRCode;
 using UniversityActivities.Application.Interfaces.Repositories.Activies.AdminActivies;
 using UniversityActivities.Application.Interfaces.Repositories.Activies.Background;
 using UniversityActivities.Application.Interfaces.Repositories.Activies.StudentActivies;
@@ -219,6 +220,7 @@ public static class InfrastructureServiceRegistration
         services.Configure<ActivityStatusBackgroundOptions>(configuration.GetSection("ActivityStatusBackground"));
         services.AddHostedService<ActivityStatusBackgroundService>();
         services.AddScoped<IHandleActivityScanUseCase, HandleActivityScanUseCase>();
+        services.AddScoped<IQRCodeGeneratorService, QRCodeGeneratorService>();
         return services;
     }
 }
