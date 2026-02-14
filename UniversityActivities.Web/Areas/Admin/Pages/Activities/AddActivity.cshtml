@@ -502,7 +502,7 @@
         background: #047857;
     }
 
-    /* Checkbox and Radio Button Colors - Green (main-600) */
+    /* Checkbox and Radio Button Colors - main (main-600) */
     input[type="checkbox"],
     input[type="radio"] {
         accent-color: #1B8354 !important;
@@ -526,7 +526,7 @@
         accent-color: #1B8354 !important;
     }
 
-    /* Ensure green color for all checkboxes and radios */
+    /* Ensure main color for all checkboxes and radios */
     input[type="checkbox"].text-main-600:checked,
     input[type="radio"].text-main-600:checked {
         background-color: #1B8354 !important;
@@ -536,6 +536,62 @@
     input[type="checkbox"].focus\:ring-main-500:focus,
     input[type="radio"].focus\:ring-main-500:focus {
         --tw-ring-color: #1B8354 !important;
+    }
+
+    /* Image Preview Styles */
+    #imagePreviewContainer {
+        transition: all 0.3s ease;
+    }
+
+    /* Make image container same size as icon div in placeholder - Full size with padding */
+    .group\/image-container {
+        width: calc(32px + 2rem); /* SVG width (32px) + padding (1rem * 2) = 64px */
+        height: calc(32px + 2rem);
+        min-width: calc(32px + 2rem);
+        min-height: calc(32px + 2rem);
+        position: relative;
+    }
+
+    #imagePreview {
+        transition: transform 0.2s ease;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+
+    .group\/image-container:hover #imagePreview {
+        transform: scale(1.05);
+    }
+
+    /* Delete Button - Perfect Circle in Center */
+    #deleteImageBtn {
+        backdrop-filter: blur(2px);
+        transition: all 0.2s ease;
+        border-radius: 50% !important;
+        aspect-ratio: 1 / 1;
+        width: 32px;
+        height: 32px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #deleteImageBtn:hover {
+        background-color: rgba(220, 38, 38, 1) !important;
+        opacity: 1 !important;
+        transform: translate(-50%, -50%) scale(1.15);
+    }
+
+    #deleteImageBtn:active {
+        transform: translate(-50%, -50%) scale(0.95);
+    }
+
+    /* Ensure the circle is perfect */
+    #deleteImageBtn svg {
+        flex-shrink: 0;
     }
 </style>
 
@@ -591,7 +647,8 @@
                     </div>
                 </div>
                 <div class="p-4">
-                    <div class="border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg p-4 hover:border-main-600 transition-all bg-gradient-to-br from-gray-50 to-white dark:from-gray-700 dark:to-gray-800">
+                    <!-- Upload Placeholder (shown when no image) -->
+                    <div id="imageUploadPlaceholder" class="border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg p-4 hover:border-main-600 transition-all bg-gradient-to-br from-gray-50 to-white dark:from-gray-700 dark:to-gray-800">
                         <label class="flex items-center gap-4 cursor-pointer group">
                             <input type="file"
                                    accept="image/*" id="activityImage" name="image" class="hidden">
@@ -624,6 +681,75 @@
                                 </svg><span class="text-sm text-white dark:text-gray-200">اختيار صورة</span>
                             </div>
                         </label>
+                    </div>
+                    
+                    <!-- Image Preview (shown when image is selected) -->
+                    <div id="imagePreviewContainer" class="hidden border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg p-4 bg-gradient-to-br from-gray-50 to-white dark:from-gray-700 dark:to-gray-800">
+                        <div class="flex items-center gap-4">
+                            <!-- Image Thumbnail with Delete Button on Hover - Full size of the main div -->
+                            <div class="relative group/image-container bg-gradient-to-br from-main-600/10 to-main-700/10 p-4 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
+                                <img id="imagePreview" 
+                                     src="" 
+                                     alt="Activity Image Preview" 
+                                     class="w-full h-full object-cover rounded-lg absolute inset-0">
+                                <!-- Delete Button (perfect circle in center, shown on hover) -->
+                                <button type="button" 
+                                        id="deleteImageBtn"
+                                        class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center bg-red-500 rounded-full opacity-0 group-hover/image-container:opacity-100 transition-opacity duration-200 cursor-pointer shadow-lg hover:bg-red-600 hover:scale-110 z-10 aspect-square">
+                                    <svg xmlns="http://www.w3.org/2000/svg" 
+                                         width="16" 
+                                         height="16" 
+                                         viewBox="0 0 24 24" 
+                                         fill="none" 
+                                         stroke="white" 
+                                         stroke-width="3" 
+                                         stroke-linecap="round" 
+                                         stroke-linejoin="round"
+                                         class="lucide lucide-x">
+                                        <path d="M18 6 6 18"></path>
+                                        <path d="m6 6 12 12"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            
+                            <!-- Success Message and Change Button -->
+                            <div class="flex-1">
+                                <p class="text-main-600 dark:text-main-400 font-medium mb-2 text-sm flex items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" 
+                                         width="18" 
+                                         height="18" 
+                                         viewBox="0 0 24 24" 
+                                         fill="none" 
+                                         stroke="currentColor" 
+                                         stroke-width="2" 
+                                         stroke-linecap="round" 
+                                         stroke-linejoin="round"
+                                         class="lucide lucide-check-circle text-main-600">
+                                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                        <path d="m9 11 3 3L22 4"></path>
+
+                                    </svg>
+                                    تم اختيار الصورة بنجاح
+                                </p>
+                                <label for="activityImage" class="inline-flex items-center gap-2 bg-gradient-to-r from-main-600 to-main-700 text-white px-4 py-2 rounded-lg shadow-md hover:shadow-lg transition-all hover:scale-105 cursor-pointer">
+                                    <svg xmlns="http://www.w3.org/2000/svg" 
+                                         width="16" 
+                                         height="16" 
+                                         viewBox="0 0 24 24" 
+                                         fill="none" 
+                                         stroke="currentColor" 
+                                         stroke-width="2" 
+                                         stroke-linecap="round" 
+                                         stroke-linejoin="round"
+                                         class="lucide lucide-upload text-white">
+                                        <path d="M12 3v12"></path>
+                                        <path d="m17 8-5-5-5 5"></path>
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    </svg>
+                                    <span class="text-sm text-white">تغيير الصورة</span>
+                                </label>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -845,7 +971,7 @@
                             </label>
                         </div>
                     </div>
-                    <div class="space-y-2 animate-fadeIn" id="locationWrapper">
+                    <div class="space-y-2" id="locationWrapper">
                         <label class="flex items-center gap-2 text-sm font-medium text-gray-700">
                             <svg xmlns="http://www.w3.org/2000/svg"
                                  width="16" height="16" viewBox="0 0 24 24" fill="none"
@@ -859,7 +985,7 @@
                         </label><input type="text" asp-for="Input.LocationEn"
                                        class="form-input" placeholder="أدخل مكان النشاط" required="">
                     </div>
-                    <div class="space-y-2 d-none" id="linkWrapper">
+                    <div class="space-y-2 hidden" id="linkWrapper">
                         <label class="flex items-center gap-2 text-sm font-medium text-gray-700">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -1342,6 +1468,59 @@
             attributes: true,
             attributeFilter: ['class']
         });
+
+        /* ================================
+           ATTENDANCE TYPE TOGGLE (نوع الحضور)
+        ================================= */
+        function toggleAttendanceFields() {
+            const attendanceType = document.querySelector('input[name="AttendanceType"]:checked')?.value;
+            const locationWrapper = document.getElementById('locationWrapper');
+            const linkWrapper = document.getElementById('linkWrapper');
+            const locationInput = document.querySelector('[name="Input.LocationEn"]');
+            const linkInput = document.querySelector('[name="Input.OnlineLink"]');
+
+            if (attendanceType === '1') {
+                // حضوري - إظهار مكان النشاط وإخفاء رابط الاجتماع
+                if (locationWrapper) {
+                    locationWrapper.classList.remove('hidden');
+                }
+                if (linkWrapper) {
+                    linkWrapper.classList.add('hidden');
+                }
+                // جعل الحقل مطلوب أو غير مطلوب
+                if (locationInput) {
+                    locationInput.required = true;
+                }
+                if (linkInput) {
+                    linkInput.required = false;
+                    linkInput.value = ''; // مسح القيمة عند الإخفاء
+                }
+            } else if (attendanceType === '2') {
+                // إلكتروني - إظهار رابط الاجتماع وإخفاء مكان النشاط
+                if (locationWrapper) {
+                    locationWrapper.classList.add('hidden');
+                }
+                if (linkWrapper) {
+                    linkWrapper.classList.remove('hidden');
+                }
+                // جعل الحقل مطلوب أو غير مطلوب
+                if (locationInput) {
+                    locationInput.required = false;
+                    locationInput.value = ''; // مسح القيمة عند الإخفاء
+                }
+                if (linkInput) {
+                    linkInput.required = true;
+                }
+            }
+        }
+
+        // إضافة event listeners لجميع radio buttons
+        document.querySelectorAll('input[name="AttendanceType"]').forEach(radio => {
+            radio.addEventListener('change', toggleAttendanceFields);
+        });
+
+        // تهيئة الحالة الابتدائية
+        toggleAttendanceFields();
 
         /* ================================
            PUBLISH SELECT (عرض على الموقع)

@@ -4,25 +4,59 @@
 console.log("🔵 Welcome In js - AddActivity.js loaded");
 console.log("🔵 Current window.assignment:", window.assignment);
 
-document.getElementById("activityImage")
-    .addEventListener("change", function (e) {
+// Image upload handler
+const activityImageInput = document.getElementById("activityImage");
+const imageUploadPlaceholder = document.getElementById("imageUploadPlaceholder");
+const imagePreviewContainer = document.getElementById("imagePreviewContainer");
+const imagePreview = document.getElementById("imagePreview");
+const deleteImageBtn = document.getElementById("deleteImageBtn");
 
+if (activityImageInput) {
+    activityImageInput.addEventListener("change", function (e) {
         const file = e.target.files[0];
         if (!file) return;
 
+        // Validate file type
+        if (!file.type.startsWith('image/')) {
+            alert('يرجى اختيار ملف صورة صحيح');
+            return;
+        }
+
+        // Validate file size (10MB)
+        if (file.size > 10 * 1024 * 1024) {
+            alert('حجم الصورة يجب أن يكون أقل من 10MB');
+            return;
+        }
+
         const reader = new FileReader();
         reader.onload = function () {
-
-            const preview = document.getElementById("imagePreview");
-            preview.src = reader.result;
-            preview.classList.remove("d-none");
-
-            document.getElementById("uploadPlaceholder")
-                .classList.add("d-none");
+            // Show preview and hide placeholder
+            imagePreview.src = reader.result;
+            imageUploadPlaceholder.classList.add("hidden");
+            imagePreviewContainer.classList.remove("hidden");
         };
 
         reader.readAsDataURL(file);
     });
+}
+
+// Delete image handler
+if (deleteImageBtn) {
+    deleteImageBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        // Reset file input
+        if (activityImageInput) {
+            activityImageInput.value = '';
+        }
+        
+        // Hide preview and show placeholder
+        imagePreviewContainer.classList.add("hidden");
+        imageUploadPlaceholder.classList.remove("hidden");
+        imagePreview.src = '';
+    });
+}
 
 
 
