@@ -511,9 +511,17 @@
                         <div class="space-y-3">
                             <div class="relative">
                                 <select id="publishSelect" class="form-select" required>
-                                    <option value="" selected>اختر</option>
-                                    <option value="true">نعم</option>
-                                    <option value="false">لا</option>
+                                    <option value="">اختر</option>
+                                    @if (Model.Input.IsPublished)
+                                    {
+                                        <option value="true" selected>نعم</option>
+                                        <option value="false">لا</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="true">نعم</option>
+                                        <option value="false" selected>لا</option>
+                                    }
                                 </select>
                                 <input type="hidden" id="publishCheckbox" name="Input.IsPublished" value="@(Model.Input.IsPublished ? "true" : "false")" />
                             </div>
@@ -670,16 +678,18 @@
                 if (v === "true") {
                     publishInfoBox.className = "mt-1 p-4 rounded-lg border-2 bg-gradient-to-r from-main-50 to-main-100/50 border-main-200";
                     if (publishInfoTitle) publishInfoTitle.textContent = "سيتم نشر النشاط";
-                    if (publishInfoDescription) publishInfoDescription.textContent = "في حالة اختيار \"نعم\" سيتم نشر النشاط على الموقع الرسمي للجامعة وسيكون مرئياً لجميع الزوار والمستخدمين";
+                    if (publishInfoDescription) publishInfoDescription.textContent = "سيتم نشر النشاط على الموقع الرسمي للجامعة وسيكون مرئياً لجميع الزوار";
                 } else {
                     publishInfoBox.className = "mt-1 p-4 rounded-lg border-2 bg-gray-50 border-gray-200";
                     if (publishInfoTitle) publishInfoTitle.textContent = "لن يتم عرض النشاط";
-                    if (publishInfoDescription) publishInfoDescription.textContent = "في حالة اختيار \"لا\" لن يتم عرض النشاط على الموقع الرسمي وسيبقى داخلياً في النظام فقط";
+                    if (publishInfoDescription) publishInfoDescription.textContent = "لن يتم عرض النشاط على الموقع الرسمي وسيبقى داخلياً في النظام فقط";
                 }
             }
         }
         publishSelect.addEventListener("change", function () { updatePublishUI(this.value); });
-        updatePublishUI(publishSelect.value);
+        // Initialize with current value from model
+        const initialValue = publishSelect.value;
+        updatePublishUI(initialValue);
     })();
 
     document.addEventListener("DOMContentLoaded", async function () {
@@ -694,13 +704,14 @@
         const coordinatorsChips = document.getElementById("coordinatorsChips");
         const participantsChips = document.getElementById("participantsChips");
 
-        const existingAssignments = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Input.Assignments));
+        const existingAssignments = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Input.Assignments ?? new List<UniversityActivities.Application.DTOs.Activities.ActivityAssignmentDto>()));
         const usersMap = new Map();
 
         const selectedManagementTypeId = managementTypeSelect?.value;
         const selectedManagementId = "@Model.Input.ManagementId";
         const selectedClubId = "@Model.Input.ClubId";
 
+        // تحميل البيانات الأولية
         if (selectedManagementTypeId) {
             await loadManagements(selectedManagementTypeId);
             if (selectedManagementId) {
@@ -752,12 +763,24 @@
 
         
         function preloadAssignments() {
-            if (!existingAssignments) return;
+            if (!existingAssignments || existingAssignments.length === 0) return;
+            
             existingAssignments.forEach(a => {
-                const name = usersMap.get(a.UserId);
+                // التعامل مع كل من PascalCase و camelCase
+                const userId = parseInt(a.UserId || a.userId);
+                const roleId = parseInt(a.ActivityRoleId || a.activityRoleId);
+                
+                if (!userId || !roleId) return;
+                
+                const name = usersMap.get(userId);
                 if (!name) return;
-                const container = a.ActivityRoleId === 1 ? supervisorsChips : a.ActivityRoleId === 2 ? coordinatorsChips : participantsChips;
-                addChip(container, a.UserId, name, a.ActivityRoleId);
+                
+                // Supervisor = 1, Coordinator = 2, Viewer = 3
+                const container = roleId === 1 ? supervisorsChips : roleId === 2 ? coordinatorsChips : roleId === 3 ? participantsChips : null;
+                
+                if (container && !container.querySelector(`[data-user-id="${userId}"]`)) {
+                    addChip(container, userId, name, roleId);
+                }
             });
         }
 
@@ -814,6 +837,7 @@
             resetUsers();
         }
         function resetAll() {
+            clearChips();
             resetSelect(managementSelect, "اختر الإدارة");
             resetAfterManagement();
         }

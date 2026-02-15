@@ -55,8 +55,8 @@
                                 </path>
                             </svg><span class="text-white dark:text-gray-200">تعديل</span>
                         </a>
-                        <button type="button" class="flex items-center gap-2 bg-red-600 text-white px-3 py-2 rounded-lg hover:bg-red-700 transition-all hover:shadow-lg font-medium text-sm"
-                                title="حذف النشاط" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                        <button type="button" id="deleteBtn" class="flex items-center gap-2 bg-red-600 text-white px-3 py-2 rounded-lg hover:bg-red-700 transition-all hover:shadow-lg font-medium text-sm"
+                                title="حذف النشاط">
                             <svg class="text-white dark:text-gray-200 lucide lucide-trash2 lucide-trash-2"
                                  xmlns="http://www.w3.org/2000/svg" width="18" height="18"
                                  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -567,28 +567,80 @@
 
 
 
-@* <!-- Delete Confirmation Modal -->
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title text-danger" id="deleteModalLabel">تأكيد الحذف</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>هل أنت متأكد من حذف هذا النشاط؟</p>
-                <strong>@(Model.Activity?.TitleAr ?? Model.Activity?.TitleEn ?? "النشاط")</strong>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
-                <form method="post" asp-page-handler="Delete">
-                    <input type="hidden" name="id" value="@Model.Activity?.Id" />
-                    <button type="submit" class="btn btn-danger">نعم، احذف</button>
-                </form>
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-50">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-md w-full mx-4 transform transition-all">
+        <div class="p-6 border-b-2 border-gray-200 dark:border-gray-700">
+            <div class="flex items-center justify-between">
+                <h3 class="text-xl font-bold text-red-600 dark:text-red-500" id="deleteModalLabel">تأكيد الحذف</h3>
+                <button type="button" id="closeModalBtn" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 6 6 18"></path>
+                        <path d="m6 6 12 12"></path>
+                    </svg>
+                </button>
             </div>
         </div>
+        <div class="p-6">
+            <p class="text-gray-700 dark:text-gray-300 mb-4">هل أنت متأكد من حذف هذا النشاط؟</p>
+            <p class="text-lg font-bold text-gray-900 dark:text-gray-100">@(Model.Activity?.TitleAr ?? Model.Activity?.TitleEn ?? "النشاط")</p>
+        </div>
+        <div class="p-6 border-t-2 border-gray-200 dark:border-gray-700 flex items-center justify-end gap-3">
+            <button type="button" id="cancelDeleteBtn" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-all font-medium">
+                إلغاء
+            </button>
+            <form method="post" asp-page-handler="Delete" class="inline">
+                <input type="hidden" name="id" value="@Model.Activity?.Id" />
+                <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all font-medium">
+                    نعم، احذف
+                </button>
+            </form>
+        </div>
     </div>
-</div> *@
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const deleteBtn = document.getElementById('deleteBtn');
+        const deleteModal = document.getElementById('deleteModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+
+        // فتح المودال عند الضغط على زر الحذف
+        deleteBtn.addEventListener('click', function() {
+            deleteModal.classList.remove('hidden');
+            deleteModal.classList.add('flex');
+        });
+
+        // إغلاق المودال عند الضغط على زر الإغلاق
+        closeModalBtn.addEventListener('click', function() {
+            deleteModal.classList.add('hidden');
+            deleteModal.classList.remove('flex');
+        });
+
+        // إغلاق المودال عند الضغط على زر الإلغاء
+        cancelDeleteBtn.addEventListener('click', function() {
+            deleteModal.classList.add('hidden');
+            deleteModal.classList.remove('flex');
+        });
+
+        // إغلاق المودال عند الضغط خارج المودال
+        deleteModal.addEventListener('click', function(e) {
+            if (e.target === deleteModal) {
+                deleteModal.classList.add('hidden');
+                deleteModal.classList.remove('flex');
+            }
+        });
+
+        // إغلاق المودال عند الضغط على مفتاح ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && !deleteModal.classList.contains('hidden')) {
+                deleteModal.classList.add('hidden');
+                deleteModal.classList.remove('flex');
+            }
+        });
+    });
+</script>
 @* <div class="container-fluid px-4 py-3">
 
     <!-- HEADER -->

@@ -99,8 +99,18 @@ public class ActivityProfile : Profile
                      .Select(x => x.TargetAudienceId)
                      .ToList()))
 
+            // Assignments reverse
+            .ForMember(d => d.Assignments,
+                o => o.MapFrom(s =>
+                    s.ActivityUsers
+                     .Select(au => new ActivityAssignmentDto
+                     {
+                         UserId = au.UserId,
+                         ActivityRoleId = au.ActivityRoleId
+                     })
+                     .ToList()))
+
             // Ignore DTO-only fields
-            .ForMember(d => d.Assignments, o => o.Ignore())
             .ForMember(d => d.ManagementTypeId, o => o.Ignore());
 
     }
