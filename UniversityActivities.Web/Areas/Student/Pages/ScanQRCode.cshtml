@@ -3,6 +3,87 @@
 @{
     ViewData["Title"] = "Activity Check-In";
 }
+<style>
+    .scan-wrapper {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(135deg, #0d6efd, #198754);
+    }
+
+    .scan-card {
+        background: rgba(255,255,255,0.1);
+        backdrop-filter: blur(10px);
+        padding: 40px;
+        border-radius: 20px;
+        text-align: center;
+        width: 100%;
+        max-width: 420px;
+        color: #fff;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    .scan-icon {
+        font-size: 60px;
+        margin-bottom: 20px;
+    }
+
+    .scan-title {
+        font-weight: 600;
+    }
+
+    .result-message {
+        margin-top: 20px;
+        padding: 15px;
+        border-radius: 8px;
+        font-weight: 500;
+    }
+
+        .result-message.success {
+            background: #198754;
+        }
+
+        .result-message.warning {
+            background: #ffc107;
+            color: #000;
+        }
+
+        .result-message.error {
+            background: #dc3545;
+        }
+
+        .result-message.info {
+            background: #0dcaf0;
+        }
+
+    .rating-modal {
+        border-radius: 15px;
+    }
+
+    .star-rating {
+        direction: rtl;
+        display: inline-flex;
+        gap: 5px;
+        font-size: 24px;
+        cursor: pointer;
+    }
+
+        .star-rating i {
+            color: #ccc;
+            transition: 0.2s;
+        }
+
+            .star-rating i.active {
+                color: #ffc107;
+            }
+
+            .star-rating i:hover,
+            .star-rating i:hover ~ i {
+                color: #ffc107;
+            }
+
+</style>
 
 <div class="scan-wrapper">
 
@@ -17,7 +98,7 @@
         </h3>
 
         <p class="scan-subtitle">
-            Please wait while we verify your attendance...
+            Please wait while we verify your status...
         </p>
 
         <div id="loadingSection" class="loading-section">
@@ -32,14 +113,55 @@
 
 </div>
 
+<!-- Rating Modal -->
+<div class="modal fade" id="ratingModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rating-modal">
+
+            <div class="modal-header">
+                <h5 class="modal-title">تقييم النشاط</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+
+                <form id="ratingForm">
+
+                    <div id="criteriaContainer"></div>
+
+                    <div class="mt-4">
+                        <label class="form-label">تعليق (اختياري)</label>
+                        <textarea id="comment"
+                                  class="form-control"
+                                  rows="3"
+                                  placeholder="اكتب رأيك عن النشاط..."></textarea>
+                    </div>
+
+                </form>
+
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-success w-100"
+                        onclick="submitEvaluation()">
+                    إرسال التقييم
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
 @section Scripts {
+
     <script>
+
+        let currentActivityId = @Model.ActivityId;
 
         document.addEventListener("DOMContentLoaded", function () {
 
-            const activityId = @Model.ActivityId;
-
-            fetch(`/Student/ScanQRCode?handler=Process&activityId=${activityId}`)
+            fetch(`/Students/ScanQRCode?handler=Process&activityId=${currentActivityId}`)
                 .then(res => res.json())
                 .then(data => {
 
@@ -50,6 +172,7 @@
                 .catch(() => {
                     showResult("حدث خطأ غير متوقع", "error");
                 });
+
         });
 
         function handleScanResult(data) {
@@ -65,20 +188,23 @@
                     showResult("النشاط لم يبدأ بعد", "warning");
                     break;
 
-                case 2:
-                    callHandler("Register", data.activityId);
-                    break;
+                        case 2:
+            callHandler("Register", data.activityId);
+            setTimeout(() => {
+                callHandler("MarkAttendance", data.activityId);
+            }, 500);
+            break;
 
-                case 3:
-                    callHandler("MarkAttendance", data.activityId);
-                    break;
+        case 3:
+            callHandler("MarkAttendance", data.activityId);
+            break;
 
                 case 4:
                     showResult("تم تسجيل حضورك مسبقًا", "info");
                     break;
 
                 case 5:
-                    window.location.href = `/student/evaluate/${data.activityId}`;
+                    openEvaluationModal(data.activityId);
                     break;
 
                 case 6:
@@ -90,22 +216,122 @@
                     break;
             }
         }
-
         function callHandler(handlerName, activityId) {
 
-            fetch(`/ActivityDetails?handler=${handlerName}`, {
+            fetch(`/ActivityDetails?handler=${handlerName}&activityId=${activityId}`)
+                .then(res => res.json())
+                .then(data => {
+
+                    if (data.success) {
+                        showResult(data.message ?? "تم التنفيذ بنجاح", "success");
+                    } else {
+                        showResult(data.message ?? "فشل التنفيذ", "error");
+                    }
+
+                })
+                .catch(() => {
+                    showResult("فشل تنفيذ العملية", "error");
+                });
+        }
+
+        function openEvaluationModal(activityId) {
+
+            fetch(`/Student/ActivityDetails?handler=GetCriteria&activityId=${activityId}`)
+                .then(res => res.json())
+                .then(criteria => {
+
+                    const container = document.getElementById("criteriaContainer");
+                    container.innerHTML = "";
+
+                    criteria.forEach(c => {
+
+                           container.innerHTML += `
+            <div class="mb-4">
+                <label class="form-label fw-bold">${c.name}</label>
+                <div class="star-rating" data-id="${c.id}">
+                    <i class="bi bi-star" data-value="5"></i>
+                    <i class="bi bi-star" data-value="4"></i>
+                    <i class="bi bi-star" data-value="3"></i>
+                    <i class="bi bi-star" data-value="2"></i>
+                    <i class="bi bi-star" data-value="1"></i>
+                </div>
+            </div>
+        `;
+                    });
+
+                    const modal = new bootstrap.Modal(document.getElementById('ratingModal'));
+                    modal.show();
+                });
+        }
+                setTimeout(() => {
+
+            document.querySelectorAll(".star-rating").forEach(rating => {
+
+                rating.querySelectorAll("i").forEach(star => {
+
+                    star.addEventListener("click", function () {
+
+                        const value = this.getAttribute("data-value");
+                        rating.setAttribute("data-selected", value);
+
+                        rating.querySelectorAll("i").forEach(s => {
+                            s.classList.remove("active");
+                        });
+
+                        rating.querySelectorAll(`i[data-value]`)
+                            .forEach(s => {
+                                if (s.getAttribute("data-value") <= value)
+                                    s.classList.add("active");
+                            });
+                    });
+                });
+            });
+
+        }, 200);
+
+               function submitEvaluation() {
+
+            let scores = [];
+
+            document.querySelectorAll(".star-rating").forEach(r => {
+
+                const selected = r.getAttribute("data-selected");
+
+                if (selected) {
+                    scores.push({
+                        criteriaId: r.getAttribute("data-id"),
+                        score: parseInt(selected)
+                    });
+                }
+            });
+
+            if (scores.length === 0) {
+                alert("يرجى اختيار تقييم واحد على الأقل");
+                return;
+            }
+
+            fetch(`/Student/ActivityDetails?handler=Rate`, {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ activityId: activityId })
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    activityId: currentActivityId,
+                    scores: scores,
+                    comment: document.getElementById("comment").value
+                })
             })
             .then(res => res.json())
             .then(data => {
-                showResult(data.message ?? "تم التنفيذ بنجاح", "success");
-            })
-            .catch(() => {
-                showResult("فشل تنفيذ العملية", "error");
+
+                const modal = bootstrap.Modal.getInstance(
+                    document.getElementById('ratingModal'));
+                modal.hide();
+
+                showResult("تم إرسال التقييم بنجاح ⭐", "success");
+
+                setTimeout(() => {
+                    window.location.href =
+                        `/student/certificate/${currentActivityId}`;
+                }, 2000);
             });
         }
 
@@ -121,4 +347,5 @@
         }
 
     </script>
+
 }

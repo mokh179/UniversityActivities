@@ -169,7 +169,7 @@ public static class InfrastructureServiceRegistration
                            PublishActivityUseCase>();
 
         services.AddScoped<IViewAdminActivitiesUseCase, ViewAdminActivitiesUseCase>();
-        services.AddScoped<IViewActivityEvaluationUseCase,ViewActivityEvaluationUseCase>();
+        //services.AddScoped<IViewActivityEvaluationUseCase,ViewActivityEvaluationUseCase>();
 
         // =========================
         // Use Cases - Activity (Student)
