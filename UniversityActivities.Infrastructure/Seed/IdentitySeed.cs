@@ -175,12 +175,12 @@ public static class IdentitySeed
             Email = "Employee@ub.edu.sa",
             EmailConfirmed = true
         };
-        if (await userManager.FindByEmailAsync(superadmin.Email) == null)
+        if (await userManager.FindByEmailAsync(Employee.Email) == null)
         {
-            var result = await userManager.CreateAsync(superadmin, superAdminPassword);
+            var result = await userManager.CreateAsync(Employee, superAdminPassword);
             if (!result.Succeeded)
                 throw new Exception($"Failed to create user {viewer.Email}");
-            var Role = await userManager.AddToRoleAsync(superadmin, SystemRoles.Employee);
+            var Role = await userManager.AddToRoleAsync(Employee, SystemRoles.Employee);
         } 
         #endregion
 
