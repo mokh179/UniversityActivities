@@ -3,42 +3,142 @@
 @{
     ViewData["Title"] = "Activity Participants";
 }
-<!-- Bootstrap CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-      rel="stylesheet">
 
-<!-- Bootstrap Icons -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
-      rel="stylesheet">
 <style>
-    /* ===========================
-       GLOBAL POLISH
-    =========================== */
-    .table tbody tr {
-        transition: all 0.2s ease-in-out;
-    }
-
-        .table tbody tr:hover {
-            background-color: #f8f9fa;
-            transform: scale(1.002);
+    /* تحسين عرض الجدول على التابلت */
+    @@media (min-width: 768px) and (max-width: 1024px) {
+        #participantsTable {
+            font-size: 0.813rem;
         }
 
-    /* ===========================
-       CARDS (STATS)
-    =========================== */
-    .card {
-        border-radius: 14px;
-        transition: transform 0.25s ease, box-shadow 0.25s ease;
+        #participantsTable th,
+        #participantsTable td {
+            padding: 0.5rem !important;
+        }
     }
 
-        .card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+    /* تصميم زر التوسيع (+) */
+    table.dataTable.dtr-inline.collapsed > tbody > tr > td.control:before,
+    table.dataTable.dtr-inline.collapsed > tbody > tr > th.control:before {
+        background-color: #198754 !important;
+        border: 2px solid #198754 !important;
+        box-shadow: 0 2px 4px rgba(25, 135, 84, 0.2);
+        width: 20px !important;
+        height: 20px !important;
+        line-height: 18px !important;
+        font-weight: bold !important;
+        transition: all 0.2s ease;
+    }
+
+    table.dataTable.dtr-inline.collapsed > tbody > tr > td.control:before:hover,
+    table.dataTable.dtr-inline.collapsed > tbody > tr > th.control:before:hover {
+        background-color: #146c43 !important;
+        border-color: #146c43 !important;
+        transform: scale(1.1);
+    }
+
+    table.dataTable.dtr-inline.collapsed > tbody > tr.parent > td.control:before,
+    table.dataTable.dtr-inline.collapsed > tbody > tr.parent > th.control:before {
+        background-color: #dc3545 !important;
+        border-color: #dc3545 !important;
+    }
+
+    /* Dark mode للزر */
+    .dark table.dataTable.dtr-inline.collapsed > tbody > tr > td.control:before,
+    .dark table.dataTable.dtr-inline.collapsed > tbody > tr > th.control:before {
+        background-color: #22c55e !important;
+        border-color: #22c55e !important;
+    }
+
+    /* تحسين عرض التفاصيل المخفية */
+    table.dataTable.dtr-inline.collapsed tbody tr.parent td.child {
+        padding: 1rem !important;
+        background-color: #f9fafb !important;
+    }
+
+    .dark table.dataTable.dtr-inline.collapsed tbody tr.parent td.child {
+        background-color: #1f2937 !important;
+    }
+
+    /* تحسين السكرول الأفقي على التابلت */
+    @@media (min-width: 640px) and (max-width: 1024px) {
+        .overflow-auto {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
-    /* ===========================
-       STATUS PILLS
-    =========================== */
+        .overflow-auto::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .overflow-auto::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
+        }
+
+        .overflow-auto::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        .overflow-auto::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    }
+
+    /* تحسين Info */
+    #dataTableInfo {
+        color: #6b7280;
+        font-size: 0.875rem;
+    }
+
+    .dark #dataTableInfo {
+        color: #9ca3af;
+    }
+
+    /* إخفاء أسهم DataTables الأصلية */
+    #participantsTable thead th.sorting,
+    #participantsTable thead th.sorting_asc,
+    #participantsTable thead th.sorting_desc {
+        background-image: none !important;
+    }
+
+    #participantsTable thead th.sorting:before,
+    #participantsTable thead th.sorting:after,
+    #participantsTable thead th.sorting_asc:before,
+    #participantsTable thead th.sorting_asc:after,
+    #participantsTable thead th.sorting_desc:before,
+    #participantsTable thead th.sorting_desc:after {
+        display: none !important;
+    }
+
+    /* Dark mode text color for headers */
+    .dark #participantsTable thead th {
+        color: #E5E7EB !important;
+    }
+
+    /* إصلاح overflow للجدول */
+    .rounded-xl.overflow-hidden {
+        position: relative;
+    }
+
+    .w-full.overflow-auto {
+        position: relative;
+        overflow-x: auto;
+    }
+    
+    #participantsTable_wrapper {
+        position: relative;
+    }
+    
+    table.dataTable tbody td {
+        overflow: visible !important;
+    }
+    
+    table.dataTable tbody tr {
+        overflow: visible !important;
+    }
+
     .status-pill {
         display: inline-flex;
         align-items: center;
@@ -50,571 +150,1091 @@
         white-space: nowrap;
     }
 
-        .status-pill.attended {
-            background-color: #e7f8ef;
-            color: #198754;
-        }
-
-        .status-pill.not-attended {
-            background-color: #fff3cd;
-            color: #856404;
-        }
-
-        .status-pill.evaluated {
-            background-color: #e7f1ff;
-            color: #0d6efd;
-        }
-
-        .status-pill.pending {
-            background-color: #f1f3f5;
-            color: #6c757d;
-        }
-
-    /* ===========================
-       ACTION BUTTONS
-    =========================== */
-    .action-group {
-        display: flex;
-        justify-content: center;
-        gap: 6px;
+    .status-pill.attended {
+        background-color: #e7f8ef;
+        color: #198754;
     }
 
-    .action-btn {
-        width: 34px;
-        height: 34px;
-        border-radius: 8px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        text-decoration: none;
-        font-size: 1rem;
-        transition: all 0.2s ease;
+    .status-pill.not-attended {
+        background-color: #fff3cd;
+        color: #856404;
     }
 
-        .action-btn.details {
-            background-color: #e7f1ff;
-            color: #0d6efd;
-        }
-
-        .action-btn.evaluate {
-            background-color: #e7f8ef;
-            color: #198754;
-        }
-
-        .action-btn.certificate {
-            background-color: #f1f3f5;
-            color: #495057;
-        }
-
-        .action-btn:hover {
-            transform: scale(1.12);
-            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
-        }
-
-    /* ===========================
-       PAGINATION
-    =========================== */
-    .pagination .page-link {
-        border-radius: 8px;
-        margin: 0 3px;
-        transition: all 0.2s ease;
+    .status-pill.evaluated {
+        background-color: #e7f1ff;
+        color: #0d6efd;
     }
 
-        .pagination .page-link:hover {
-            transform: translateY(-2px);
-        }
-
-
+    .status-pill.pending {
+        background-color: #f1f3f5;
+        color: #6c757d;
+    }
 </style>
-<div class="container-fluid">
 
-    <!-- PAGE HEADER -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3 class="fw-bold">Registered Participants</h3>
-    </div>
-
-    <!-- STATS -->
-    <div class="row g-3 mb-4">
-        <div class="col-md-3">
-            <div class="card text-white bg-primary h-100">
-                <div class="card-body">
-                    <div class="fw-semibold">Total Registered</div>
-                    <h2>@Model.ActivityStats.RegisteredCount</h2>
+<section class="animate-fade-in px-6 pb-8">
+    <!-- Welcome + KPI Cards -->
+    <div class="mb-4 space-y-4">
+        <!-- Welcome banner -->
+        <div class="rounded-2xl border border-neutral-200 bg-gradient-green-2 p-5 shadow-sm dark:border-neutral-700 dark:bg-gray-900">
+            <div class="flex justify-between items-center">
+                <div class="flex flex-col justify-between gap-3">
+                    <h2 class="text-xl font-extrabold tracking-tight text-white sm:text-2xl lg:text-2xl">
+                        المشاركين المسجلين
+                    </h2>
+                    <p class="text-white text-sm">
+                        عرض وإدارة المشاركين في النشاط
+                    </p>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-3">
-            <div class="card text-white bg-success h-100">
-                <div class="card-body">
-                    <div class="fw-semibold">Attended</div>
-                    <h2>@Model.ActivityStats.AttendedCount</h2>
+        <!-- KPI Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="bg-gradient-to-br from-main-500 to-main-600 p-6 rounded-xl shadow-lg hover:shadow-2xl transition-all hover:scale-105 duration-300">
+                <div class="flex items-center justify-between">
+                    <div class="flex-1">
+                        <p class="text-white/90 text-sm mb-3">إجمالي التسجيل في المسابقة</p>
+                        <h3 class="text-white">@Model.ActivityStats.RegisteredCount</h3>
+                    </div>
+                    <div class="bg-white/20 backdrop-blur-sm p-4 rounded-xl">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                             stroke-linecap="round" stroke-linejoin="round"
+                             class="lucide lucide-users text-white" aria-hidden="true">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-gradient-to-br from-gold-500 to-gold-600 p-6 rounded-xl shadow-lg hover:shadow-2xl transition-all hover:scale-105 duration-300">
+                <div class="flex items-center justify-between">
+                    <div class="flex-1">
+                        <p class="text-white/90 text-sm mb-3">إجمالي الحاضرون في المسابقة</p>
+                        <h3 class="text-white">@Model.ActivityStats.AttendedCount</h3>
+                    </div>
+                    <div class="bg-white/20 backdrop-blur-sm p-4 rounded-xl">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                             stroke-linecap="round" stroke-linejoin="round"
+                             class="lucide lucide-circle-check-big text-white" aria-hidden="true">
+                            <path d="M21.801 10A10 10 0 1 1 17 3.335"></path>
+                            <path d="m9 11 3 3L22 4"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-gradient-to-br from-info-500 to-info-600 p-6 rounded-xl shadow-lg hover:shadow-2xl transition-all hover:scale-105 duration-300">
+                <div class="flex items-center justify-between">
+                    <div class="flex-1">
+                        <p class="text-white/90 text-sm mb-3">إجمالي الحاضرين من داخل الجامعة</p>
+                        <h3 class="text-white">@Model.ActivityStats.ParticipatedCount</h3>
+                    </div>
+                    <div class="bg-white/20 backdrop-blur-sm p-4 rounded-xl">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                             stroke-linecap="round" stroke-linejoin="round"
+                             class="lucide lucide-user-check text-white" aria-hidden="true">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="m16 11 2 2 4-4"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-gradient-to-br from-lavender-500 to-lavender-600 p-6 rounded-xl shadow-lg hover:shadow-2xl transition-all hover:scale-105 duration-300">
+                <div class="flex items-center justify-between">
+                    <div class="flex-1">
+                        <p class="text-white/90 text-sm mb-3">لم يتم الحضور
+
+</p>
+                        <h3 class="text-white">@Model.ActivityStats.OverallAverageRate.ToString("0.0")%</h3>
+                    </div>
+                    <div class="bg-white/20 backdrop-blur-sm p-4 rounded-xl">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                             stroke-linecap="round" stroke-linejoin="round"
+                             class="lucide lucide-star text-white" aria-hidden="true">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                        </svg>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-3">
-            <div class="card text-white bg-info h-100">
-                <div class="card-body">
-                    <div class="fw-semibold">Participated</div>
-                    <h2>@Model.ActivityStats.ParticipatedCount</h2>
+        <!-- Filters Section -->
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
+            <div id="filter-toggle"
+                 class="bg-gradient-green-1 rounded-xl shadow-lg overflow-hidden cursor-pointer">
+                <div class="flex items-center justify-between p-4">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-white/20 backdrop-blur-sm p-2.5 rounded-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22"
+                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                 stroke-linecap="round" stroke-linejoin="round"
+                                 class="lucide lucide-funnel text-white" aria-hidden="true">
+                                <path d="M10 20a1 1 0 0 0 .553.895l2 1A1 1 0 0 0 14 21v-7a2 2 0 0 1 .517-1.341L21.74 4.67A1 1 0 0 0 21 3H3a1 1 0 0 0-.742 1.67l7.225 7.989A2 2 0 0 1 10 14z">
+                                </path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-medium">البحث والفلترة</h4>
+                            <p id="filter-toggle-text" class="text-white/80 text-xs mt-0.5">انقر لإظهار خيارات البحث والفلترة</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div id="filter-chevron" class="bg-white/20 backdrop-blur-sm p-2 rounded-lg transition-transform duration-300"
+                             style="transform: rotate(0deg);">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                 class="lucide lucide-chevron-down text-white" aria-hidden="true">
+                                <path d="m6 9 6 6 6-6"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="filter-content"
+                 class="transition-all duration-500 ease-in-out opacity-0 max-h-0 mt-0 overflow-hidden hidden">
+                <div class="relative bg-white dark:bg-gray-800 p-6 rounded-xl border-2 border-gray-200 dark:border-gray-700 shadow-inner">
+                    <form method="get" id="searchForm" onsubmit="return false;" onclick="event.stopPropagation();">
+                        <input type="hidden" name="id" value="@Model.filter.ActivityId" />
+                        <div class="relative z-10">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                                <div>
+                                    <label class="form-label">البحث بالاسم، البريد الإلكتروني، رقم الجوال، أو الرقم الوطني</label>
+                                    <div class="relative">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20"
+                                             height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                             class="lucide lucide-search absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400"
+                                             aria-hidden="true">
+                                            <path d="m21 21-4.34-4.34"></path>
+                                            <circle cx="11" cy="11" r="8"></circle>
+                                        </svg>
+                                        <input type="text"
+                                               name="Search"
+                                               value="@Model.filter.Search"
+                                               placeholder="ابحث بالاسم، البريد الإلكتروني، رقم الجوال، أو الرقم الوطني"
+                                               class="form-input pr-12 pl-10" />
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="form-label">الحضور / التسجيل</label>
+                                    <select name="IsAttended" class="form-select">
+                                        <option value="">الكل</option>
+                                        @if (Model.filter.IsAttended == true)
+                                        {
+                                            <option value="true" selected>حضر</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="true">حضر</option>
+                                        }
+                                        @if (Model.filter.IsAttended == false)
+                                        {
+                                            <option value="false" selected>لم يحضر</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="false">لم يحضر</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="form-label">حالة التقييم</label>
+                                    <select name="HasEvaluated" class="form-select">
+                                        <option value="">الكل</option>
+                                        @if (Model.filter.HasEvaluated == true)
+                                        {
+                                            <option value="true" selected>قيم</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="true">قيم</option>
+                                        }
+                                        @if (Model.filter.HasEvaluated == false)
+                                        {
+                                            <option value="false" selected>لم يقيم</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="false">لم يقيم</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center mt-4">
+                                <button type="button" class="btn btn-danger" onclick="clearFilters()">
+                                    مسح الكل
+                                </button>
+                                <button type="submit" class="btn btn-success px-4">
+                                    بحث
+                                </button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-3">
-            <div class="card text-white bg-warning h-100">
-                <div class="card-body">
-                    <div class="fw-semibold">Overall Avg. Rate</div>
-                    <h2>@Model.ActivityStats.OverallAverageRate.ToString("0.0")%</h2>
-                </div>
-            </div>
-        </div>
-    </div>
-    <form method="post" id="antiForgeryForm">
-        @Html.AntiForgeryToken()
-    </form>
-    <!-- FILTERS -->
-    <form method="get" class="card mb-4">
-        <div class="card-body">
-            <div class="row g-3">
-
-                <div class="col-md-4">
-                    <input type="text"
-                           name="Search"
-                           value="@Model.filter.Search"
-                           class="form-control"
-                           placeholder="Search by name or national ID" />
+        <!-- Data Table -->
+        <div class="rounded-lg bg-white dark:bg-gray-800 text-card-foreground dark:text-gray-200 shadow-sm border border-gray-200 dark:border-gray-700">
+            <div class="p-4 sm:p-6 space-y-4">
+                <div id="dataTableControls" class="flex flex-col sm:flex-row justify-between gap-4">
+                    <div id="dataTableSearch"></div>
+                    <div id="dataTableLength"></div>
                 </div>
 
-                <div class="col-md-2">
-                    <select name="IsAttended" class="form-select">
-                        <option value="">Attendance</option>
-                        <option value="true">Attended</option>
-                        <option value="false">Not Attended</option>
-                    </select>
-                </div>
-
-                <div class="col-md-2">
-                    <select name="HasEvaluated" class="form-select">
-                        <option value="">Evaluation</option>
-                        <option value="true">Evaluated</option>
-                        <option value="false">Not Evaluated</option>
-                    </select>
-                </div>
-
-                <div class="col-md-2">
-                    <select name="PageSize" class="form-select">
-                        <option value="10">10</option>
-                        <option value="20">20</option>
-                        <option value="50">50</option>
-                    </select>
-                </div>
-
-                <div class="col-md-2 d-grid">
-                    <button class="btn btn-primary">Apply</button>
-                </div>
-
-            </div>
-        </div>
-    </form>
-    <!-- TABLE -->
-    <div class="card">
-        <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-                <thead class="table-light">
-                    <tr>
-                        <th>#</th>
-                        <th>Student Name</th>
-                        <th>Management</th>
-                        <th>Target Audience</th>
-                        <th>National ID</th>
-                        <th>Attendance</th>
-                        <th>Evaluation</th>
-                        <th>Avg. Rate</th>
-                        <th>Certificate</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    @if (!Model.Result.Items.Any())
-                    {
-                        <tr>
-                            <td colspan="9" class="text-center text-muted py-4">
-                                No participants found
-                            </td>
-                        </tr>
-                    }
-                    else
-                    {
-                        var index = (Model.Result.PageNumber - 1) * Model.Result.PageSize;
-                        foreach (var item in Model.Result.Items)
-                        {
-                            index++;
-                            <tr>
-                                <td>@index</td>
-
-                                <td class="fw-semibold">
-                                    @item.StudentFullName
-                                </td>
-
-                                <td>@item.ManagementName</td>
-
-                                <td>@item.TargetAudienceName</td>
-
-                                <td>@item.NationalId</td>
-                                <!-- ================= Attendance ================= -->
-                                <td>
-                                    @if (item.IsAttended)
+                <div class="rounded-xl overflow-hidden">
+                    <div class="w-full overflow-auto">
+                        <table id="participantsTable" class="w-full text-sm display nowrap" style="width:100%">
+                            <thead>
+                                <tr class="bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+                                    <th class="p-3 text-center control" data-priority="1"></th>
+                                    <th class="p-3 text-right font-semibold text-gray-700 dark:text-gray-200" data-priority="2">#</th>
+                                    <th class="p-3 text-right font-semibold text-gray-700 dark:text-gray-200" data-priority="3">اسم الطالب</th>
+                                    <th class="p-3 text-right font-semibold text-gray-700 dark:text-gray-200" data-priority="4">الإدارة</th>
+                                    <th class="p-3 text-right font-semibold text-gray-700 dark:text-gray-200">الفئة المستفيدة</th>
+                                    <th class="p-3 text-right font-semibold text-gray-700 dark:text-gray-200">الرقم الوطني</th>
+                                    <th class="p-3 text-right font-semibold text-gray-700 dark:text-gray-200" data-priority="5">الحضور</th>
+                                    <th class="p-3 text-right font-semibold text-gray-700 dark:text-gray-200">التقييم</th>
+                                    <th class="p-3 text-right font-semibold text-gray-700 dark:text-gray-200">متوسط التقييم</th>
+                                    <th class="p-3 text-right font-semibold text-gray-700 dark:text-gray-200" data-priority="6">الشهادة</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (!Model.Result.Items.Any())
+                                {
+                                    <tr>
+                                        <td colspan="10" class="text-center text-muted py-4">
+                                            لا يوجد مشاركين
+                                        </td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    var index = (Model.Result.PageNumber - 1) * Model.Result.PageSize;
+                                    foreach (var item in Model.Result.Items)
                                     {
-                                        <span class="status-pill attended">
-                                            <i class="bi bi-check-circle-fill"></i>
-                                            Attended
-                                        </span>
+                                        index++;
+                                        <tr class="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/50">
+                                            <td class="p-3 text-center control"></td>
+                                            <td class="p-3 text-right text-gray-600 dark:text-gray-200">@index</td>
+                                            <td class="p-3 text-right text-gray-900 dark:text-gray-200 font-semibold">@item.StudentFullName</td>
+                                            <td class="p-3 text-right text-gray-600 dark:text-gray-200">@item.ManagementName</td>
+                                            <td class="p-3 text-right text-gray-600 dark:text-gray-200">@item.TargetAudienceName</td>
+                                            <td class="p-3 text-right text-gray-600 dark:text-gray-200">@item.NationalId</td>
+                                            <!-- Attendance -->
+                                            <td class="p-3 text-right">
+                                                @if (item.IsAttended)
+                                                {
+                                                    <span class="status-pill attended">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-circle-2">
+                                                            <circle cx="12" cy="12" r="10"></circle>
+                                                            <path d="m9 12 2 2 4-4"></path>
+                                                        </svg>
+                                                        حضر
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <button class="inline-flex items-center gap-2 px-3 py-1.5 bg-main-600 text-white rounded-lg text-sm font-medium hover:bg-main-700 transition-colors attend-btn"
+                                                            data-student-id="@item.StudentId"
+                                                            data-activity-id="@Model.filter.ActivityId">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-circle">
+                                                            <circle cx="12" cy="12" r="10"></circle>
+                                                            <path d="m9 12 2 2 4-4"></path>
+                                                        </svg>
+                                                        حضور
+                                                    </button>
+                                                }
+                                            </td>
+                                            <!-- Evaluation -->
+                                            <td class="p-3 text-right">
+                                                @if (item.HasEvaluated)
+                                                {
+                                                    <button type="button"
+                                                            class="inline-flex items-center gap-2 px-3 py-1.5 bg-info-600 text-white rounded-lg text-sm font-medium hover:bg-info-700 transition-colors rate-btn"
+                                                            data-student-id="@item.StudentId"
+                                                            data-activity-id="@Model.filter.ActivityId">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-star">
+                                                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                                        </svg>
+                                                        تقييم
+                                                    </button>
+                                                }
+                                                else
+                                                {
+                                                    <span class="status-pill evaluated">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-star">
+                                                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                                        </svg>
+                                                        لم يقيم
+                                                    </span>
+                                                }
+                                            </td>
+                                            <!-- Average Rate -->
+                                            <td class="p-3 text-right text-gray-600 dark:text-gray-200">
+                                                @if (item.HasEvaluated)
+                                                {
+                                                    <span class="inline-flex items-center justify-center min-w-[2rem] px-2 py-1 rounded-full bg-info-100 text-info-700 dark:bg-info-900/30 dark:text-info-300 text-xs font-medium">
+                                                        @(item.StudentAverageRate?.ToString("0.0") ?? "--")
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-gray-400 dark:text-gray-500">--</span>
+                                                }
+                                            </td>
+                                            <!-- Certificate -->
+                                            <td class="p-3 text-right">
+                                                @if (item.IsAttended && item.HasEvaluated)
+                                                {
+                                                    <button type="button"
+                                                            class="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg text-sm font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors certificate-btn"
+                                                            data-student-id="@item.StudentId"
+                                                            data-activity-id="@Model.filter.ActivityId">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-award">
+                                                            <path d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526"></path>
+                                                            <circle cx="12" cy="8" r="6"></circle>
+                                                        </svg>
+                                                        شهادة
+                                                    </button>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-gray-400 dark:text-gray-500 text-sm">لا توجد شهادة</span>
+                                                }
+                                            </td>
+                                        </tr>
                                     }
-                                    else
-                                    {
-                                        <button class="btn btn-sm btn-success attend-btn"
-                                                data-student-id="@item.StudentId"
-                                                data-activity-id="@Model.filter.ActivityId">
-                                            <i class="bi bi-check2-circle"></i>
-                                            Attend
-                                        </button>
-                                    }
-                                </td>
-
-                                <!-- ================= Evaluation ================= -->
-                                <td>
-                                    @if (item.HasEvaluated)
-                                    {
-                                       <button type="button"
-                                                class="btn btn-sm btn-primary rate-btn"
-                                                data-student-id="@item.StudentId"
-                                                data-activity-id="@Model.filter.ActivityId"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#rateModal">
-                                            <i class="bi bi-star"></i>
-                                            Rate
-                                        </button>
-                                       
-                                    }
-                                    else
-                                    {
-                                        <span class="status-pill evaluated">
-                                            <i class="bi bi-star-fill"></i>
-                                            Not Rated
-                                        </span>
-                                    }
-                                </td>
-
-
-                                <td>
-                                    @if (item.HasEvaluated)
-                                    {
-                                        @(item.StudentAverageRate?.ToString("0.0") ?? "--")
-
-                                    }
-                                    else
-                                    {
-                                        <span>Not Rated</span>
-                                    }
-                                </td>
-
-                                <!-- ================= Certificate ================= -->
-                                <td>
-                                    @if (item.IsAttended && item.HasEvaluated)
-                                    {
-                                        <button type="button"
-                                                class="btn btn-sm btn-outline-secondary certificate-btn"
-                                                data-student-id="@item.StudentId"
-                                                data-activity-id="@Model.filter.ActivityId"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#certificateModal">
-                                            <i class="bi bi-award"></i>
-                                            Certificate
-                                        </button>
-                                    }
-                                    else
-                                    {
-                                        <span class="text-muted small">
-                                            No Certificate
-                                        </span>
-                                    }
-                                </td>
-                               
-
-
-                            
-                            </tr>
-                        }
-                    }
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <!-- PAGINATION -->
-    <nav class="mt-4">
-        <ul class="pagination justify-content-end">
-            @for (int i = 1; i <= Model.Result.TotalCount; i++)
-            {
-                <li class="page-item @(i == Model.Result.PageNumber ? "active" : "")">
-                    <a class="page-link"
-                       asp-route-PageNumber="@i">
-                        @i
-                    </a>
-                </li>
-            }
-        </ul>
-    </nav>
-
-</div>
-
-<div class="modal fade" id="rateModal" tabindex="-1">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content">
-
-            <!-- HEADER -->
-            <div class="modal-header bg-success text-white">
-                <h5 class="modal-title">
-                    <i class="bi bi-star-fill"></i>
-                    Activity Evaluation
-                </h5>
-                <button type="button" class="btn-close btn-close-white"
-                        data-bs-dismiss="modal"></button>
-            </div>
-
-            <!-- BODY -->
-            <div class="modal-body">
-
-                <!-- Student / Activity Info -->
-                <div class="mb-3">
-                    <div class="fw-semibold">Student Name</div>
-                    <div id="rateStudentName" class="text-muted"></div>
-                </div>
-
-                <!-- Criteria -->
-                <div id="criteriaContainer"></div>
-
-                <!-- Average -->
-                <div class="bg-success text-white text-center rounded py-3 mt-4">
-                    <div class="small">Average Rating</div>
-                    <div class="fs-3 fw-bold">
-                        <span id="averageRate">0.0</span> / 5
-                        <i class="bi bi-star-fill"></i>
+                                }
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
-                <!-- Comment -->
-                <div class="mt-4">
-                    <label class="form-label fw-semibold">Comment</label>
-                    <textarea class="form-control" id="rateComment"
-                              rows="3" readonly></textarea>
+                <div class="flex flex-col gap-4 pt-4">
+                    <div class="flex flex-wrap justify-between items-center gap-4">
+                        <div id="dataTablePagination"></div>
+                        <div id="dataTableInfo"></div>
+                    </div>
                 </div>
-
             </div>
+        </div>
+    </div>
+</section>
 
-            <!-- FOOTER -->
-            <div class="modal-footer">
-                <button class="btn btn-secondary"
-                        data-bs-dismiss="modal">
-                    Close
+<form method="post" id="antiForgeryForm" style="display: none;">
+    @Html.AntiForgeryToken()
+</form>
+
+<!-- Rate Modal -->
+<div id="rateModal" class="fixed inset-0 hidden items-center justify-center" style="z-index: 99999 !important;">
+    <!-- Backdrop -->
+    <div id="rateModalBackdrop" class="fixed inset-0 bg-black/50 transition-opacity duration-300 opacity-0" style="z-index: 99998 !important;"></div>
+    
+    <!-- Modal Container -->
+    <div class="relative w-full max-w-2xl mx-4 my-4 overflow-hidden bg-white dark:bg-gray-800 rounded-xl shadow-2xl transform transition-all duration-300 scale-95 opacity-0" style="z-index: 100000 !important; height: 85vh; max-height: 85vh; display: flex; flex-direction: column;">
+        <!-- HEADER -->
+        <div class="bg-gradient-to-r from-main-500 to-main-600 text-white p-5">
+            <div class="flex items-center justify-between">
+                <h5 class="text-xl font-bold flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-star">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                    </svg>
+                    تقييم النشاط
+                </h5>
+                <button type="button" id="closeRateModalBtn" class="text-white hover:text-gray-200 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x">
+                        <path d="m18 6-12 12"></path>
+                        <path d="m6 6 12 12"></path>
+                    </svg>
                 </button>
             </div>
+        </div>
 
+        <!-- BODY -->
+        <div class="p-6 overflow-y-auto flex-1" style="min-height: 0;">
+            <!-- Student Info -->
+            <div class="mb-4">
+                <div class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">اسم الطالب</div>
+                <div id="rateStudentName" class="text-gray-600 dark:text-gray-400"></div>
+            </div>
+
+            <!-- Criteria -->
+            <div id="criteriaContainer" class="space-y-3"></div>
+
+            <!-- Average -->
+            <div class="bg-gradient-to-r from-main-500 to-main-600 text-white text-center rounded-xl py-4 mt-6">
+                <div class="text-sm opacity-90 mb-1">متوسط التقييم</div>
+                <div class="text-3xl font-bold flex items-center justify-center gap-2">
+                    <span id="averageRate">0.0</span> / 5
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="lucide lucide-star">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Comment -->
+            <div class="mt-6">
+                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">التعليق</label>
+                <textarea class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-main-500 focus:border-transparent" 
+                          id="rateComment"
+                          rows="3" 
+                          readonly></textarea>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="flex justify-end gap-3 p-6 border-t border-gray-200 dark:border-gray-700">
+            <button id="closeRateModalBtn2" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+                إغلاق
+            </button>
         </div>
     </div>
 </div>
-<div class="modal fade" id="certificateModal" tabindex="-1">
-    <div class="modal-dialog modal-xl modal-dialog-centered">
-        <div class="modal-content">
 
-            <!-- HEADER -->
-            <div class="modal-header bg-success text-white">
-                <h5 class="modal-title">
-                    <i class="bi bi-award-fill"></i>
-                    Certificate Preview
+<!-- Certificate Modal -->
+<div id="certificateModal" class="fixed inset-0 hidden items-center justify-center" style="z-index: 99999 !important;">
+    <!-- Backdrop -->
+    <div id="certificateModalBackdrop" class="fixed inset-0 bg-black/50 transition-opacity duration-300 opacity-0" style="z-index: 99998 !important;"></div>
+    
+    <!-- Modal Container -->
+    <div class="relative w-full max-w-7xl mx-4 my-4 overflow-hidden bg-white dark:bg-gray-800 rounded-xl shadow-2xl transform transition-all duration-300 scale-95 opacity-0" style="z-index: 100000 !important; height: 85vh; max-height: 85vh; display: flex; flex-direction: column;">
+        <!-- HEADER -->
+        <div class="bg-gradient-to-r from-main-500 to-main-600 text-white p-5">
+            <div class="flex items-center justify-between">
+                <h5 class="text-xl font-bold flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-award">
+                        <path d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526"></path>
+                        <circle cx="12" cy="8" r="6"></circle>
+                    </svg>
+                    معاينة الشهادة
                 </h5>
-
-                <div class="d-flex gap-2">
+                <div class="flex items-center gap-2">
                     <a id="downloadCertificateBtn"
-                       class="btn btn-light btn-sm"
+                       class="inline-flex items-center gap-2 px-4 py-2 bg-white text-main-600 rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors"
                        target="_blank">
-                        <i class="bi bi-download"></i>
-                        Download
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" x2="12" y1="15" y2="3"></line>
+                        </svg>
+                        تحميل
                     </a>
-
-                    <button type="button"
-                            class="btn-close btn-close-white"
-                            data-bs-dismiss="modal">
+                    <button type="button" id="closeCertificateModalBtn" class="text-white hover:text-gray-200 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x">
+                            <path d="m18 6-12 12"></path>
+                            <path d="m6 6 12 12"></path>
+                        </svg>
                     </button>
                 </div>
             </div>
+        </div>
 
-            <!-- BODY -->
-            <div class="modal-body p-0" style="height:80vh">
-                <iframe id="certificateFrame"
-                        style="width:100%; height:100%; border:0;">
-                </iframe>
-            </div>
-
+        <!-- BODY -->
+        <div class="p-0 flex-1 overflow-hidden" style="min-height: 0;">
+            <iframe id="certificateFrame"
+                    class="w-full h-full border-0"
+                    style="min-height: 500px;">
+            </iframe>
         </div>
     </div>
 </div>
 
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
 <script>
     document.addEventListener("DOMContentLoaded", function () {
+        // Filter Toggle - نفس الطريقة من Index.cshtml
+        function initFilterToggle() {
+            const filterToggle = document.getElementById('filter-toggle');
+            const filterContent = document.getElementById('filter-content');
+            const filterChevron = document.getElementById('filter-chevron');
+            const filterToggleText = document.getElementById('filter-toggle-text');
 
-        document.querySelectorAll(".attend-btn").forEach(btn => {
+            if (!filterToggle || !filterContent) {
+                console.warn('Filter toggle elements not found');
+                return false;
+            }
 
+            // التحقق من أن الـ listener غير موجود مسبقاً
+            if (filterToggle.hasAttribute('data-filter-initialized')) {
+                return true;
+            }
+
+            // إضافة علامة لتجنب إعادة التهيئة
+            filterToggle.setAttribute('data-filter-initialized', 'true');
+
+            // إضافة event listener مع استخدام capture phase لمنع التداخل
+            filterToggle.addEventListener('click', function(e) {
+                // منع propagation بشكل أقوى
+                e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation();
+                
+                const isHidden = filterContent.classList.contains('hidden');
+                if (isHidden) {
+                    filterContent.classList.remove('hidden');
+                    filterContent.classList.remove('opacity-0', 'max-h-0', 'mt-0');
+                    filterContent.classList.add('opacity-100', 'max-h-[2000px]', 'mt-4');
+                    if (filterChevron) {
+                        filterChevron.style.transform = 'rotate(180deg)';
+                    }
+                    if (filterToggleText) {
+                        filterToggleText.textContent = 'انقر لإخفاء خيارات البحث والفلترة';
+                    }
+                } else {
+                    filterContent.classList.add('opacity-0', 'max-h-0', 'mt-0');
+                    filterContent.classList.remove('opacity-100', 'max-h-[2000px]', 'mt-4');
+                    setTimeout(() => {
+                        filterContent.classList.add('hidden');
+                    }, 500);
+                    if (filterChevron) {
+                        filterChevron.style.transform = 'rotate(0deg)';
+                    }
+                    if (filterToggleText) {
+                        filterToggleText.textContent = 'انقر لإظهار خيارات البحث والفلترة';
+                    }
+                }
+                
+                return false;
+            }, true); // استخدام capture phase
+
+            return true;
+        }
+
+        // استدعاء الدالة بعد تحميل الصفحة - مع إعادة المحاولة إذا فشلت
+        function tryInitFilterToggle(retries = 5) {
+            if (initFilterToggle()) {
+                return;
+            }
+            if (retries > 0) {
+                setTimeout(() => {
+                    tryInitFilterToggle(retries - 1);
+                }, 100);
+            }
+        }
+
+        tryInitFilterToggle();
+
+        // Function to re-attach event listeners after DataTable redraws
+        function attachEventListeners() {
+            // Attend Button
+            document.querySelectorAll(".attend-btn").forEach(btn => {
+                if (!btn.hasAttribute('data-listener-attached')) {
+                    btn.setAttribute('data-listener-attached', 'true');
+                    btn.addEventListener("click", async function () {
+                        const studentId = this.dataset.studentId;
+                        const activityId = this.dataset.activityId;
+
+                        // Disable button + loading state
+                        this.disabled = true;
+                        const originalHTML = this.innerHTML;
+                        this.innerHTML = `
+                            <svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                        `;
+
+                        const formData = new FormData();
+                        formData.append("id", activityId);
+                        formData.append("studentid", studentId);
+
+                        try {
+                            const response = await fetch(`?handler=Attend`, {
+                                method: "POST",
+                                body: formData,
+                                headers: {
+                                    "RequestVerificationToken":
+                                        document.querySelector('input[name="__RequestVerificationToken"]').value
+                                }
+                            });
+
+                            const result = await response.json();
+
+                            if (result.success) {
+                                // Replace button with Attended badge
+                                const td = this.closest("td");
+                                td.innerHTML = `
+                                    <span class="status-pill attended">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-circle-2">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <path d="m9 12 2 2 4-4"></path>
+                                        </svg>
+                                        حضر
+                                    </span>
+                                `;
+                                if (dataTable) {
+                                    dataTable.draw();
+                                }
+                            } else {
+                                throw new Error(result.message);
+                            }
+                        } catch (err) {
+                            console.error(err);
+                            this.disabled = false;
+                            this.innerHTML = originalHTML;
+                            alert("حدث خطأ ما");
+                        }
+                    });
+                }
+            });
+        }
+
+        // Initial attach of event listeners
+        attachEventListeners();
+
+        // Rate Modal Functions
+        const rateModal = document.getElementById("rateModal");
+        const rateModalBackdrop = document.getElementById("rateModalBackdrop");
+        const rateModalContent = rateModal?.querySelector('.relative.w-full');
+
+        function openRateModal() {
+            if (rateModal && rateModalBackdrop && rateModalContent) {
+                rateModal.classList.remove("hidden");
+                rateModal.classList.add("flex");
+                document.body.style.overflow = "hidden";
+                
+                setTimeout(() => {
+                    rateModalBackdrop.classList.remove("opacity-0");
+                    rateModalBackdrop.classList.add("opacity-100");
+                    rateModalContent.classList.remove("scale-95", "opacity-0");
+                    rateModalContent.classList.add("scale-100", "opacity-100");
+                }, 10);
+            }
+        }
+
+        function closeRateModal() {
+            if (rateModal && rateModalBackdrop && rateModalContent) {
+                rateModalBackdrop.classList.remove("opacity-100");
+                rateModalBackdrop.classList.add("opacity-0");
+                rateModalContent.classList.remove("scale-100", "opacity-100");
+                rateModalContent.classList.add("scale-95", "opacity-0");
+                
+                setTimeout(() => {
+                    rateModal.classList.remove("flex");
+                    rateModal.classList.add("hidden");
+                    document.body.style.overflow = "";
+                }, 300);
+            }
+        }
+
+        // Close buttons for Rate Modal
+        document.getElementById("closeRateModalBtn")?.addEventListener("click", closeRateModal);
+        document.getElementById("closeRateModalBtn2")?.addEventListener("click", closeRateModal);
+        rateModalBackdrop?.addEventListener("click", closeRateModal);
+
+        // Rate Button
+        document.querySelectorAll(".rate-btn").forEach(btn => {
             btn.addEventListener("click", async function () {
-
                 const studentId = this.dataset.studentId;
                 const activityId = this.dataset.activityId;
 
-                // Disable button + loading state
-                this.disabled = true;
-                this.innerHTML = `<span class="spinner-border spinner-border-sm"></span>`;
+                // Open modal first
+                openRateModal();
 
-                const formData = new FormData();
-                formData.append("id", activityId);
-                formData.append("studentid", studentId);
+                // Reset modal
+                document.getElementById("rateStudentName").innerText = "جاري التحميل...";
+                document.getElementById("criteriaContainer").innerHTML = "";
+                document.getElementById("averageRate").innerText = "0.0";
+                document.getElementById("rateComment").value = "";
 
                 try {
-                    const response = await fetch(`?handler=Attend`, {
-                        method: "POST",
-                        body: formData,
-                        headers: {
-                            "RequestVerificationToken":
-                                document.querySelector('input[name="__RequestVerificationToken"]').value
-                        }
+                    const response = await fetch(
+                        `?handler=Rate&id=${activityId}&studentid=${studentId}`
+                    );
+
+                    const data = await response.json();
+
+                    if (!data.success) return;
+
+                    const result = data.result;
+
+                    // Student name
+                    document.getElementById("rateStudentName").innerText = result.studentName;
+
+                    let total = 0;
+
+                    // Criteria
+                    result.criteria.forEach(c => {
+                        total += c.score;
+
+                        document.getElementById("criteriaContainer")
+                            .insertAdjacentHTML("beforeend", `
+                            <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-gray-50 dark:bg-gray-800">
+                                <div class="flex justify-between items-center">
+                                    <div class="font-semibold text-gray-900 dark:text-gray-200">${c.criteriaName}</div>
+                                    <div class="flex gap-1">
+                                        ${renderStars(c.score)}
+                                    </div>
+                                </div>
+                            </div>
+                        `);
                     });
 
-                    const result = await response.json();
+                    // Average
+                    const avg = (total / result.criteria.length).toFixed(1);
+                    document.getElementById("averageRate").innerText = avg;
 
-                    if (result.success) {
+                    // Comment
+                    document.getElementById("rateComment").value = result.comment ?? "";
 
-                        // Replace button with Attended badge
-                        const td = this.closest("td");
-                        td.innerHTML = `
-                            <span class="status-pill attended">
-                                <i class="bi bi-check-circle-fill"></i>
-                                Attended
-                            </span>
-                        `;
-                    } else {
-                        throw new Error(result.message);
-                    }
-
-                } catch (err) {
-                    console.error(err);
-                    this.disabled = false;
-                    this.innerHTML = `<i class="bi bi-check2-circle"></i> Attend`;
-                    alert("Something went wrong");
+                } catch (e) {
+                    console.error(e);
                 }
             });
         });
-        document.querySelectorAll(".rate-btn").forEach(btn => {
 
-        btn.addEventListener("click", async function () {
+        // Certificate Modal Functions
+        const certificateModal = document.getElementById("certificateModal");
+        const certificateModalBackdrop = document.getElementById("certificateModalBackdrop");
+        const certificateModalContent = certificateModal?.querySelector('.relative.w-full');
 
-            const studentId = this.dataset.studentId;
-            const activityId = this.dataset.activityId;
-
-            // Reset modal
-            document.getElementById("rateStudentName").innerText = "Loading...";
-            document.getElementById("criteriaContainer").innerHTML = "";
-            document.getElementById("averageRate").innerText = "0.0";
-            document.getElementById("rateComment").value = "";
-
-            try {
-                const response = await fetch(
-                    `?handler=Rate&id=${activityId}&studentid=${studentId}`
-                );
-
-                const data = await response.json();
-
-                if (!data.success) return;
-
-                const result = data.result;
-
-                // Student name
-                document.getElementById("rateStudentName").innerText =
-                    result.studentName;
-
-                let total = 0;
-
-                // Criteria
-                result.criteria.forEach(c => {
-                    total += c.score;
-
-                    document.getElementById("criteriaContainer")
-                        .insertAdjacentHTML("beforeend", `
-                        <div class="border rounded p-3 mb-3">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="fw-semibold">${c.criteriaName}</div>
-                                <div class="stars">
-                                    ${renderStars(c.score)}
-                                </div>
-                            </div>
-                        </div>
-                    `);
-                });
-
-                // Average
-                const avg = (total / result.criteria.length).toFixed(1);
-                document.getElementById("averageRate").innerText = avg;
-
-                // Comment
-                document.getElementById("rateComment").value =
-                    result.comment ?? "";
-
-            } catch (e) {
-                console.error(e);
+        function openCertificateModal() {
+            if (certificateModal && certificateModalBackdrop && certificateModalContent) {
+                certificateModal.classList.remove("hidden");
+                certificateModal.classList.add("flex");
+                document.body.style.overflow = "hidden";
+                
+                setTimeout(() => {
+                    certificateModalBackdrop.classList.remove("opacity-0");
+                    certificateModalBackdrop.classList.add("opacity-100");
+                    certificateModalContent.classList.remove("scale-95", "opacity-0");
+                    certificateModalContent.classList.add("scale-100", "opacity-100");
+                }, 10);
             }
-        });
+        }
 
-    });
-          document.querySelectorAll(".certificate-btn").forEach(btn => {
+        function closeCertificateModal() {
+            if (certificateModal && certificateModalBackdrop && certificateModalContent) {
+                certificateModalBackdrop.classList.remove("opacity-100");
+                certificateModalBackdrop.classList.add("opacity-0");
+                certificateModalContent.classList.remove("scale-100", "opacity-100");
+                certificateModalContent.classList.add("scale-95", "opacity-0");
+                
+                setTimeout(() => {
+                    certificateModal.classList.remove("flex");
+                    certificateModal.classList.add("hidden");
+                    document.body.style.overflow = "";
+                    // Clear iframe
+                    document.getElementById("certificateFrame").src = "";
+                }, 300);
+            }
+        }
 
-        btn.addEventListener("click", function () {
+        // Close button for Certificate Modal
+        document.getElementById("closeCertificateModalBtn")?.addEventListener("click", closeCertificateModal);
+        certificateModalBackdrop?.addEventListener("click", closeCertificateModal);
 
-            const studentId = this.dataset.studentId;
-            const activityId = this.dataset.activityId;
+        // Certificate Button
+        document.querySelectorAll(".certificate-btn").forEach(btn => {
+            btn.addEventListener("click", function () {
+                const studentId = this.dataset.studentId;
+                const activityId = this.dataset.activityId;
 
-            const previewUrl =
-                `/Student/StudentCertificate?activityId=${activityId}` +
-                (studentId ? `&studentId=${studentId}` : "");
+                const previewUrl =
+                    `/Student/StudentCertificate?activityId=${activityId}` +
+                    (studentId ? `&studentId=${studentId}` : "");
 
-            const downloadUrl =
-                `/Student/DownloadCertificate?activityId=${activityId}` +
-                (studentId ? `&studentId=${studentId}` : "");
+                const downloadUrl =
+                    `/Student/DownloadCertificate?activityId=${activityId}` +
+                    (studentId ? `&studentId=${studentId}` : "");
 
-            // iframe preview
-            document.getElementById("certificateFrame").src = previewUrl;
+                // iframe preview
+                document.getElementById("certificateFrame").src = previewUrl;
 
-            // download button
-            document.getElementById("downloadCertificateBtn").href = downloadUrl;
-        });
+                // download button
+                document.getElementById("downloadCertificateBtn").href = downloadUrl;
 
-    });
-
-        document.getElementById("certificateModal")
-            .addEventListener("hidden.bs.modal", function () {
-                document.getElementById("certificateFrame").src = "";
+                // Open modal
+                openCertificateModal();
             });
+        });
     });
 
-        function renderStars(score) {
+    function renderStars(score) {
         let stars = "";
         for (let i = 1; i <= 5; i++) {
-            stars += i <= score
-                ? `<i class="bi bi-star-fill text-warning"></i>`
-                : `<i class="bi bi-star text-muted"></i>`;
+            if (i <= score) {
+                stars += `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="text-yellow-400">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>`;
+            } else {
+                stars += `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-300 dark:text-gray-600">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>`;
+            }
         }
         return stars;
     }
+
+    function clearFilters() {
+        const form = document.getElementById('searchForm');
+        if (form) {
+            form.reset();
+            // Keep the ActivityId
+            const activityId = '@Model.filter.ActivityId';
+            const hiddenInput = form.querySelector('input[name="id"]');
+            if (hiddenInput) {
+                hiddenInput.value = activityId;
+            }
+            // Submit form to reload with cleared filters
+            form.submit();
+        }
+    }
+
+    // Handle form submission
+    const searchForm = document.getElementById('searchForm');
+    if (searchForm) {
+        searchForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const formData = new FormData(this);
+            const params = new URLSearchParams();
+            
+            // Add all form data to URL params
+            for (const [key, value] of formData.entries()) {
+                if (value && value.trim() !== '') {
+                    params.append(key, value);
+                }
+            }
+            
+            // Navigate to the same page with query params
+            window.location.href = window.location.pathname + '?' + params.toString();
+        });
+    }
+
+    // Initialize DataTable - نفس الطريقة من Index.cshtml
+    let dataTable = null;
+    $(document).ready(function () {
+        const tableElement = document.getElementById('participantsTable');
+        if (!tableElement) return;
+
+        dataTable = $('#participantsTable').DataTable({
+            responsive: {
+                details: {
+                    type: 'column',
+                    target: 0
+                }
+            },
+            dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+                 "<'row'<'col-sm-12'tr>>" +
+                 "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+            autoWidth: false,
+            pageLength: @Model.filter.PageSize,
+            lengthMenu: [[10, 20, 50, -1], [10, 20, 50, "الكل"]],
+            language: {
+                search: "",
+                searchPlaceholder: "ابحث...",
+                lengthMenu: "عرض _MENU_",
+                info: "عرض _START_ إلى _END_ من _TOTAL_",
+                infoEmpty: "لا توجد بيانات",
+                zeroRecords: "لم يتم العثور على نتائج",
+                infoFiltered: "(تمت التصفية من _MAX_)",
+                paginate: {
+                    previous: "السابق",
+                    next: "التالي"
+                }
+            },
+            columnDefs: [
+                {
+                    className: 'control',
+                    orderable: false,
+                    targets: 0,
+                    responsivePriority: 1
+                },
+                {
+                    orderable: false,
+                    targets: [6, 7, 9],
+                    responsivePriority: 6
+                },
+                { responsivePriority: 2, targets: 1 },
+                { responsivePriority: 3, targets: 2 },
+                { responsivePriority: 4, targets: 3 },
+                { responsivePriority: 5, targets: 5 }
+            ],
+            ordering: true,
+            order: [[0, 'asc']],
+            initComplete: function () {
+                const api = this.api();
+                const wrapper = $(api.table().container());
+
+                // Move controls
+                const lengthContainer = wrapper.find('.dataTables_length')[0];
+                const searchContainer = wrapper.find('.dataTables_filter')[0];
+                const infoContainer = wrapper.find('.dataTables_info')[0];
+                const paginationContainer = wrapper.find('.dataTables_paginate')[0];
+
+                // Add flex classes to length container
+                if (lengthContainer) {
+                    lengthContainer.classList.add('flex', 'items-center', 'gap-2');
+                }
+
+                if (infoContainer) {
+                    infoContainer.classList.add('dark:text-gray-200');
+                }
+
+                $('#dataTableLength').html('').append(lengthContainer);
+                $('#dataTableSearch').html('').append(searchContainer);
+                $('#dataTableInfo').html('').append(infoContainer);
+                $('#dataTablePagination').html('').append(paginationContainer);
+
+                // Style search input
+                const searchInput = searchContainer?.querySelector('input');
+                if (searchInput) {
+                    searchInput.className = 'w-full sm:w-64 px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:ring-2 focus:ring-main-500 focus:border-main-500 dark:bg-gray-700 dark:text-white transition-all';
+                    searchInput.placeholder = 'ابحث في الجدول...';
+                }
+
+                // Replace select with custom dropdown (مثل Index.cshtml)
+                const lengthSelect = lengthContainer?.querySelector('select');
+                if (lengthSelect) {
+                    const options = Array.from(lengthSelect.querySelectorAll('option'));
+                    const currentValue = lengthSelect.value;
+                    const currentText = lengthSelect.options[lengthSelect.selectedIndex]?.text || currentValue;
+
+                    // Create custom dropdown HTML
+                    const customDropdown = document.createElement('div');
+                    customDropdown.className = 'custom-length-dropdown relative';
+                    customDropdown.style.cssText = 'width: 140px; min-width: 140px;';
+
+                    const isRTL = document.documentElement.dir === 'rtl' || document.documentElement.getAttribute('dir') === 'rtl';
+
+                    customDropdown.innerHTML = `
+                        <button type="button" class="custom-dropdown-btn form-select w-full text-left flex items-center justify-between dark:text-gray-200" style="padding-right: ${isRTL ? '0.75rem' : '2rem'}; padding-left: ${isRTL ? '2rem' : '0.75rem'};">
+                            <span class="dropdown-value text-gray-900 dark:text-gray-200">${currentText}</span>
+                        </button>
+                        <div class="custom-dropdown-menu hidden absolute z-50 w-full mt-1 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg overflow-hidden" style="top: 100%; ${isRTL ? 'right: 0' : 'left: 0'};">
+                            ${options.map((opt, index) => `
+                                <div class="custom-dropdown-item px-3 py-2 cursor-pointer transition-colors text-gray-900 dark:text-gray-200 hover:bg-main-600 hover:text-white" data-value="${opt.value}">
+                                    ${opt.text}
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+
+                    // Replace select with custom dropdown
+                    lengthSelect.style.display = 'none';
+                    lengthContainer.appendChild(customDropdown);
+
+                    const dropdownBtn = customDropdown.querySelector('.custom-dropdown-btn');
+                    const dropdownMenu = customDropdown.querySelector('.custom-dropdown-menu');
+                    const dropdownItems = customDropdown.querySelectorAll('.custom-dropdown-item');
+                    const dropdownValue = customDropdown.querySelector('.dropdown-value');
+
+                    // Toggle dropdown
+                    dropdownBtn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const isHidden = dropdownMenu.classList.contains('hidden');
+
+                        // Close all other dropdowns
+                        document.querySelectorAll('.custom-dropdown-menu').forEach(menu => {
+                            if (menu !== dropdownMenu) {
+                                menu.classList.add('hidden');
+                            }
+                        });
+
+                        if (isHidden) {
+                            dropdownMenu.classList.remove('hidden');
+                        } else {
+                            dropdownMenu.classList.add('hidden');
+                        }
+                    });
+
+                    // Handle item selection
+                    dropdownItems.forEach(item => {
+                        item.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            const value = this.getAttribute('data-value');
+                            const text = this.textContent.trim();
+
+                            // Update select value
+                            lengthSelect.value = value;
+                            lengthSelect.dispatchEvent(new Event('change', { bubbles: true }));
+
+                            // Update dropdown display
+                            dropdownValue.textContent = text;
+
+                            // Close dropdown
+                            dropdownMenu.classList.add('hidden');
+                        });
+                    });
+
+                    // Close dropdown when clicking outside
+                    document.addEventListener('click', function(e) {
+                        if (!customDropdown.contains(e.target)) {
+                            dropdownMenu.classList.add('hidden');
+                        }
+                    });
+
+                    // Update on DataTables page length change
+                    api.on('length', function() {
+                        const newValue = api.page.len();
+                        const newText = newValue === -1 ? 'الكل' : newValue.toString();
+                        dropdownValue.textContent = newText;
+                    });
+                }
+
+                // Style length label
+                const lengthLabel = lengthContainer?.querySelector('label');
+                if (lengthLabel) {
+                    lengthLabel.className = 'flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300';
+                }
+
+                // Apply pagination styles
+                setTimeout(() => {
+                    applyPaginationStyles();
+                    api.columns.adjust().responsive.recalc();
+                }, 100);
+
+                api.on('draw', function() {
+                    setTimeout(() => {
+                        applyPaginationStyles();
+                        attachEventListeners();
+                    }, 50);
+                });
+
+                // Re-attach event listeners after DataTable initialization
+                attachEventListeners();
+            }
+        });
+
+        // Function to apply pagination styles
+        function applyPaginationStyles() {
+            $('#dataTablePagination .paginate_button').each(function() {
+                const isCurrent = $(this).hasClass('current');
+                const isDisabled = $(this).hasClass('disabled');
+
+                // Remove default classes
+                $(this).removeClass('paginate_button current disabled');
+
+                if (isCurrent) {
+                    $(this).addClass('inline-flex items-center justify-center px-4 py-2 mx-1 text-sm font-medium text-white bg-main-600 border border-main-600 rounded-lg hover:bg-main-700 transition-all shadow-sm');
+                } else if (isDisabled) {
+                    $(this).addClass('inline-flex items-center justify-center px-4 py-2 mx-1 text-sm font-medium text-gray-400 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg cursor-not-allowed opacity-60');
+                } else {
+                    $(this).addClass('inline-flex items-center justify-center px-4 py-2 mx-1 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-main-500 transition-all shadow-sm');
+                }
+            });
+
+            // Style pagination container
+            $('#dataTablePagination').addClass('flex items-center gap-1');
+        }
+
+        // Handle window resize
+        $(window).on('resize', function() {
+            if (dataTable) {
+                dataTable.columns.adjust().responsive.recalc();
+            }
+        });
+    });
+
 </script>
+
 

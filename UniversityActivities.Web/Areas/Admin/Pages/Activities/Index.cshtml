@@ -214,14 +214,14 @@
                     </p>
 
                 </div>
-                <a href="/Admin/Activities/AddActivity"
-                   class="flex items-center gap-2 bg-white text-main-600 px-5 py-2.5 rounded-lg font-medium shadow-md hover:bg-main-600 hover:text-white hover:shadow-xl transition-all duration-300 hover:scale-105 border-2 border-white hover:border-white">
+                <a asp-area="Admin" asp-page="/Activities/AddActivity"
+                   class="flex items-center gap-2 bg-white text-main-600 px-5 py-2.5 rounded-lg font-medium shadow-md group hover:bg-main-600 hover:text-white hover:shadow-xl transition-all duration-300 hover:scale-105 border-2 border-white hover:border-white">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                          fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                         stroke-linejoin="round" class="lucide lucide-plus" aria-hidden="true">
+                         stroke-linejoin="round" class="lucide lucide-plus group-hover:text-white" aria-hidden="true">
                         <path d="M5 12h14"></path>
                         <path d="M12 5v14"></path>
-                    </svg><span>إضافة نشاط جديد</span>
+                    </svg><span class="group-hover:text-white">إضافة نشاط جديد</span>
                 </a>
 
             </div>
@@ -686,9 +686,9 @@
                                     @foreach (var item in Model.Result.Items.Select((v, i) => new { v, i }))
                                     {
                                         var rowNumber = ((Model.PageNumber - 1) * Model.Result.PageSize) + item.i + 1;
-                                        var statusClass = item.v.status == UniversityActivities.Application.DTOs.Enums.StatusEnums.Inprogress ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300" :
-                                                         item.v.status == UniversityActivities.Application.DTOs.Enums.StatusEnums.Completed ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300" :
-                                                         "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300";
+                                        var statusClass = item.v.status == UniversityActivities.Application.DTOs.Enums.StatusEnums.Inprogress ? "bg-warning-100 text-warning-700 dark:bg-warning-900/30 dark:text-warning-300" :
+                                                         item.v.status == UniversityActivities.Application.DTOs.Enums.StatusEnums.Completed ? "bg-main-100 text-main-700 dark:bg-main-900/30 dark:text-main-300" :
+                                                         "bg-info-100 text-info-700 dark:bg-info-900/30 dark:text-info-300";
                                         var statusText = item.v.status == UniversityActivities.Application.DTOs.Enums.StatusEnums.Inprogress ? "قيد التنفيذ" :
                                                         item.v.status == UniversityActivities.Application.DTOs.Enums.StatusEnums.Completed ? "مكتمل" : "قريباً";
                                         <tr class="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/50">
@@ -699,10 +699,10 @@
                                             <td class="p-3 text-right text-gray-600 dark:text-gray-200">@item.v.StartDate.ToString("yyyy-MM-dd")</td>
                                             <td class="p-3 text-right text-gray-600 dark:text-gray-200">-</td>
                                             <td class="p-3 text-right">
-                                                <span class="inline-flex items-center justify-center min-w-[2rem] px-2 py-1 rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 text-xs font-medium">@item.v.RegisteredCount</span>
+                                                <span class="inline-flex items-center justify-center min-w-[2rem] px-2 py-1 rounded-full bg-info-100 text-info-700 dark:bg-info-900/30 dark:text-info-300 text-xs font-medium">@item.v.RegisteredCount</span>
                                             </td>
                                             <td class="p-3 text-right">
-                                                <span class="inline-flex items-center justify-center min-w-[2rem] px-2 py-1 rounded-full bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300 text-xs font-medium">@item.v.AttendedCount</span>
+                                                <span class="inline-flex items-center justify-center min-w-[2rem] px-2 py-1 rounded-full bg-lavender-100 text-lavender-700 dark:bg-lavender-900/30 dark:text-lavender-300 text-xs font-medium">@item.v.AttendedCount</span>
                                             </td>
                                             <td class="p-3 text-right">
                                                 <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium @statusClass">@statusText</span>
@@ -719,13 +719,14 @@
                                                     <div id="menu-@item.v.Id" class="action-menu hidden absolute left-0 w-40 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-[1000]" style="top: calc(100% + 0.25rem); min-width: 160px;">
                                                         <a href="/Admin/Activities/ActivityDetails/@item.v.Id" class="menu-item w-full text-right px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors border-b border-gray-200 dark:border-gray-700 block">
                                                             <div class="flex items-center gap-2 justify-end">
-                                                                <span class="dark:text-gray-200">عرض</span>
+                                                                <span class="dark:text-gray-200">عرض التفاصيل</span>
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-600 dark:text-blue-400">
                                                                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                                                     <circle cx="12" cy="12" r="3"></circle>
                                                                 </svg>
                                                             </div>
                                                         </a>
+                                                        @*
                                                         <a href="/Admin/Activities/EditActivity/@item.v.Id" class="menu-item w-full text-right px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors border-b border-gray-200 dark:border-gray-700 block">
                                                             <div class="flex items-center gap-2 justify-end">
                                                                 <span class="dark:text-gray-200">تعديل</span>
@@ -735,10 +736,19 @@
                                                                 </svg>
                                                             </div>
                                                         </a>
-                                                        <a href="?handler=participants&activityId=@item.v.Id" onclick="return loadParticipants(event, @item.v.Id)" class="menu-item w-full text-right px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors border-b border-gray-200 dark:border-gray-700 block">
+                                                        *@
+                                                        <a href="/Admin/Activities/ActivityParticipationDetails/@item.v.Id" class="menu-item w-full text-right px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors block">
                                                             <div class="flex items-center gap-2 justify-end">
                                                                 <span class="dark:text-gray-200">المشاركين</span>
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-purple-600 dark:text-purple-400">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-main-600 dark:text-main-400">
+                                                                    <path d="M20 6L9 17l-5-5"></path>
+                                                                </svg>
+                                                            </div>
+                                                        </a>
+                                                        <a href="?handler=participants&activityId=@item.v.Id" onclick="return loadParticipants(event, @item.v.Id)" class="menu-item w-full text-right px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors border-b border-gray-200 dark:border-gray-700 block">
+                                                            <div class="flex items-center gap-2 justify-end">
+                                                                <span class="dark:text-gray-200">المسؤولين</span>
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-lavender-600 dark:text-lavender-400">
                                                                     <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
                                                                     <circle cx="9" cy="7" r="4"></circle>
                                                                     <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
@@ -746,14 +756,7 @@
                                                                 </svg>
                                                             </div>
                                                         </a>
-                                                        <a href="/Admin/Activities/ActivityParticipationDetails/@item.v.Id" class="menu-item w-full text-right px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors block">
-                                                            <div class="flex items-center gap-2 justify-end">
-                                                                <span class="dark:text-gray-200">الموافقة</span>
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-600 dark:text-green-400">
-                                                                    <path d="M20 6L9 17l-5-5"></path>
-                                                                </svg>
-                                                            </div>
-                                                        </a>
+                                                        
                                                     </div>
                                                 </div>
                                             </td>
