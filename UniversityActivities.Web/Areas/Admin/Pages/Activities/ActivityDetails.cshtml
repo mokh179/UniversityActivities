@@ -417,12 +417,9 @@
                             <div class="space-y-2">
                                 @if (Model.Activity?.Coordinators != null && Model.Activity.Coordinators.Any())
                                 {
-                                    @foreach (var coordinator in Model.Activity.Coordinators)
-                                    {
-                                        <div class="bg-white dark:bg-gray-700 px-3 py-2 rounded-lg text-sm font-medium text-gray-800 dark:text-gray-200 border border-main-300 dark:border-gray-600">
-                                            @coordinator.FullNameAr
-                                        </div>
-                                    }
+                                    @Html.Partial("_UsersCard", ("Coordinators", "secondary", Model.Activity.Coordinators))
+
+
                                 }
                                 else
                                 {
@@ -449,12 +446,8 @@
                             <div class="space-y-2">
                                 @if (Model.Activity?.Viewers != null && Model.Activity.Viewers.Any())
                                 {
-                                    @foreach (var viewer in Model.Activity.Viewers)
-                                    {
-                                        <div class="bg-white dark:bg-gray-700 px-3 py-2 rounded-lg text-sm font-medium text-gray-800 dark:text-gray-200 border border-info-300 dark:border-gray-600">
-                                            @viewer.FullNameAr
-                                        </div>
-                                    }
+                                    @Html.Partial("_UsersCard", ("Reviewers", "success", Model.Activity.Viewers))
+
                                 }
                                 else
                                 {
@@ -481,12 +474,8 @@
                             <div class="space-y-2">
                                 @if (Model.Activity?.Supervisors != null && Model.Activity.Supervisors.Any())
                                 {
-                                    @foreach (var supervisor in Model.Activity.Supervisors)
-                                    {
-                                        <div class="bg-white dark:bg-gray-700 px-3 py-2 rounded-lg text-sm font-medium text-gray-800 dark:text-gray-200 border border-lavender-300 dark:border-gray-600">
-                                            @supervisor.FullNameAr
-                                        </div>
-                                    }
+                                    @Html.Partial("_UsersCard", ("Supervisors", "primary", Model.Activity.Supervisors))
+
                                 }
                                 else
                                 {

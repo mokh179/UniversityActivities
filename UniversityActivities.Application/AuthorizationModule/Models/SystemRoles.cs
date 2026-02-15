@@ -11,5 +11,6 @@ namespace UniversityActivities.Application.AuthorizationModule.Models
         public const string ManagementCoordinator = "Coordinator";
         public const string ManagementViewer = "Viewer";
         public const string Student = "Student";
+        public const string Employee = "Employee";
     }
 }
