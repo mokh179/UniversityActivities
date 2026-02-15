@@ -745,7 +745,7 @@
                                                                 </svg>
                                                             </div>
                                                         </a>
-                                                        <a href="?handler=participants&activityId=@item.v.Id" onclick="return loadParticipants(event, @item.v.Id)" class="menu-item w-full text-right px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors border-b border-gray-200 dark:border-gray-700 block">
+                                                        <a href="?handler=participants&activityId=@item.v.Id" onclick="return loadParticipants(event, @item.v.Id, '@item.v.TitleEn')" class="menu-item w-full text-right px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors border-b border-gray-200 dark:border-gray-700 block">
                                                             <div class="flex items-center gap-2 justify-end">
                                                                 <span class="dark:text-gray-200">المسؤولين</span>
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-lavender-600 dark:text-lavender-400">
@@ -794,34 +794,101 @@
     </div>
 </section>
 
-<!-- Modal للمشاركين -->
-@* <div class="modal fade" id="participantsModal" tabindex="-1">
-    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header bg-main-600 text-white">
-                <h5 class="modal-title">مشاركين النشاط</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <div class="mb-4">
-                    <h6 class="text-main-600 fw-bold">الملاحظين / Coordinators</h6>
-                    <ul class="list-group" id="coordinatorsList"></ul>
+<!-- Modal المسؤولين -->
+<div id="participantsModal" class="fixed inset-0 z-[99999] hidden items-center justify-center">
+    <!-- Backdrop -->
+    <div id="participantsModalBackdrop" class="fixed inset-0 z-[99998] bg-black/50 transition-opacity duration-300 opacity-0"></div>
+    
+    <!-- Modal Container -->
+    <div class="relative z-[100000] w-full max-w-3xl mx-4 my-4 flex flex-col overflow-hidden bg-white dark:bg-gray-800 rounded-xl shadow-2xl transform transition-all duration-300 scale-95 opacity-0 max-h-[90vh] overflow-y-auto">
+        <!-- HEADER -->
+        <div class="bg-gradient-to-r from-main-500 to-main-600 text-white p-5">
+            <div class="flex items-center justify-between">
+                <div class="flex-1">
+                    <div class="flex items-center gap-3 mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield-check text-white">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                            <path d="m9 12 2 2 4-4"></path>
+                        </svg>
+                        <h5 class="text-xl font-bold text-white">المسؤولون عن النشاط</h5>
+                    </div>
+                    <p id="participantsActivityTitle" class="text-white/90 text-sm">جاري التحميل...</p>
                 </div>
-                <div class="mb-4">
-                    <h6 class="text-main-600 fw-bold">المشرفين / Supervisors</h6>
-                    <ul class="list-group" id="supervisorsList"></ul>
-                </div>
-                <div>
-                    <h6 class="text-main-600 fw-bold">المشاهدين / Viewers</h6>
-                    <ul class="list-group" id="viewersList"></ul>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" data-bs-dismiss="modal">إغلاق</button>
+                <button type="button" id="closeParticipantsModalBtn" class="text-white hover:text-gray-200 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x text-white">
+                        <path d="m18 6-12 12"></path>
+                        <path d="m6 6 12 12"></path>
+                    </svg>
+                </button>
             </div>
         </div>
+
+        <!-- BODY -->
+        <div class="p-6 overflow-y-auto flex-1 max-h-[calc(90vh-140px)]">
+            <!-- Supervisors Section -->
+            <div class="mb-6 bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 rounded-xl p-4 border border-yellow-200 dark:border-yellow-800">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-yellow-500 p-2 rounded-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white lucide lucide-crown">
+                                <path d="M11.562 3.266a1 1 0 0 1 .876 0L16 4.652l2.562-1.386a1 1 0 0 1 .876 0L21.8 4.8a1 1 0 0 1 .2 1.4l-3.465 3.465a1 1 0 0 1-.332.206l-4.626 1.69a1 1 0 0 1-.954 0l-4.626-1.69a1 1 0 0 1-.332-.206L2.2 6.2a1 1 0 0 1 .2-1.4l1.362-.786Z"></path>
+                                <path d="M12 8v4"></path>
+                                <path d="M12 16h.01"></path>
+                            </svg>
+                        </div>
+                        <h6 class="text-yellow-700 dark:text-yellow-300 font-bold text-lg">المشرفين</h6>
+                    </div>
+                    <span id="supervisorsCount" class="text-yellow-600 dark:text-yellow-400 text-sm font-medium">(0 مشرف)</span>
+                </div>
+                <ul class="space-y-3" id="supervisorsList"></ul>
+            </div>
+
+            <!-- Coordinators Section -->
+            <div class="mb-6 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl p-4 border border-green-200 dark:border-green-800">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-green-500 p-2 rounded-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white lucide lucide-users">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            </svg>
+                        </div>
+                        <h6 class="text-green-700 dark:text-green-300 font-bold text-lg">المنسقين</h6>
+                    </div>
+                    <span id="coordinatorsCount" class="text-green-600 dark:text-green-400 text-sm font-medium">(0 منسق)</span>
+                </div>
+                <ul class="space-y-3" id="coordinatorsList"></ul>
+            </div>
+
+            <!-- Viewers Section -->
+            <div class="bg-gradient-to-br from-purple-50 to-violet-50 dark:from-purple-900/20 dark:to-violet-900/20 rounded-xl p-4 border border-purple-200 dark:border-purple-800">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-purple-500 p-2 rounded-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white lucide lucide-users-round">
+                                <path d="M18 21a8 8 0 0 0-16 0"></path>
+                                <circle cx="10" cy="8" r="5"></circle>
+                                <path d="M22 20c0-3.37-2-6.5-4-8a5 5 0 0 0-.46-1.3"></path>
+                            </svg>
+                        </div>
+                        <h6 class="text-purple-700 dark:text-purple-300 font-bold text-lg">المشاركين</h6>
+                    </div>
+                    <span id="viewersCount" class="text-purple-600 dark:text-purple-400 text-sm font-medium">(0 مشارك)</span>
+                </div>
+                <ul class="space-y-3" id="viewersList"></ul>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="flex justify-end gap-3 p-6 border-t border-gray-200 dark:border-gray-700">
+            <button id="closeParticipantsModalBtn2" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+                إغلاق
+            </button>
+        </div>
     </div>
-</div> *@
+</div> 
 <script src="~/js/Areas/Admin/IndexActivity.js"></script>
 <script>
     window.participantsUrl = '@Url.Page("/Activities/Index", "Participants", new { area = "Admin" })';
@@ -1394,48 +1461,158 @@
             .catch(err => console.error(err));
     }
 
-    function loadParticipants(e, activityId) {
+    // Participants Modal Functions
+    const participantsModal = document.getElementById("participantsModal");
+    const participantsModalBackdrop = document.getElementById("participantsModalBackdrop");
+    const participantsModalContent = participantsModal?.querySelector('.relative.w-full');
+
+    function openParticipantsModal() {
+        if (participantsModal && participantsModalBackdrop && participantsModalContent) {
+            participantsModal.classList.remove("hidden");
+            participantsModal.classList.add("flex");
+            document.body.style.overflow = "hidden";
+            
+            setTimeout(() => {
+                participantsModalBackdrop.classList.remove("opacity-0");
+                participantsModalBackdrop.classList.add("opacity-100");
+                participantsModalContent.classList.remove("scale-95", "opacity-0");
+                participantsModalContent.classList.add("scale-100", "opacity-100");
+            }, 10);
+        }
+    }
+
+    function closeParticipantsModal() {
+        if (participantsModal && participantsModalBackdrop && participantsModalContent) {
+            participantsModalBackdrop.classList.remove("opacity-100");
+            participantsModalBackdrop.classList.add("opacity-0");
+            participantsModalContent.classList.remove("scale-100", "opacity-100");
+            participantsModalContent.classList.add("scale-95", "opacity-0");
+            
+            setTimeout(() => {
+                participantsModal.classList.remove("flex");
+                participantsModal.classList.add("hidden");
+                document.body.style.overflow = "";
+            }, 300);
+        }
+    }
+
+    // Close buttons for Participants Modal
+    document.getElementById("closeParticipantsModalBtn")?.addEventListener("click", closeParticipantsModal);
+    document.getElementById("closeParticipantsModalBtn2")?.addEventListener("click", closeParticipantsModal);
+    participantsModalBackdrop?.addEventListener("click", closeParticipantsModal);
+
+    // Store activity data for modal
+    let currentActivityData = null;
+
+    function loadParticipants(e, activityId, activityTitle) {
         e.preventDefault();
+
+        // Set activity title
+        document.getElementById("participantsActivityTitle").textContent = activityTitle || 'جاري التحميل...';
+
+        // Open modal first
+        openParticipantsModal();
+
+        // Clear previous data
+        document.getElementById("coordinatorsList").innerHTML = "";
+        document.getElementById("supervisorsList").innerHTML = "";
+        document.getElementById("viewersList").innerHTML = "";
 
         fetch(`${window.participantsUrl}&activityId=${activityId}`)
             .then(res => res.json())
             .then(data => {
-                fillParticipants("coordinatorsList", data.coordinators);
-                fillParticipants("supervisorsList", data.supervisors);
-                fillParticipants("viewersList", data.viewer);
-
-                const modalEl = document.getElementById("participantsModal");
-                if (modalEl && typeof bootstrap !== 'undefined') {
-                    const modal = new bootstrap.Modal(modalEl);
-                    modal.show();
-                }
+                currentActivityData = data;
+                fillParticipants("supervisorsList", data.supervisors, "supervisor");
+                fillParticipants("coordinatorsList", data.coordinators, "coordinator");
+                fillParticipants("viewersList", data.viewer, "viewer");
+                
+                // Update counts
+                document.getElementById("supervisorsCount").textContent = `(${data.supervisors?.length || 0} مشرف)`;
+                document.getElementById("coordinatorsCount").textContent = `(${data.coordinators?.length || 0} منسق)`;
+                document.getElementById("viewersCount").textContent = `(${data.viewer?.length || 0} مشارك)`;
             })
-            .catch(err => console.error(err));
+            .catch(err => {
+                console.error(err);
+                alert("حدث خطأ أثناء تحميل البيانات");
+            });
 
         return false;
     }
 
-    function fillParticipants(listId, items) {
+    function getFirstLetter(name) {
+        if (!name || name.length === 0) return '?';
+        // Get first Arabic or English letter
+        const firstChar = name.trim().charAt(0);
+        return firstChar;
+    }
+
+    function fillParticipants(listId, items, type) {
         const list = document.getElementById(listId);
         if (!list) return;
 
         list.innerHTML = "";
 
         if (!items || items.length === 0) {
-            list.innerHTML = '<li class="list-group-item text-muted">لا يوجد مشاركين</li>';
+            list.innerHTML = '<li class="text-gray-500 dark:text-gray-400 text-sm py-2 text-center">لا يوجد</li>';
             return;
         }
 
+        // Define colors based on type
+        const colors = {
+            supervisor: {
+                bg: 'bg-warning-500',
+                text: 'text-warning-700 dark:text-warning-300'
+            },
+            coordinator: {
+                bg: 'bg-main-500',
+                text: 'text-main-700 dark:text-main-300'
+            },
+            viewer: {
+                bg: 'bg-lavender-500',
+                text: 'text-lavender-700 dark:text-lavender-300'
+            }
+        };
+
+        const colorScheme = colors[type] || colors.viewer;
+
         items.forEach(p => {
-            const fullName = p.fullname ?? p.fullName ?? '';
+            const fullName = p.fullname ?? p.fullName ?? p.name ?? '';
             const userName = p.username ?? p.useraname ?? p.userName ?? '';
             const participantId = p.id;
+            const firstLetter = getFirstLetter(fullName);
+
+            // Icon based on type
+            let iconSvg = '';
+            if (type === 'supervisor') {
+                iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-badge-check">
+                    <path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"></path>
+                    <path d="m9 12 2 2 4-4"></path>
+                </svg>`;
+            } else if (type === 'coordinator') {
+                iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user">
+                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>`;
+            } else {
+                iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user">
+                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>`;
+            }
 
             list.innerHTML += `
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <div>
-                        <div class="fw-semibold">${fullName}</div>
-                        <div class="text-muted small">${userName}</div>
+                <li class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex items-center gap-3">
+                        <div class="${colorScheme.bg} w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
+                            ${firstLetter}
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="font-semibold text-gray-900 dark:text-gray-200 text-base">${fullName}</div>
+                            ${userName ? `<div class="text-sm text-gray-500 dark:text-gray-400 mt-0.5">${userName}</div>` : ''}
+                        </div>
+                        <div class="${colorScheme.text} flex-shrink-0">
+                            ${iconSvg}
+                        </div>
                     </div>
                 </li>`;
         });

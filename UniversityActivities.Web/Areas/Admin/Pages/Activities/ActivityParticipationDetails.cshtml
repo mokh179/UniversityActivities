@@ -20,8 +20,8 @@
     /* تصميم زر التوسيع (+) */
     table.dataTable.dtr-inline.collapsed > tbody > tr > td.control:before,
     table.dataTable.dtr-inline.collapsed > tbody > tr > th.control:before {
-        background-color: #198754 !important;
-        border: 2px solid #198754 !important;
+        background-color: #1B8354 !important;
+        border: 2px solid #1B8354 !important;
         box-shadow: 0 2px 4px rgba(25, 135, 84, 0.2);
         width: 20px !important;
         height: 20px !important;
@@ -152,7 +152,7 @@
 
     .status-pill.attended {
         background-color: #e7f8ef;
-        color: #198754;
+        color: #1B8354;
     }
 
     .status-pill.not-attended {
@@ -433,7 +433,7 @@
                                                 @if (item.IsAttended)
                                                 {
                                                     <span class="status-pill attended">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-circle-2">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-circle-2 text-main-600">
                                                             <circle cx="12" cy="12" r="10"></circle>
                                                             <path d="m9 12 2 2 4-4"></path>
                                                         </svg>
@@ -461,7 +461,7 @@
                                                             class="inline-flex items-center gap-2 px-3 py-1.5 bg-info-600 text-white rounded-lg text-sm font-medium hover:bg-info-700 transition-colors rate-btn"
                                                             data-student-id="@item.StudentId"
                                                             data-activity-id="@Model.filter.ActivityId">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-star">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-star text-white">
                                                             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
                                                         </svg>
                                                         تقييم
@@ -543,14 +543,14 @@
         <!-- HEADER -->
         <div class="bg-gradient-to-r from-main-500 to-main-600 text-white p-5">
             <div class="flex items-center justify-between">
-                <h5 class="text-xl font-bold flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-star">
+                <h5 class="text-xl font-bold flex items-center gap-2 text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-star text-white">
                         <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
                     </svg>
                     تقييم النشاط
                 </h5>
                 <button type="button" id="closeRateModalBtn" class="text-white hover:text-gray-200 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x text-white">
                         <path d="m18 6-12 12"></path>
                         <path d="m6 6 12 12"></path>
                     </svg>
@@ -571,10 +571,10 @@
 
             <!-- Average -->
             <div class="bg-gradient-to-r from-main-500 to-main-600 text-white text-center rounded-xl py-4 mt-6">
-                <div class="text-sm opacity-90 mb-1">متوسط التقييم</div>
-                <div class="text-3xl font-bold flex items-center justify-center gap-2">
-                    <span id="averageRate">0.0</span> / 5
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="lucide lucide-star">
+                <div class="text-sm opacity-90 mb-1 text-white">متوسط التقييم</div>
+                <div class="text-3xl font-bold flex items-center justify-center gap-2 text-white">
+                    <span id="averageRate" class="text-white">0.0</span> / 5
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="lucide lucide-star text-white">
                         <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
                     </svg>
                 </div>
@@ -609,8 +609,8 @@
         <!-- HEADER -->
         <div class="bg-gradient-to-r from-main-500 to-main-600 text-white p-5">
             <div class="flex items-center justify-between">
-                <h5 class="text-xl font-bold flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-award">
+                <h5 class="text-xl font-bold flex items-center gap-2 text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-award text-white">
                         <path d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526"></path>
                         <circle cx="12" cy="8" r="6"></circle>
                     </svg>
@@ -620,7 +620,7 @@
                     <a id="downloadCertificateBtn"
                        class="inline-flex items-center gap-2 px-4 py-2 bg-white text-main-600 rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors"
                        target="_blank">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-download text-main-600">
                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                             <polyline points="7 10 12 15 17 10"></polyline>
                             <line x1="12" x2="12" y1="15" y2="3"></line>
@@ -628,7 +628,7 @@
                         تحميل
                     </a>
                     <button type="button" id="closeCertificateModalBtn" class="text-white hover:text-gray-200 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x text-white">
                             <path d="m18 6-12 12"></path>
                             <path d="m6 6 12 12"></path>
                         </svg>
@@ -763,7 +763,7 @@
                                 const td = this.closest("td");
                                 td.innerHTML = `
                                     <span class="status-pill attended">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-circle-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-circle-2 ">
                                             <circle cx="12" cy="12" r="10"></circle>
                                             <path d="m9 12 2 2 4-4"></path>
                                         </svg>
