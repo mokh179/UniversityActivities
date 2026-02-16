@@ -12,6 +12,7 @@ using UniversityActivities.Application.Implementation.ApplyUseCases.AdminActivti
 using UniversityActivities.Application.Implementation.ApplyUseCases.AdminActivties.Scan;
 using UniversityActivities.Application.Implementation.ApplyUseCases.AdminDashboard;
 using UniversityActivities.Application.Implementation.ApplyUseCases.BackgroundServices.Activity;
+using UniversityActivities.Application.Implementation.ApplyUseCases.Clubs;
 using UniversityActivities.Application.Implementation.ApplyUseCases.Evaluations;
 using UniversityActivities.Application.Implementation.ApplyUseCases.lookup;
 using UniversityActivities.Application.Implementation.ApplyUseCases.StudentActivties;
@@ -27,8 +28,9 @@ using UniversityActivities.Application.Interfaces.Repositories.Admin;
 using UniversityActivities.Application.Interfaces.Repositories.Roles;
 using UniversityActivities.Application.lookup.Interface;
 using UniversityActivities.Application.Mapping.Activities;
+using UniversityActivities.Application.UseCases.Activities.Scan;
+using UniversityActivities.Application.UseCases.Clubs;
 using UniversityActivities.Application.UserCases.Activities.Admin;
-using UniversityActivities.Application.UserCases.Activities.Scan;
 using UniversityActivities.Application.UserCases.Activities.Student;
 using UniversityActivities.Application.UserCases.Admin;
 using UniversityActivities.Application.UserCases.BackgroundServices.Interface.Activity;
@@ -221,6 +223,16 @@ public static class InfrastructureServiceRegistration
         services.AddHostedService<ActivityStatusBackgroundService>();
         services.AddScoped<IHandleActivityScanUseCase, HandleActivityScanUseCase>();
         services.AddScoped<IQRCodeGeneratorService, QRCodeGeneratorService>();
+
+        // =========================
+        // Clubs
+        // =========================
+
+        services.AddScoped<ICreateClubUseCase, CreateClubUseCase>();
+        services.AddScoped<IUpdateClubUseCase, UpdateClubUseCase>();
+        services.AddScoped<IDeleteClubUseCase, DeleteClubUseCase>();
+        services.AddScoped<IGetClubByIdUseCase, GetClubByIdUseCase>();
+        services.AddScoped<IGetPagedClubsUseCase, GetPagedClubsUseCase>();
         return services;
     }
 }

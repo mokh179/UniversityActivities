@@ -9,6 +9,7 @@ using UniversityActivities.Application.Interfaces.Repositories.Activies.AdminAct
 using UniversityActivities.Application.Interfaces.Repositories.Activies.Scan;
 using UniversityActivities.Application.Interfaces.Repositories.Activies.StudentActivies;
 using UniversityActivities.Application.Interfaces.Repositories.Clubs;
+using UniversityActivities.Application.Interfaces.Repositories.Clubs.ClubUsers;
 using UniversityActivities.Application.Interfaces.Repositories.Roles;
 using UniversityActivities.Infrastructure.Identity;
 using UniversityActivities.Infrastructure.Persistence.Repositories.Activities.Admin;
@@ -16,6 +17,7 @@ using UniversityActivities.Infrastructure.Persistence.Repositories.Activities.Ev
 using UniversityActivities.Infrastructure.Persistence.Repositories.Activities.Scan;
 using UniversityActivities.Infrastructure.Persistence.Repositories.Activities.Students;
 using UniversityActivities.Infrastructure.Persistence.Repositories.Clubs;
+using UniversityActivities.Infrastructure.Persistence.Repositories.Clubs.ClubMembers;
 using UniversityActivities.Infrastructure.Persistence.Repositories.Roles;
 
 namespace UniversityActivities.Infrastructure.Persistence
@@ -69,6 +71,10 @@ namespace UniversityActivities.Infrastructure.Persistence
         //// =========================
         public IClubRepository Clubs
             => new ClubRepository(_context);
+        public IClubUserRepository ClubUsers
+            => new ClubUserRepository(_context);
+
+        public IActivityScanRepository ActivityScanRepository => new ActivityScanRepository(_context);
 
 
 

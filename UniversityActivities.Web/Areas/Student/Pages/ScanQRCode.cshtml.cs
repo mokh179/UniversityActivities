@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Security.Claims;
 using UniversityActivities.Application.DTOs.Scan.Models;
-using UniversityActivities.Application.UserCases.Activities.Scan;
+using UniversityActivities.Application.UseCases.Activities.Scan;
 using UniversityActivities.Web.Common;
 
 namespace UniversityActivities.Web.Areas.Student.Pages

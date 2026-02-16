@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using UniversityActivities.Application.DTOs.Scan.Models;
 
-namespace UniversityActivities.Application.UserCases.Activities.Scan
+namespace UniversityActivities.Application.UseCases.Activities.Scan
 {
     public interface IHandleActivityScanUseCase
     {

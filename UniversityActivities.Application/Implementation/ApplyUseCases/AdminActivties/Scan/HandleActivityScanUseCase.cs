@@ -4,7 +4,7 @@ using System.Text;
 using UniversityActivities.Application.DTOs.Enums;
 using UniversityActivities.Application.DTOs.Scan.Models;
 using UniversityActivities.Application.Interfaces.IUnitOfWork;
-using UniversityActivities.Application.UserCases.Activities.Scan;
+using UniversityActivities.Application.UseCases.Activities.Scan;
 
 namespace UniversityActivities.Application.Implementation.ApplyUseCases.AdminActivties.Scan
 {

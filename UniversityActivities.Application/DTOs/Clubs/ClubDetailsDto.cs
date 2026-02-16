@@ -4,7 +4,7 @@ using System.Text;
 
 namespace UniversityActivities.Application.DTOs.Clubs
 {
-    public class ClubDetailsDTO
+    public class ClubDetailsDto
     {
         public int Id { get; set; }
 
