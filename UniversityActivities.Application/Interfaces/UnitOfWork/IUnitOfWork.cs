@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using UniversityActivities.Application.Interfaces.Repositories;
 using UniversityActivities.Application.Interfaces.Repositories.Activies.AdminActivies;
+using UniversityActivities.Application.Interfaces.Repositories.Activies.Scan;
 using UniversityActivities.Application.Interfaces.Repositories.Activies.StudentActivies;
 using UniversityActivities.Application.Interfaces.Repositories.Roles;
 
@@ -17,6 +18,7 @@ namespace UniversityActivities.Application.Interfaces.IUnitOfWork
         IAdminActivityRepository AdminActivities { get; }
         IActivityTargetAudienceRepository ActivityTargetAudiences { get; }
         IActivityAssignmentRepository ActivityAssignments { get; }
+        IActivityScanRepository ActivityScanRepository { get; }
 
         // =========================
         // Student Activity
