@@ -28,8 +28,7 @@ namespace UniversityActivities.Application.Implementation.ApplyUseCases.Clubs
         {
             var result = await _uow.Clubs
                 .GetPagedAsync(filter, ct);
-
-            return result;
+            return new PagedResult<ClubListDto>(_mapper.Map<List<ClubListDto>>(result.Items),result.TotalCount,result.PageNumber,result.PageSize,result.TotalPages);
         }
     }
 

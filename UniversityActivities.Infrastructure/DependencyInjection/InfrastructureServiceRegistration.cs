@@ -13,6 +13,7 @@ using UniversityActivities.Application.Implementation.ApplyUseCases.AdminActivti
 using UniversityActivities.Application.Implementation.ApplyUseCases.AdminDashboard;
 using UniversityActivities.Application.Implementation.ApplyUseCases.BackgroundServices.Activity;
 using UniversityActivities.Application.Implementation.ApplyUseCases.Clubs;
+using UniversityActivities.Application.Implementation.ApplyUseCases.Clubs.ClubUsers;
 using UniversityActivities.Application.Implementation.ApplyUseCases.Evaluations;
 using UniversityActivities.Application.Implementation.ApplyUseCases.lookup;
 using UniversityActivities.Application.Implementation.ApplyUseCases.StudentActivties;
@@ -30,6 +31,7 @@ using UniversityActivities.Application.lookup.Interface;
 using UniversityActivities.Application.Mapping.Activities;
 using UniversityActivities.Application.UseCases.Activities.Scan;
 using UniversityActivities.Application.UseCases.Clubs;
+using UniversityActivities.Application.UseCases.Clubs.Clubusers;
 using UniversityActivities.Application.UserCases.Activities.Admin;
 using UniversityActivities.Application.UserCases.Activities.Student;
 using UniversityActivities.Application.UserCases.Admin;
@@ -233,6 +235,11 @@ public static class InfrastructureServiceRegistration
         services.AddScoped<IDeleteClubUseCase, DeleteClubUseCase>();
         services.AddScoped<IGetClubByIdUseCase, GetClubByIdUseCase>();
         services.AddScoped<IGetPagedClubsUseCase, GetPagedClubsUseCase>();
+        services.AddScoped<IAddClubUserUseCase, AddClubUserUseCase>();
+        services.AddScoped<IRemoveClubUserUseCase, RemoveClubUserUseCase>();
+        services.AddScoped<IChangeClubUserRoleUseCase, ChangeClubUserRoleUseCase>();
+        services.AddScoped<IGetClubUsersUseCase, GetClubUsersUseCase>();
+
         return services;
     }
 }

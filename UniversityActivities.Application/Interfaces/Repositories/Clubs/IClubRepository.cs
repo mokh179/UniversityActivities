@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using UniversityActivities.Application.Common.Models;
+using UniversityActivities.Application.DTOs.Clubs;
 using UniversityActivities.Domain.Entities;
 
 namespace UniversityActivities.Application.Interfaces.Repositories.Clubs

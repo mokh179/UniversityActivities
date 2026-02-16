@@ -55,6 +55,7 @@ namespace UniversityActivities.Infrastructure.Persistence
         public DbSet<AttendanceScope> AttendanceScopes { get; set; }
         public DbSet<ClubDomain> ClubDomains { get; set; }
         public DbSet<Club> Clubs { get; set; }
+        public DbSet<ClubJoinRequest> ClubJoinRequests { get; set; }
 
 
         // =========================
@@ -158,7 +159,7 @@ namespace UniversityActivities.Infrastructure.Persistence
             modelBuilder.Entity<ClubMember>(entity =>
             {
                 entity.HasIndex(x => new { x.ClubId, x.UserId })
-                      .IsUnique(); // Prevent duplicate membership
+                      .IsUnique(); 
 
                 entity
                      .HasIndex(x => new { x.ClubId, x.Role })
@@ -171,6 +172,17 @@ namespace UniversityActivities.Infrastructure.Persistence
                       .OnDelete(DeleteBehavior.Cascade);
 
 
+            });
+
+            modelBuilder.Entity<ClubJoinRequest>(entity =>
+            {
+                entity.HasIndex(x => new { x.ClubId, x.UserId })
+                      .IsUnique(); 
+
+                entity.HasOne(x => x.Club)
+                      .WithMany()
+                      .HasForeignKey(x => x.ClubId)
+                      .OnDelete(DeleteBehavior.Cascade);
             });
         }
 

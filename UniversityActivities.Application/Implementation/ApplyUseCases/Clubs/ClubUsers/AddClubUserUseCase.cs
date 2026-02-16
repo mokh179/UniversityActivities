@@ -42,7 +42,7 @@ namespace UniversityActivities.Application.Implementation.ApplyUseCases.Clubs.Cl
                     throw new Exception("Club already has a President.");
             }
 
-            var entity = new ClubUser
+            var entity = new ClubMember
             {
                 ClubId = dto.ClubId,
                 UserId = dto.UserId,

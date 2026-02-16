@@ -26,7 +26,7 @@ namespace UniversityActivities.Application.Mapping.NewFolder
             //.ForMember(dest => dest.AttendanceScope, opt => opt.Ignore());
 
             // Entity → Details DTO
-            CreateMap<Club, ClubDetailsDTO>()
+            CreateMap<Club, ClubDetailsDto>()
                 .ForMember(dest => dest.ClubDomainNameAr,
                     opt => opt.MapFrom(src => src.ClubDomain.NameAr))
                 .ForMember(dest => dest.ClubDomainNameEn,

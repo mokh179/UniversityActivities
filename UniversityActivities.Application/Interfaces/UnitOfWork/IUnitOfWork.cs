@@ -40,6 +40,7 @@ namespace UniversityActivities.Application.Interfaces.IUnitOfWork
         IManagementSupervisorRepository ManagementSupervisors {  get; }
         IClubRepository Clubs {  get; }
         IClubUserRepository ClubUsers {  get; }
+        IClubJoinRequestRepository ClubJoinRequests  {  get; }
 
         // =========================
         // Persistence

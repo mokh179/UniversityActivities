@@ -18,6 +18,7 @@ using UniversityActivities.Infrastructure.Persistence.Repositories.Activities.Sc
 using UniversityActivities.Infrastructure.Persistence.Repositories.Activities.Students;
 using UniversityActivities.Infrastructure.Persistence.Repositories.Clubs;
 using UniversityActivities.Infrastructure.Persistence.Repositories.Clubs.ClubMembers;
+using UniversityActivities.Infrastructure.Persistence.Repositories.Clubs.ClubUsers;
 using UniversityActivities.Infrastructure.Persistence.Repositories.Roles;
 
 namespace UniversityActivities.Infrastructure.Persistence
@@ -75,6 +76,7 @@ namespace UniversityActivities.Infrastructure.Persistence
             => new ClubUserRepository(_context);
 
         public IActivityScanRepository ActivityScanRepository => new ActivityScanRepository(_context);
+        public IClubJoinRequestRepository ClubJoinRequests => new ClubJoinRequestRepository(_context);
 
 
 

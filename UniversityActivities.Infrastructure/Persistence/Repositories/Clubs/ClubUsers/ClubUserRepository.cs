@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using UniversityActivities.Application.DTOs.Clubs.ClubUsers;
-using UniversityActivities.Application.Interfaces.Repositories.Clubs.ClubMembers;
 using UniversityActivities.Application.Interfaces.Repositories.Clubs.ClubUsers;
 using UniversityActivities.Domain.Enums;
 

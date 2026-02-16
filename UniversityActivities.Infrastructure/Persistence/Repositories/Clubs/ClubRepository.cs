@@ -1,8 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Net.NetworkInformation;
 using System.Text;
 using UniversityActivities.Application.Common.Models;
+using UniversityActivities.Application.DTOs.Clubs;
 using UniversityActivities.Application.Interfaces.Repositories.Clubs;
 using UniversityActivities.Domain.Entities;
 
@@ -63,7 +66,7 @@ namespace UniversityActivities.Infrastructure.Persistence.Repositories.Clubs
                 items,
                 total,
                 filter.PageNumber,
-                filter.PageSize
+                filter.PageSize,filter.PageSize == 0 ? 1 : (int)Math.Ceiling(total / (double)filter.PageSize)
             );
         }
 
