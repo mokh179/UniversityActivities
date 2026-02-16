@@ -229,17 +229,17 @@
         </div>
         <!-- KPI Cards -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div class="bg-gradient-to-br from-main-500 to-main-600 p-6 rounded-xl shadow-lg hover:shadow-2xl transition-all hover:scale-105 duration-300">
+            <div class="bg-white dark:bg-gray-800 border-l-4 border-main-400 p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300">
                 <div class="flex items-center justify-between">
                     <div class="flex-1">
-                        <p class="text-white/90 text-sm mb-3">الأنشطة القادمة</p>
-                        <h3 class="text-white">@(Model.adminStatistics?.UpcomingActivities ?? 0)</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm mb-3">الأنشطة القادمة</p>
+                        <h3 class="text-gray-900 dark:text-white text-lg font-bold">@(Model.adminStatistics?.UpcomingActivities ?? 0)</h3>
                     </div>
-                    <div class="bg-white/20 backdrop-blur-sm p-4 rounded-xl">
+                    <div class="bg-main-50 dark:bg-main-900/20 p-4 rounded-xl">
                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
                              viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                              stroke-linecap="round" stroke-linejoin="round"
-                             class="lucide lucide-calendar text-white" aria-hidden="true">
+                             class="lucide lucide-calendar text-main-600 dark:text-main-400" aria-hidden="true">
                             <path d="M8 2v4"></path>
                             <path d="M16 2v4"></path>
                             <rect width="18" height="18" x="3" y="4" rx="2"></rect>
@@ -248,51 +248,51 @@
                     </div>
                 </div>
             </div>
-            <div class="bg-gradient-to-br from-gold-500 to-gold-600 p-6 rounded-xl shadow-lg hover:shadow-2xl transition-all hover:scale-105 duration-300">
+            <div class="bg-white dark:bg-gray-800 border-l-4 border-gold-400 p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300">
                 <div class="flex items-center justify-between">
                     <div class="flex-1">
-                        <p class="text-white/90 text-sm mb-3">قيد التنفيذ</p>
-                        <h3 class="text-white">@(Model.adminStatistics?.InProgressActivities ?? 0)</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm mb-3">قيد التنفيذ</p>
+                        <h3 class="text-gray-900 dark:text-white text-lg font-bold">@(Model.adminStatistics?.InProgressActivities ?? 0)</h3>
                     </div>
-                    <div class="bg-white/20 backdrop-blur-sm p-4 rounded-xl">
+                    <div class="bg-gold-50 dark:bg-gold-900/20 p-4 rounded-xl">
                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
                              viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                              stroke-linecap="round" stroke-linejoin="round"
-                             class="lucide lucide-clock text-white" aria-hidden="true">
+                             class="lucide lucide-clock text-gold-600 dark:text-gold-400" aria-hidden="true">
                             <path d="M12 6v6l4 2"></path>
                             <circle cx="12" cy="12" r="10"></circle>
                         </svg>
                     </div>
                 </div>
             </div>
-            <div class="bg-gradient-to-br from-info-500 to-info-600 p-6 rounded-xl shadow-lg hover:shadow-2xl transition-all hover:scale-105 duration-300">
+            <div class="bg-white dark:bg-gray-800 border-l-4 border-info-400 p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300">
                 <div class="flex items-center justify-between">
                     <div class="flex-1">
-                        <p class="text-white/90 text-sm mb-3">الأنشطة المكتملة</p>
-                        <h3 class="text-white">@(Model.adminStatistics?.CompletedActivities ?? 0)</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm mb-3">الأنشطة المكتملة</p>
+                        <h3 class="text-gray-900 dark:text-white text-lg font-bold">@(Model.adminStatistics?.CompletedActivities ?? 0)</h3>
                     </div>
-                    <div class="bg-white/20 backdrop-blur-sm p-4 rounded-xl">
+                    <div class="bg-info-50 dark:bg-info-900/20 p-4 rounded-xl">
                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
                              viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                              stroke-linecap="round" stroke-linejoin="round"
-                             class="lucide lucide-circle-check-big text-white" aria-hidden="true">
+                             class="lucide lucide-circle-check-big text-info-600 dark:text-info-400" aria-hidden="true">
                             <path d="M21.801 10A10 10 0 1 1 17 3.335"></path>
                             <path d="m9 11 3 3L22 4"></path>
                         </svg>
                     </div>
                 </div>
             </div>
-            <div class="bg-gradient-to-br from-lavender-500  to-lavender-600 p-6 rounded-xl shadow-lg hover:shadow-2xl transition-all hover:scale-105 duration-300">
+            <div class="bg-white dark:bg-gray-800 border-l-4 border-lavender-400 p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300">
                 <div class="flex items-center justify-between">
                     <div class="flex-1">
-                        <p class="text-white/90 text-sm mb-3">إجمالي الأنشطة</p>
-                        <h3 class="text-white">@(Model.adminStatistics?.TotalActivities ?? 0)</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm mb-3">إجمالي الأنشطة</p>
+                        <h3 class="text-gray-900 dark:text-white text-lg font-bold">@(Model.adminStatistics?.TotalActivities ?? 0)</h3>
                     </div>
-                    <div class="bg-white/20 backdrop-blur-sm p-4 rounded-xl">
+                    <div class="bg-lavender-50 dark:bg-lavender-900/20 p-4 rounded-xl">
                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
                              viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                              stroke-linecap="round" stroke-linejoin="round"
-                             class="lucide lucide-users text-white" aria-hidden="true">
+                             class="lucide lucide-users text-lavender-600 dark:text-lavender-400" aria-hidden="true">
                             <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
                             <path d="M16 3.128a4 4 0 0 1 0 7.744"></path>
                             <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
@@ -546,10 +546,10 @@
                             </div>
                         </div>
                         <div class="flex justify-between items-center mt-4">
-                            <button type="button" class="btn btn-danger" onclick="clearAllFilters()">
+                            <button type="button" class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600" onclick="clearAllFilters()">
                                 مسح الكل
                             </button>
-                            <button type="button" class="btn btn-success px-4" onclick="searchActivities(1, document.getElementById('searchForm'))">
+                            <button type="button" class="bg-success-500 text-white px-4 py-2 rounded-md hover:bg-success-600" onclick="searchActivities(1, document.getElementById('searchForm'))">
                                 بحث
                             </button>
                         </div>
