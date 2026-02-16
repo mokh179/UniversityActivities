@@ -7,11 +7,13 @@ using UniversityActivities.Application.Interfaces.IUnitOfWork;
 using UniversityActivities.Application.Interfaces.Repositories;
 using UniversityActivities.Application.Interfaces.Repositories.Activies.AdminActivies;
 using UniversityActivities.Application.Interfaces.Repositories.Activies.StudentActivies;
+using UniversityActivities.Application.Interfaces.Repositories.Clubs;
 using UniversityActivities.Application.Interfaces.Repositories.Roles;
 using UniversityActivities.Infrastructure.Identity;
 using UniversityActivities.Infrastructure.Persistence.Repositories.Activities.Admin;
 using UniversityActivities.Infrastructure.Persistence.Repositories.Activities.Evaluation;
 using UniversityActivities.Infrastructure.Persistence.Repositories.Activities.Students;
+using UniversityActivities.Infrastructure.Persistence.Repositories.Clubs;
 using UniversityActivities.Infrastructure.Persistence.Repositories.Roles;
 
 namespace UniversityActivities.Infrastructure.Persistence
@@ -60,6 +62,15 @@ namespace UniversityActivities.Infrastructure.Persistence
         //// =========================
         public IManagementSupervisorRepository ManagementSupervisors
             => new ManagementSupervisorRepository(_context);
+        //// =========================
+        //// Clubs
+        //// =========================
+        public IClubRepository Clubs
+            => new ClubRepository(_context);
+
+
+
+
 
         // =========================
         // Save

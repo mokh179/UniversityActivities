@@ -1,15 +1,21 @@
 ﻿
 
 
+using UniversityActivities.Domain.Entities;
+using UniversityActivities.Domain.Enums;
+
 public class ClubMember:AuditableEntity
 {
     [Required]
-    public int StudentClubId { get; set; }
+    public int ClubId { get; set; }
 
     [Required]
     public int UserId { get; set; }
 
     [Required]
-    public int ClubRoleId { get; set; }
+    public ClubRole Role { get; set; }
+    public Club Club { get; set; }= null!;
 }
+
+
 

@@ -4,12 +4,13 @@ using System.Text;
 
 namespace UniversityActivities.Domain.Entities
 {
-    public class Club
+    public class Club:AuditableEntity
     {
-        public int Id { get; set; }
 
         public string NameAr { get; set; } = string.Empty;
         public string NameEn { get; set; } = string.Empty;
+        public string DescEn { get; set; } = string.Empty;
+        public string DescAr { get; set; } = string.Empty;
 
         public string? ImageUrl { get; set; }
 
@@ -18,10 +19,11 @@ namespace UniversityActivities.Domain.Entities
         public int ManagementId { get; set; }
         public Management Management { get; set; } = null!;
 
-        public int AttendanceScopeId { get; set; }
-        public AttendanceScope AttendanceScope { get; set; } = null!;
 
         // Navigation
         public ICollection<Activity> Activities { get; set; } = new List<Activity>();
+        public ICollection<ClubMember> ClubMembers { get; set; } = new List<ClubMember>();
+
+        public bool IsActive { get; set; } = false;
     }
 }

@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using UniversityActivities.Domain.Common;
 using UniversityActivities.Domain.Entities;
+using UniversityActivities.Domain.Enums;
 using UniversityActivities.Domain.Lookups;
 using UniversityActivities.Infrastructure.Identity;
 
@@ -117,7 +118,7 @@ namespace UniversityActivities.Infrastructure.Persistence
 
             // One membership per user per club
             modelBuilder.Entity<ClubMember>()
-                .HasIndex(x => new { x.UserId, x.StudentClubId })
+                .HasIndex(x => new { x.UserId, x.ClubId })
                 .IsUnique();
 
 
@@ -127,6 +128,50 @@ namespace UniversityActivities.Infrastructure.Persistence
 
             modelBuilder.Entity<ActivityTargetAudience>()
                 .HasKey(x => new { x.ActivityId, x.TargetAudienceId });
+
+
+            modelBuilder.Entity<Club>(entity =>
+            {
+                entity.HasIndex(x => new { x.ManagementId, x.NameEn })
+                      .IsUnique();
+
+                entity.HasIndex(x => new { x.ManagementId, x.NameAr })
+                      .IsUnique();
+
+                entity.HasOne(x => x.Management)
+                      .WithMany()
+                      .HasForeignKey(x => x.ManagementId)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(x => x.ClubDomain)
+                      .WithMany()
+                      .HasForeignKey(x => x.ClubDomainId)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                //entity.HasOne(x => x.AttendanceScope)
+                //      .WithMany()
+                //      .HasForeignKey(x => x.AttendanceScopeId)
+                //      .OnDelete(DeleteBehavior.Restrict);
+           
+            });
+
+            modelBuilder.Entity<ClubMember>(entity =>
+            {
+                entity.HasIndex(x => new { x.ClubId, x.UserId })
+                      .IsUnique(); // Prevent duplicate membership
+
+                entity
+                     .HasIndex(x => new { x.ClubId, x.Role })
+                     .HasFilter($"[{nameof(ClubMember.Role)}] = {(int)ClubRole.President}")
+                     .IsUnique();
+
+                entity.HasOne(x => x.Club)
+                      .WithMany(x => x.ClubMembers)
+                      .HasForeignKey(x => x.ClubId)
+                      .OnDelete(DeleteBehavior.Cascade);
+
+
+            });
         }
 
         // =====================================================
