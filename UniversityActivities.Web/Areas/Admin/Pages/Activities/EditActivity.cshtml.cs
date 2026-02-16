@@ -68,7 +68,7 @@ namespace UniversityActivities.Web.Areas.Admin.Pages.Activities
                 return new JsonResult(new List<LookupDto>());
 
             var result = await _getUserManagmentQuery
-                .GetUsersinManagement(managementId);
+                .GetUsersinManagement(managementId, role = "Supervisor");
 
             return new JsonResult(result);
         }

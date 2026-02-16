@@ -164,7 +164,7 @@ namespace UniversityActivities.Infrastructure.Persistence.Repositories.Activitie
             items,
             totalCount,
             paging.PageNumber,
-            paging.PageSize);
+            paging.PageSize, paging.PageSize == 0 ? 1 : (int)Math.Ceiling(totalCount / (double)paging.PageSize));
         }
 
  

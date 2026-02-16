@@ -138,7 +138,7 @@ namespace UniversityActivities.Infrastructure.Persistence.Repositories.Activitie
                 })
                 .ToListAsync();
 
-            return new PagedResult<ActivityParticipantDto>(items,totalCount,filter.PageNumber,filter.PageSize);
+            return new PagedResult<ActivityParticipantDto>(items,totalCount,filter.PageNumber,filter.PageSize, filter.PageSize == 0 ? 1 : (int)Math.Ceiling(totalCount / (double)filter.PageSize));
         }
 
         // =========================
