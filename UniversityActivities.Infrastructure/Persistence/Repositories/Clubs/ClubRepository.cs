@@ -72,7 +72,7 @@ namespace UniversityActivities.Infrastructure.Persistence.Repositories.Clubs
 
         public Task SoftDeleteAsync(Club club)
         {
-            club.IsActive = false;
+            club.IsDeleted = true;
             _context.Clubs.Update(club);
             return Task.CompletedTask;
         }

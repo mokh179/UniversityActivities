@@ -5,7 +5,7 @@ using System.Text;
 using UniversityActivities.Application.DTOs.Clubs;
 using UniversityActivities.Domain.Entities;
 
-namespace UniversityActivities.Application.Mapping.NewFolder
+namespace UniversityActivities.Application.Mapping.Clubs
 {
     public class ClubProfile:Profile
     {

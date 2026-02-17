@@ -56,6 +56,9 @@ namespace UniversityActivities.Infrastructure.Persistence
         public DbSet<ClubDomain> ClubDomains { get; set; }
         public DbSet<Club> Clubs { get; set; }
         public DbSet<ClubJoinRequest> ClubJoinRequests { get; set; }
+        public DbSet<Report> Reports { get; set; }
+        public DbSet<ReportAttachment> ReportAttachments { get; set; }
+        public DbSet<ReportImage> ReportImages { get; set; }
 
 
         // =========================

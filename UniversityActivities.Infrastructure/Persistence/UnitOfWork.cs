@@ -10,8 +10,11 @@ using UniversityActivities.Application.Interfaces.Repositories.Activies.Scan;
 using UniversityActivities.Application.Interfaces.Repositories.Activies.StudentActivies;
 using UniversityActivities.Application.Interfaces.Repositories.Clubs;
 using UniversityActivities.Application.Interfaces.Repositories.Clubs.ClubUsers;
+using UniversityActivities.Application.Interfaces.Repositories.Reports;
 using UniversityActivities.Application.Interfaces.Repositories.Roles;
+using UniversityActivities.Domain.Entities;
 using UniversityActivities.Infrastructure.Identity;
+using UniversityActivities.Infrastructure.Persistence.Repositories;
 using UniversityActivities.Infrastructure.Persistence.Repositories.Activities.Admin;
 using UniversityActivities.Infrastructure.Persistence.Repositories.Activities.Evaluation;
 using UniversityActivities.Infrastructure.Persistence.Repositories.Activities.Scan;
@@ -77,6 +80,7 @@ namespace UniversityActivities.Infrastructure.Persistence
 
         public IActivityScanRepository ActivityScanRepository => new ActivityScanRepository(_context);
         public IClubJoinRequestRepository ClubJoinRequests => new ClubJoinRequestRepository(_context);
+        public IReportRepository Reports => new ReportRepository(_context);
 
 
 

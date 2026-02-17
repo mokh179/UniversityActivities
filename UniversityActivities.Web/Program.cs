@@ -1,6 +1,7 @@
 using Serilog;
 using UniversityActivities.Web.Middleware;
-
+using Microsoft.AspNetCore.Localization;
+using System.Globalization;
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog((context, services, configuration) =>
 {
@@ -9,7 +10,12 @@ builder.Host.UseSerilog((context, services, configuration) =>
         .ReadFrom.Services(services)
         .Enrich.FromLogContext();
 });
-
+// 1️⃣ Add Localization
+builder.Services.AddLocalization(options =>
+{
+    options.ResourcesPath = "Resources";
+});
+    
 
 // Add services to the container.
 builder.Services.AddRazorPages(options =>
@@ -34,7 +40,8 @@ builder.Services.AddRazorPages(options =>
     options.Conventions.AddAreaPageRoute("Admin", "/Activities/ViewActivity", "viewactivity");
 
 
-});
+}).AddViewLocalization()
+    .AddDataAnnotationsLocalization(); ;
 
 builder.Services.AddInfrastructure(builder.Configuration);
 QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
@@ -66,7 +73,18 @@ if (!app.Environment.IsDevelopment())
 app.UseGlobalExceptionHandling();
 
 app.UseHttpsRedirection();
+var supportedCultures = new[]
+{
+    new CultureInfo("ar-SA"),
+    new CultureInfo("en-US")
+};
 
+app.UseRequestLocalization(new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new RequestCulture("ar-SA"),
+    SupportedCultures = supportedCultures,
+    SupportedUICultures = supportedCultures
+});
 app.UseRouting();
 
 app.UseAuthentication();

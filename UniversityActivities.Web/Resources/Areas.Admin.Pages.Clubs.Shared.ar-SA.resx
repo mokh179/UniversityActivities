@@ -1,0 +1,156 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- Microsoft ResX Schema -->
+  <xsd:schema id="root"
+              xmlns=""
+              xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+              xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0</value>
+  </resheader>
+
+  <!-- ===== Page ===== -->
+  <data name="Page.Title" xml:space="preserve">
+    <value>إدارة الأندية</value>
+  </data>
+  <data name="Page.SubTitle" xml:space="preserve">
+    <value>إضافة وعرض وتعديل الأندية الطلابية</value>
+  </data>
+
+  <!-- ===== Navbar ===== -->
+  <data name="Navbar.Platform" xml:space="preserve">
+    <value>منصة الأنشطة</value>
+  </data>
+  <data name="Navbar.ToggleMenu" xml:space="preserve">
+    <value>فتح القائمة</value>
+  </data>
+  <data name="Navbar.ThemeToggle" xml:space="preserve">
+    <value>تبديل الثيم</value>
+  </data>
+  <data name="Navbar.Profile" xml:space="preserve">
+    <value>الصفحة الشخصية</value>
+  </data>
+  <data name="Navbar.Logout" xml:space="preserve">
+    <value>تسجيل خروج</value>
+  </data>
+
+  <!-- ===== Sidebar ===== -->
+  <data name="Sidebar.Home" xml:space="preserve">
+    <value>الصفحة الرئيسية</value>
+  </data>
+  <data name="Sidebar.Activities" xml:space="preserve">
+    <value>إدارة الأنشطة</value>
+  </data>
+  <data name="Sidebar.Clubs" xml:space="preserve">
+    <value>إدارة الأندية</value>
+  </data>
+  <data name="Sidebar.Reports" xml:space="preserve">
+    <value>إدارة التقارير</value>
+  </data>
+  <data name="Sidebar.SystemReports" xml:space="preserve">
+    <value>تقارير النظام</value>
+  </data>
+  <data name="Sidebar.Users" xml:space="preserve">
+    <value>إدارة المستخدمين</value>
+  </data>
+
+  <!-- ===== Buttons ===== -->
+  <data name="Button.AddClub" xml:space="preserve">
+    <value>إضافة نادي جديد</value>
+  </data>
+  <data name="Button.Search" xml:space="preserve">
+    <value>بحث</value>
+  </data>
+  <data name="Button.Clear" xml:space="preserve">
+    <value>مسح الكل</value>
+  </data>
+  <data name="Button.Details" xml:space="preserve">
+    <value>تفاصيل النادي</value>
+  </data>
+  <data name="Button.JoinRequests" xml:space="preserve">
+    <value>طلبات الانضمام</value>
+  </data>
+
+  <!-- ===== KPIs ===== -->
+  <data name="Kpi.TotalClubs" xml:space="preserve">
+    <value>إجمالي الأندية</value>
+  </data>
+  <data name="Kpi.TotalMembers" xml:space="preserve">
+    <value>إجمالي الأعضاء</value>
+  </data>
+  <data name="Kpi.TotalActivities" xml:space="preserve">
+    <value>إجمالي الأنشطة</value>
+  </data>
+
+  <!-- ===== Filter ===== -->
+  <data name="Filter.Title" xml:space="preserve">
+    <value>البحث والفلترة المتقدمة</value>
+  </data>
+  <data name="Filter.ToggleHint" xml:space="preserve">
+    <value>انقر لإظهار خيارات البحث والفلترة</value>
+  </data>
+  <data name="Filter.Placeholder.ClubName" xml:space="preserve">
+    <value>البحث عن نادي بالاسم...</value>
+  </data>
+
+  <!-- ===== Footer ===== -->
+  <data name="Footer.Copyright" xml:space="preserve">
+    <value>جميع الحقوق محفوظة © 2025 منصة الابتكار - المملكة العربية السعودية</value>
+  </data>
+
+</root>

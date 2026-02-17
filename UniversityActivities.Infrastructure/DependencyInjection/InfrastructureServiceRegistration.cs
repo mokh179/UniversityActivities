@@ -13,9 +13,11 @@ using UniversityActivities.Application.Implementation.ApplyUseCases.AdminActivti
 using UniversityActivities.Application.Implementation.ApplyUseCases.AdminDashboard;
 using UniversityActivities.Application.Implementation.ApplyUseCases.BackgroundServices.Activity;
 using UniversityActivities.Application.Implementation.ApplyUseCases.Clubs;
+using UniversityActivities.Application.Implementation.ApplyUseCases.Clubs.ClubJoinRequest;
 using UniversityActivities.Application.Implementation.ApplyUseCases.Clubs.ClubUsers;
 using UniversityActivities.Application.Implementation.ApplyUseCases.Evaluations;
 using UniversityActivities.Application.Implementation.ApplyUseCases.lookup;
+using UniversityActivities.Application.Implementation.ApplyUseCases.Reports;
 using UniversityActivities.Application.Implementation.ApplyUseCases.StudentActivties;
 using UniversityActivities.Application.Implementation.ApplyUseCases.StudentAuth;
 using UniversityActivities.Application.Implementation.Services;
@@ -26,12 +28,19 @@ using UniversityActivities.Application.Interfaces.Repositories.Activies.AdminAct
 using UniversityActivities.Application.Interfaces.Repositories.Activies.Background;
 using UniversityActivities.Application.Interfaces.Repositories.Activies.StudentActivies;
 using UniversityActivities.Application.Interfaces.Repositories.Admin;
+using UniversityActivities.Application.Interfaces.Repositories.Clubs;
+using UniversityActivities.Application.Interfaces.Repositories.Clubs.ClubUsers;
+using UniversityActivities.Application.Interfaces.Repositories.Reports;
 using UniversityActivities.Application.Interfaces.Repositories.Roles;
 using UniversityActivities.Application.lookup.Interface;
 using UniversityActivities.Application.Mapping.Activities;
+using UniversityActivities.Application.Mapping.Clubs;
+using UniversityActivities.Application.Mapping.Reports;
 using UniversityActivities.Application.UseCases.Activities.Scan;
 using UniversityActivities.Application.UseCases.Clubs;
+using UniversityActivities.Application.UseCases.Clubs.ClubJoinRequest;
 using UniversityActivities.Application.UseCases.Clubs.Clubusers;
+using UniversityActivities.Application.UseCases.Reports;
 using UniversityActivities.Application.UserCases.Activities.Admin;
 using UniversityActivities.Application.UserCases.Activities.Student;
 using UniversityActivities.Application.UserCases.Admin;
@@ -43,11 +52,15 @@ using UniversityActivities.Infrastructure.Identity;
 using UniversityActivities.Infrastructure.Identity.Services;
 using UniversityActivities.Infrastructure.Lookup;
 using UniversityActivities.Infrastructure.Persistence;
+using UniversityActivities.Infrastructure.Persistence.Repositories;
 using UniversityActivities.Infrastructure.Persistence.Repositories.Activities.Admin;
 using UniversityActivities.Infrastructure.Persistence.Repositories.Activities.BackgroundService;
 using UniversityActivities.Infrastructure.Persistence.Repositories.Activities.Evaluation;
 using UniversityActivities.Infrastructure.Persistence.Repositories.Activities.Students;
 using UniversityActivities.Infrastructure.Persistence.Repositories.Admin;
+using UniversityActivities.Infrastructure.Persistence.Repositories.Clubs;
+using UniversityActivities.Infrastructure.Persistence.Repositories.Clubs.ClubMembers;
+using UniversityActivities.Infrastructure.Persistence.Repositories.Clubs.ClubUsers;
 using UniversityActivities.Infrastructure.Persistence.Repositories.Roles;
 using UniversityActivities.Infrastructure.Persistence.Services;
 
@@ -211,6 +224,8 @@ public static class InfrastructureServiceRegistration
 
         // AutoMapper
         services.AddAutoMapper(typeof(ActivityProfile).Assembly);
+        services.AddAutoMapper(typeof(ClubProfile).Assembly);
+        services.AddAutoMapper(typeof(ReportProfile).Assembly);
 
 
         services.AddScoped<ILogOutUseCase, LogOutUseCase>();
@@ -230,6 +245,10 @@ public static class InfrastructureServiceRegistration
         // Clubs
         // =========================
 
+        services.AddScoped<IClubRepository, ClubRepository>();
+        services.AddScoped<IClubQueryRepository, ClubQueryRepository>();
+        services.AddScoped<IClubUserRepository, ClubUserRepository>();
+        services.AddScoped<IClubJoinRequestRepository, ClubJoinRequestRepository>();
         services.AddScoped<ICreateClubUseCase, CreateClubUseCase>();
         services.AddScoped<IUpdateClubUseCase, UpdateClubUseCase>();
         services.AddScoped<IDeleteClubUseCase, DeleteClubUseCase>();
@@ -239,6 +258,24 @@ public static class InfrastructureServiceRegistration
         services.AddScoped<IRemoveClubUserUseCase, RemoveClubUserUseCase>();
         services.AddScoped<IChangeClubUserRoleUseCase, ChangeClubUserRoleUseCase>();
         services.AddScoped<IGetClubUsersUseCase, GetClubUsersUseCase>();
+        services.AddScoped<IClubQueryRepository, ClubQueryRepository>();
+        services.AddScoped<IGetClubStatsUseCase, GetClubStatsUseCase>();
+        services.AddScoped<IApproveClubJoinRequestUseCase, ApproveClubJoinRequestUseCase>();
+        services.AddScoped<IRejectClubJoinRequestUseCase, RejectClubJoinRequestUseCase>();
+        services.AddScoped<ISubmitClubJoinRequestUseCase, SubmitClubJoinRequestUseCase>();
+        services.AddScoped<IGetClubStatsUseCase, GetClubStatsUseCase>();
+        services.AddScoped<IGetClubStatsUseCase, GetClubStatsUseCase>();
+
+
+        // =========================
+        // Reports
+        // =========================
+
+        services.AddScoped<IReportRepository, ReportRepository>();
+        services.AddScoped<ICreateReportUseCase, CreateReportUseCase>();
+        services.AddScoped<IUpdateReportUseCase, UpdateReportUseCase>();
+        services.AddScoped<IDeleteReportUseCase, DeleteReportUseCase>();
+
 
         return services;
     }

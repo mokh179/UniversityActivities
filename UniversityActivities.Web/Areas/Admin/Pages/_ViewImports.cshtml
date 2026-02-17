@@ -1,2 +1,13 @@
 ﻿@using UniversityActivities
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.Extensions.Localization
+@using System.Globalization
+@{
+    var isArabic = CultureInfo.CurrentUICulture.Name.StartsWith("ar");
+}
+
+@using UniversityActivities.Web.Areas.Admin.Pages.Clubs
+
+
+
+

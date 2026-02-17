@@ -1,0 +1,160 @@
+﻿@page
+@inject IStringLocalizer<ClubsSharedResource> L
+@model UniversityActivities.Web.Areas.Admin.Pages.Clubs.IndexModel
+@{
+}
+<!doctype html>
+<html lang="ar" dir="rtl" class="dark">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@L["Page.Title"]</title>
+
+    <script type="module" crossorigin src="`~/assets/main.js"></script>
+    <link rel="stylesheet" crossorigin href="~/assets/main.css">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="fixed top-0 z-[99999] w-full bg-white shadow-lg dark:bg-gray-800">
+        <div class="px-4 py-3">
+            <div class="flex items-center justify-between">
+
+                <button id="sidebar-toggle">
+                    <span class="sr-only">@L["Navbar.ToggleMenu"]</span>
+                </button>
+
+                <h1 class="text-sm font-semibold text-gray-900 dark:text-white sm:text-lg">
+                    @L["Navbar.Platform"]
+                </h1>
+
+                <div class="flex items-center gap-4">
+
+                    <span class="text-gray-600 dark:text-gray-400">
+                        @L["Navbar.Language"]
+                    </span>
+
+                    <button>
+                        @L["Navbar.Profile"]
+                    </button>
+
+                    <button class="text-red-600">
+                        @L["Navbar.Logout"]
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- SIDEBAR -->
+    <aside class="fixed top-0 h-screen w-56 bg-white dark:bg-gray-800">
+        <ul class="pt-24 space-y-2">
+
+            <li>
+                <span>@L["Sidebar.Home"]</span>
+            </li>
+
+            <li>
+                <span>@L["Sidebar.Activities"]</span>
+            </li>
+
+            <li>
+                <span>@L["Sidebar.Clubs"]</span>
+            </li>
+
+            <li>
+                <span>@L["Sidebar.Reports"]</span>
+            </li>
+
+            <li>
+                <span>@L["Sidebar.Users"]</span>
+            </li>
+
+        </ul>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="mt-24 px-6">
+
+        <!-- PAGE HEADER -->
+        <div class="rounded-2xl bg-gradient-green-2 p-5 mb-6">
+            <h2 class="text-xl font-extrabold text-white">
+                @L["Page.Title"]
+            </h2>
+
+            <p class="text-white text-sm mt-2">
+                @L["Page.SubTitle"]
+            </p>
+
+            <a class="mt-4 inline-flex items-center bg-white px-5 py-2 rounded-lg text-main-600">
+                @L["Button.AddClub"]
+            </a>
+        </div>
+
+        <!-- KPI -->
+        <div class="grid grid-cols-3 gap-4 mb-6">
+
+            <div class="bg-white p-4 rounded">
+                <p class="text-sm text-gray-600">
+                    @L["Kpi.TotalClubs"]
+                </p>
+                <h3>0</h3>
+            </div>
+
+            <div class="bg-white p-4 rounded">
+                <p class="text-sm text-gray-600">
+                    @L["Kpi.TotalMembers"]
+                </p>
+                <h3>0</h3>
+            </div>
+
+            <div class="bg-white p-4 rounded">
+                <p class="text-sm text-gray-600">
+                    @L["Kpi.TotalActivities"]
+                </p>
+                <h3>0</h3>
+            </div>
+
+        </div>
+
+        <!-- FILTER -->
+        <div class="bg-white p-6 rounded-xl">
+
+            <h4 class="font-medium">
+                @L["Filter.Title"]
+            </h4>
+
+            <p class="text-sm text-gray-500">
+                @L["Filter.ToggleHint"]
+            </p>
+
+            <input type="text"
+                   placeholder="@L["Filter.Placeholder.ClubName"]"
+                   class="form-input mt-4 w-full" />
+
+            <div class="flex gap-4 mt-4">
+                <button class="bg-red-600 text-white px-4 py-2 rounded">
+                    @L["Button.Clear"]
+                </button>
+
+                <button class="bg-main-600 text-white px-4 py-2 rounded">
+                    @L["Button.Search"]
+                </button>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="fixed bottom-0 w-full bg-white dark:bg-gray-800 border-t px-4 py-3">
+        <p class="text-xs text-gray-500 dark:text-gray-400">
+            @L["Footer.Copyright"]
+        </p>
+    </footer>
+
+</body>
+</html>

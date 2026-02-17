@@ -7,6 +7,7 @@ using UniversityActivities.Application.Interfaces.Repositories.Activies.Scan;
 using UniversityActivities.Application.Interfaces.Repositories.Activies.StudentActivies;
 using UniversityActivities.Application.Interfaces.Repositories.Clubs;
 using UniversityActivities.Application.Interfaces.Repositories.Clubs.ClubUsers;
+using UniversityActivities.Application.Interfaces.Repositories.Reports;
 using UniversityActivities.Application.Interfaces.Repositories.Roles;
 
 namespace UniversityActivities.Application.Interfaces.IUnitOfWork
@@ -41,6 +42,7 @@ namespace UniversityActivities.Application.Interfaces.IUnitOfWork
         IClubRepository Clubs {  get; }
         IClubUserRepository ClubUsers {  get; }
         IClubJoinRequestRepository ClubJoinRequests  {  get; }
+        IReportRepository Reports  {  get; }
 
         // =========================
         // Persistence

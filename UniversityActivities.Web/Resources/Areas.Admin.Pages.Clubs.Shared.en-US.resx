@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms</value>
+  </resheader>
+
+  <!-- ===== Navbar ===== -->
+  <data name="Navbar.Platform" xml:space="preserve">
+    <value>Activities Platform</value>
+  </data>
+  <data name="Navbar.ToggleMenu" xml:space="preserve">
+    <value>Toggle Menu</value>
+  </data>
+  <data name="Navbar.Profile" xml:space="preserve">
+    <value>Profile</value>
+  </data>
+  <data name="Navbar.ThemeToggle" xml:space="preserve">
+    <value>Toggle Theme</value>
+  </data>
+  <data name="Navbar.Logout" xml:space="preserve">
+    <value>Logout</value>
+  </data>
+
+  <!-- ===== Sidebar ===== -->
+  <data name="Sidebar.Home" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="Sidebar.Activities" xml:space="preserve">
+    <value>Activities Management</value>
+  </data>
+  <data name="Sidebar.Clubs" xml:space="preserve">
+    <value>Clubs Management</value>
+  </data>
+  <data name="Sidebar.Reports" xml:space="preserve">
+    <value>Reports Management</value>
+  </data>
+  <data name="Sidebar.SystemReports" xml:space="preserve">
+    <value>System Reports</value>
+  </data>
+  <data name="Sidebar.Users" xml:space="preserve">
+    <value>User Management</value>
+  </data>
+
+  <!-- ===== Page ===== -->
+  <data name="Page.Title" xml:space="preserve">
+    <value>Clubs Management</value>
+  </data>
+  <data name="Page.SubTitle" xml:space="preserve">
+    <value>Add, view, and manage student clubs</value>
+  </data>
+
+  <!-- ===== Buttons ===== -->
+  <data name="Button.AddClub" xml:space="preserve">
+    <value>Add New Club</value>
+  </data>
+  <data name="Button.Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="Button.Clear" xml:space="preserve">
+    <value>Clear All</value>
+  </data>
+  <data name="Button.Details" xml:space="preserve">
+    <value>Club Details</value>
+  </data>
+  <data name="Button.JoinRequests" xml:space="preserve">
+    <value>Join Requests</value>
+  </data>
+
+  <!-- ===== KPIs ===== -->
+  <data name="Kpi.TotalActivities" xml:space="preserve">
+    <value>Total Activities</value>
+  </data>
+  <data name="Kpi.TotalClubs" xml:space="preserve">
+    <value>Total Clubs</value>
+  </data>
+  <data name="Kpi.TotalMembers" xml:space="preserve">
+    <value>Total Members</value>
+  </data>
+
+  <!-- ===== Filters ===== -->
+  <data name="Filter.Title" xml:space="preserve">
+    <value>Advanced Search &amp; Filtering</value>
+  </data>
+  <data name="Filter.ToggleHint" xml:space="preserve">
+    <value>Click to show search and filter options</value>
+  </data>
+  <data name="Filter.Placeholder.ClubName" xml:space="preserve">
+    <value>Search club by name...</value>
+  </data>
+
+  <!-- ===== Footer ===== -->
+  <data name="Footer.Copyright" xml:space="preserve">
+    <value>All rights reserved © 2025 Innovation Platform - Saudi Arabia</value>
+  </data>
+
+</root>
