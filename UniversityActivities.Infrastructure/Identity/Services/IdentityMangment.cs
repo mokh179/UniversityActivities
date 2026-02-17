@@ -103,7 +103,7 @@ namespace UniversityActivities.Infrastructure.Identity.Services
 
 
     
-        public async Task<(int UserId, string UserName)> LoginAsync(LoginDto loginDto)
+        public async Task<(int UserId, string UserName,bool isAdmin)> LoginAsync(LoginDto loginDto)
         {
             var user = await _userManager.FindByNameAsync(loginDto.UserNameOrEmail) ?? await _userManager.FindByEmailAsync(loginDto.UserNameOrEmail);
 
@@ -118,7 +118,9 @@ namespace UniversityActivities.Infrastructure.Identity.Services
               );
             if (result==null)
                 throw new Exception("Invalid username/email or password.");
-            return (user.Id, user.UserName!);
+
+            bool isAdmin = await _userManager.IsInRoleAsync(user, "Employee");
+            return (user.Id, user.UserName!,isAdmin);
         }
         public async Task  LogoutAsync()
         {

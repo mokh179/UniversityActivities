@@ -31,8 +31,9 @@ namespace UniversityActivities.Web.Areas.Auth.Pages
             try
             {
                 var result = await _loginUseCase.ExecuteAsync(Input);
-
-                return RedirectToPage("/Index", new { area = "Student" });
+                if(!result.IsAdmin)
+                    return RedirectToPage("/Index", new { area = "Student" });
+                return RedirectToPage("/Index", new { area = "Admin" });
             }
             catch (BusinessException ex)
 

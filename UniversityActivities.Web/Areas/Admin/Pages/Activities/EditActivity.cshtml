@@ -1,95 +1,10 @@
-﻿@page "{id:int}"
+@page "{id:int}"
 @model UniversityActivities.Web.Areas.Admin.Pages.Activities.EditActivityModel
 @{
     ViewData["Title"] = "Edit Activity";
 }
-<link rel="stylesheet"href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 <style>
-    .header-card {
-        background: #1f7a4d;
-        border-radius: 8px;
-    }
-    /* ================= GENERAL ================= */
-    body {
-        background-color: #f5f7fa;
-    }
-
-    .card {
-        border: 1px solid #e5e7eb;
-        border-radius: 10px;
-    }
-
-        .card + .card {
-            margin-top: 1.25rem;
-        }
-
-    .card-header {
-        background-color: #f9fafb;
-        border-bottom: 1px solid #e5e7eb;
-        padding: 0.85rem 1.25rem;
-    }
-
-    .card-body {
-        padding: 1.25rem;
-    }
-
-    .form-label {
-        font-size: 0.85rem;
-        font-weight: 600;
-        color: #374151;
-    }
-
-    .form-control,
-    .form-select {
-        font-size: 0.9rem;
-        border-radius: 8px;
-    }
-
-        .form-control:focus,
-        .form-select:focus {
-            border-color: #4f46e5;
-            box-shadow: 0 0 0 0.1rem rgba(79, 70, 229, 0.15);
-        }
-
-    /* ================= HEADER ================= */
-    .header-card {
-        background: linear-gradient(135deg, #15803d, #166534);
-        border: none;
-        border-radius: 12px;
-    }
-
-        .header-card h5 {
-            font-weight: 600;
-        }
-
-        .header-card small {
-            font-size: 0.8rem;
-        }
-
-    /* ================= IMAGE CARD ================= */
-    .card img {
-        background-color: #f3f4f6;
-    }
-
-    .card input[type="file"] {
-        font-size: 0.85rem;
-    }
-
-    /* ================= SECTION TITLES ================= */
-    .card-header .fw-semibold {
-        font-size: 0.95rem;
-    }
-
-    .card-header small {
-        font-size: 0.75rem;
-    }
-
-    /* ================= MULTI SELECT ================= */
-    select[multiple] {
-        min-height: 110px;
-    }
-
-    /* ================= ROLES SECTION ================= */
+    /* Role chips - match Edit logic */
     #supervisorsChips,
     #coordinatorsChips,
     #participantsChips {
@@ -97,66 +12,43 @@
         flex-wrap: wrap;
         gap: 6px;
     }
-
-    /* chip */
     .role-chip {
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        background-color: #eef2ff;
-        color: #3730a3;
+        background: #ecfdf5;
+        color: #065f46;
         border-radius: 999px;
-        padding: 4px 10px;
-        font-size: 0.75rem;
+        padding: 6px 12px;
+        font-size: 0.8rem;
         font-weight: 500;
+        border: 1px solid #a7f3d0;
     }
-
-        .role-chip button {
-            border: none;
-            background: transparent;
-            color: #6b7280;
-            font-size: 0.8rem;
-            cursor: pointer;
-        }
-
-            .role-chip button:hover {
-                color: #dc2626;
-            }
-
-    /* ================= SWITCH ================= */
-    .form-switch .form-check-input {
-        width: 2.4em;
-        height: 1.2em;
+    .role-chip button {
+        border: none;
+        background: #d1fae5;
+        color: #065f46;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        font-size: 14px;
+        line-height: 1;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
-
-    /* ================= BUTTONS ================= */
-    .btn-light {
-        font-weight: 600;
-        border-radius: 8px;
+    .role-chip button:hover {
+        background: #86efac;
     }
-
-    .btn-success {
-        border-radius: 8px;
-    }
-
-    /* ================= SPACING ================= */
-    .row.mb-3 {
-        margin-bottom: 1rem !important;
-    }
-
-    /* ================= ICON ================= */
-    .bi {
-        font-size: 1.1rem;
-    }
-    /* ===== Target Audience Cards ===== */
+    /* Target audience cards */
     .audience-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill,minmax(200px,1fr));
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
         gap: 12px;
     }
-
     .audience-card {
-        border: 1px solid #e5e7eb;
+        border: 2px solid #e5e7eb;
         border-radius: 12px;
         padding: 14px;
         cursor: pointer;
@@ -165,16 +57,20 @@
         background: #fff;
         transition: .2s;
     }
-
-        .audience-card.active {
-            border-color: #22c55e;
-            background: #f0fdf4;
-        }
-
-        .audience-card input {
-            display: none;
-        }
-
+    .dark .audience-card {
+        border-color: #4b5563;
+        background: #1f2937;
+    }
+    .audience-card.active {
+        border-color: #1B8354;
+        background: #f0fdf4;
+    }
+    .dark .audience-card.active {
+        background: rgba(27, 131, 84, 0.2);
+    }
+    .audience-card input {
+        display: none;
+    }
     .audience-icon {
         width: 36px;
         height: 36px;
@@ -185,381 +81,646 @@
         align-items: center;
         justify-content: center;
     }
+    .dark .audience-icon {
+        background: rgba(27, 131, 84, 0.3);
+        color: #86efac;
+    }
+    input[type="checkbox"], input[type="radio"] {
+        accent-color: #1B8354 !important;
+    }
+    /* Multi-select menu (like AddActivity) */
+    .multi-select-menu {
+        max-height: 300px;
+        overflow-y: auto;
+    }
+    .multi-select-item {
+        transition: background-color 0.2s;
+    }
+    .multi-select-item:hover {
+        background-color: #f3f4f6;
+    }
+    .dark .multi-select-item:hover {
+        background-color: #374151;
+    }
+    .multi-select-item.bg-main-50,
+    .dark .multi-select-item.bg-main-900\/20 {
+        background-color: rgba(27, 131, 84, 0.1);
+    }
 </style>
 
-
-
-
-<form method="post" id="editForm" enctype="multipart/form-data">
-    <input type="hidden" asp-for="Input.Id" disabled />
-    <!-- ================= HEADER ================= -->
-    <div class="card header-card mb-4">
-        <div class="card-body d-flex justify-content-between align-items-center">
-            <div>
-                <h5 class="mb-1 text-white">Edit Activity</h5>
-                <small class="text-white-50">
-                    Update activity information and settings
-                </small>
-            </div>
-
-            <button type="submit" class="btn btn-light btn-sm">
-                Save Changes
-            </button>
-        </div>
-    </div>
-
-    <!-- ================= ACTIVITY IMAGE ================= -->
-    <div class="card shadow-sm mb-4">
-        <div class="card-header fw-semibold">
-            Activity Image
-            <small class="text-muted d-block">
-                Upload or change the activity image
-            </small>
-        </div>
-
-        <div class="card-body">
-            <div class="d-flex align-items-center gap-3">
-                <img id="imagePreview"
-                     src="@Model.Input.ImageUrl"
-                     style="width:120px;height:80px;object-fit:cover"
-                     class="rounded border" />
-
-                <input type="file"
-                       id="imageInput"
-                       name="ImageFile"
-                       accept="image/*"
-                       class="form-control mt-2" />
-
-                <input type="hidden" id="isImageChanged" name="IsImageChanged" value="false" />
-            </div>
-        </div>
-    </div>
-
-    <!-- ================= BASIC INFORMATION ================= -->
-    <div class="card shadow-sm mb-4">
-        <div class="card-header d-flex align-items-center gap-2">
-            <i class="bi bi-info-circle text-primary"></i>
-            <div>
-                <div class="fw-semibold">Basic Information</div>
-                <small class="text-muted">Main activity details</small>
+<section class="animate-fade-in px-6 pb-8">
+    <div class="mb-4 space-y-4">
+        <!-- Welcome banner -->
+        <div class="rounded-2xl border border-neutral-200 bg-gradient-green-2 p-5 shadow-sm dark:border-neutral-700 dark:bg-gray-900">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center gap-4">
+                    <a href="/Admin/Activities/Index"
+                       class="p-2.5 bg-white/20 hover:bg-white/30 rounded-lg transition-all hover:scale-105">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22"
+                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                             stroke-linecap="round" stroke-linejoin="round"
+                             class="lucide lucide-arrow-right text-white" aria-hidden="true">
+                            <path d="M5 12h14"></path>
+                            <path d="m12 5 7 7-7 7"></path>
+                        </svg>
+                    </a>
+                    <div class="flex flex-col justify-between gap-1">
+                        <h2 class="text-sm tracking-tight text-white sm:text-lg lg:text-lg">
+                            تعديل النشاط
+                        </h2>
+                        <p class="text-white text-sm">
+                            تحديث معلومات النشاط والإعدادات
+                        </p>
+                    </div>
+                </div>
+                <button type="submit" form="editForm"
+                        class="px-6 py-2.5 rounded-lg transition-all font-bold text-sm bg-white text-main-700 hover:bg-gray-100 shadow-md">
+                    حفظ التغييرات
+                </button>
             </div>
         </div>
 
-        <div class="card-body">
+        <form method="post" id="editForm" enctype="multipart/form-data" class="space-y-6">
+            <input type="hidden" asp-for="Input.Id" />
 
-            <!-- Titles -->
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <label class="form-label">Title (English)</label>
-                    <input asp-for="Input.TitleEn" class="form-control" />
-                </div>
-
-                <div class="col-md-6">
-                    <label class="form-label">Title (Arabic)</label>
-                    <input asp-for="Input.TitleAr" class="form-control" />
-                </div>
-            </div>
-
-            <!-- Activity Code -->
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <label class="form-label">Activity Code</label>
-                    <input asp-for="Input.ActivityCode" class="form-control" />
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">Gender</label>
-                    <div> @foreach (var item in Model.Lookups.AttendanceScopes) {
-                    <div class="form-check"> <input asp-for="Input.AttendanceScopeId" class="form-check-input" type="radio" value="@item.Id" /> <label class="form-check-label"> @item.NameEn </label> </div>
-                                       
-                    }
- </div>
-                </div>
-            </div>
-
-            <!-- Management Type -->
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <label class="form-label">Management Type</label>
-                    <select asp-for="Input.ManagementTypeId"
-                            id="managementTypeSelect"
-                            class="form-select">
-                        <option value="">Select management type</option>
-                        @foreach (var item in Model.Lookups.ManagementTypes)
-                        {
-                            <option value="@item.Id">@item.NameEn</option>
-                        }
-                    </select>
-                </div>
-
-                <div class="col-md-6">
-                    <label class="form-label">Management</label>
-                    <select asp-for="Input.ManagementId"
-                            id="managementSelect"
-                            class="form-select">
-                        <option value="">Select management</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- Club -->
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <label class="form-label">Club</label>
-                    <select asp-for="Input.ClubId"
-                            id="clubSelect"
-                            class="form-select">
-                        <option value="">Select club</option>
-                    </select>
-                </div>
-
-                <div class="col-md-6">
-                    <label class="form-label">Activity Type</label>
-                    <select asp-for="Input.ActivityTypeId"
-                            class="form-select">
-                        <option value="">Select activity type</option>
-                        @foreach (var item in Model.Lookups.ActivityTypes)
-                        {
-                            <option value="@item.Id">@item.NameEn</option>
-                        }
-                    </select>
-                </div>
-            </div>
-
-            <label class="form-label">Target Audiences</label>
-            <div class="audience-grid mb-3">
-                @foreach (var a in Model.Lookups.TargetAudiences)
-                {
-                    var selected = Model.Input.TargetAudienceIds.Contains(a.Id);
-                    <label class="audience-card @(selected ? "active" : "")">
-                        <input type="checkbox"
-                               name="Input.TargetAudienceIds"
-                               value="@a.Id"
-                               @(selected ? "checked" : "") />
-                        <div class="audience-icon">
-                            <i class="bi bi-people"></i>
+            <!-- Activity Image -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-200 dark:border-gray-700">
+                <div class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 px-6 py-3 border-b border-gray-200 dark:border-gray-700">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-main-600 p-2 rounded-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                 stroke-linejoin="round" class="lucide lucide-image text-white" aria-hidden="true">
+                                <rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect>
+                                <circle cx="9" cy="9" r="2"></circle>
+                                <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path>
+                            </svg>
                         </div>
                         <div>
-                            <div class="fw-semibold">@a.NameEn</div>
-                            <small class="text-muted">Audience</small>
+                            <h3 class="text-sm font-medium text-gray-800 dark:text-gray-200">صورة النشاط</h3>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">تحميل أو تغيير صورة النشاط</p>
                         </div>
-                    </label>
-                }
-            </div>
-
-            <label class="form-label">Description</label>
-            <textarea asp-for="Input.DescriptionEn" rows="4" class="form-control"></textarea>
-
-            <!-- Description -->
-            <div>
-                <label class="form-label">Description</label>
-                <textarea asp-for="Input.DescriptionAr"
-                          rows="4"
-                          class="form-control"></textarea>
-            </div>
-
-        </div>
-    </div>
-
-    <!-- ================= ATTENDANCE ================= -->
-    <div class="card shadow-sm mb-4">
-        <!-- ATTENDANCE -->
-        <div class="card mb-4">
-            <div class="card-header fw-semibold">Attendance & Location</div>
-            <div class="card-body">
-
-                <label class="form-label">Attendance Mode</label>
-                <select asp-for="Input.AttendanceModeId"
-                        id="attendanceModeSelect"
-                        class="form-select mb-3">
-                    @foreach (var m in Model.Lookups.AttendanceModes)
-                    {
-                        <option value="@m.Id">@m.NameEn</option>
-                    }
-                </select>
-
-                <div class="row">
-                    <div class="col-md-6" id="locationWrapper">
-                        <label class="form-label">Location</label>
-                        <input asp-for="Input.LocationEn" class="form-control">
-                    </div>
-                    <div class="col-md-6" id="onlineLinkWrapper">
-                        <label class="form-label">Online Link</label>
-                        <input asp-for="Input.OnlineLink" class="form-control">
                     </div>
                 </div>
-
+                <div class="p-4">
+                    <div class="flex items-center gap-4">
+                        <div class="relative w-24 h-24 flex-shrink-0 bg-gradient-to-br from-main-600/10 to-main-700/10 p-2 rounded-lg flex items-center justify-center overflow-hidden">
+                            <img id="imagePreview"
+                                 src="@(Model.Input.ImageUrl ?? "")"
+                                 alt="Activity"
+                                 class="w-full h-full object-cover rounded-lg"
+                                 style="@(string.IsNullOrEmpty(Model.Input.ImageUrl) ? "display:none" : "")" />
+                            <div id="imagePlaceholder" class="absolute inset-0 flex items-center justify-center" style="@(string.IsNullOrEmpty(Model.Input.ImageUrl) ? "" : "display:none")">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-main-600">
+                                    <rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect>
+                                    <circle cx="9" cy="9" r="2"></circle>
+                                    <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="flex-1">
+                            <input type="file"
+                                   id="imageInput"
+                                   name="ImageFile"
+                                   accept="image/*"
+                                   class="hidden" />
+                            <input type="hidden" id="isImageChanged" name="IsImageChanged" value="false" />
+                            <label for="imageInput" class="inline-flex items-center gap-2 bg-gradient-to-r from-main-600 to-main-700 text-white px-4 py-2 rounded-lg shadow-md hover:shadow-lg transition-all hover:scale-105 cursor-pointer">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="lucide lucide-upload text-white">
+                                    <path d="M12 3v12"></path>
+                                    <path d="m17 8-5-5-5 5"></path>
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                </svg>
+                                <span class="text-sm text-white">@(string.IsNullOrEmpty(Model.Input.ImageUrl) ? "اختيار صورة" : "تغيير الصورة")</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
+
+            <!-- Basic Information -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 overflow-visible">
+                <div class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-info-600 p-2 rounded-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                 stroke-linejoin="round" class="lucide lucide-file-text text-white" aria-hidden="true">
+                                <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"></path>
+                                <path d="M14 2v5a1 1 0 0 0 1 1h5"></path>
+                                <path d="M10 9H8"></path>
+                                <path d="M16 13H8"></path>
+                                <path d="M16 17H8"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-medium text-gray-800 dark:text-gray-200">المعلومات الأساسية</h3>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">المعلومات الأساسية للنشاط</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-6 space-y-5">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">عنوان النشاط (عربي)</label>
+                            <input asp-for="Input.TitleAr" class="form-input" placeholder="أدخل عنوان النشاط بالعربية" />
+                        </div>
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">عنوان النشاط (إنجليزي)</label>
+                            <input asp-for="Input.TitleEn" class="form-input" placeholder="Enter activity title in English" dir="ltr" />
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">نوع الشطر</label>
+                            <div class="flex flex-wrap items-center gap-4 p-4 bg-gray-50 dark:bg-gray-500 rounded-lg border-2 border-gray-200 dark:border-gray-700">
+                                @foreach (var item in Model.Lookups.AttendanceScopes)
+                                {
+                                    <label class="flex items-center gap-2 cursor-pointer px-4 py-2 rounded-lg hover:bg-white dark:hover:bg-gray-700 transition-colors">
+                                        <input asp-for="Input.AttendanceScopeId" class="w-4 h-4 text-main-600 focus:ring-main-600" type="radio" value="@item.Id" />
+                                        <span class="text-gray-700 font-medium dark:text-gray-200">@item.NameEn</span>
+                                    </label>
+                                }
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">الجهة المنظمة</label>
+                            <select asp-for="Input.ManagementTypeId" id="managementTypeSelect" class="form-select">
+                                <option value="">اختر نوع الجهة المنظمة</option>
+                                @foreach (var item in Model.Lookups.ManagementTypes)
+                                {
+                                    <option value="@item.Id">@item.NameEn</option>
+                                }
+                            </select>
+                            <div class="space-y-2 mt-3">
+                                <label class="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">الإدارة</label>
+                                <select asp-for="Input.ManagementId" id="managementSelect" class="form-select">
+                                    <option value="">اختر الإدارة</option>
+                                </select>
+                            </div>
+                            <div class="space-y-2 mt-3">
+                                <label class="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">النادي</label>
+                                <select asp-for="Input.ClubId" id="clubSelect" class="form-select">
+                                    <option value="">اختر النادي</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                                <span>الفئة المستفيدة</span><span class="text-xs text-gray-500">(يمكن اختيار أكثر من فئة)</span>
+                            </label>
+                            <div class="relative">
+                                @foreach (var item in Model.Lookups.TargetAudiences)
+                                {
+                                    <input type="checkbox" name="Input.TargetAudienceIds" value="@item.Id" class="hidden target-audience-checkbox" id="targetAudience_@item.Id" @(Model.Input.TargetAudienceIds.Contains(item.Id) ? "checked" : "") />
+                                }
+                                <button type="button" id="btn-beneficiaryCategory" data-menu-id="menu-beneficiaryCategory" data-placeholder="اختر الفئة المستفيدة"
+                                        class="form-select w-full text-right">
+                                    <span class="text-gray-700 dark:text-gray-200" id="beneficiaryCategory-label">اختر الفئة المستفيدة</span>
+                                </button>
+                                <div id="selected-beneficiaryCategory" class="flex flex-wrap gap-2 mt-2"></div>
+                                <div id="menu-beneficiaryCategory" class="multi-select-menu hidden absolute z-[9999] w-full mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg overflow-hidden">
+                                    @foreach (var item in Model.Lookups.TargetAudiences)
+                                    {
+                                        var isSelected = Model.Input.TargetAudienceIds.Contains(item.Id);
+                                        <div class="multi-select-item px-4 py-2 cursor-pointer flex items-center gap-2 border-b border-gray-200 dark:border-gray-700 @(isSelected ? "bg-main-50 dark:bg-main-900/20" : "")" data-value="@item.Id">
+                                            <input type="checkbox" class="w-4 h-4 text-main-600 rounded focus:ring-main-500 pointer-events-none" @(isSelected ? "checked" : "")>
+                                            <span class="text-gray-700 dark:text-gray-200">@item.NameEn</span>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">مجال النشاط</label>
+                            <select asp-for="Input.ActivityTypeId" class="form-select">
+                                <option value="">اختر مجال النشاط</option>
+                                @foreach (var item in Model.Lookups.ActivityTypes)
+                                {
+                                    <option value="@item.Id">@item.NameEn</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">الوصف (إنجليزي)</label>
+                            <textarea asp-for="Input.DescriptionEn" class="form-input" rows="4" placeholder="Enter description..."></textarea>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">الوصف (عربي)</label>
+                            <textarea asp-for="Input.DescriptionAr" class="form-input" rows="4" placeholder="أدخل الوصف..."></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- تفاصيل الحضور والمكان (نفس ترتيب AddActivity) -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-200 dark:border-gray-700">
+                <div class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-gold-600 p-2 rounded-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                 stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin text-white" aria-hidden="true">
+                                <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-medium text-gray-800 dark:text-gray-200">تفاصيل الحضور والمكان</h3>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">نوع الحضور ومكان أو رابط النشاط</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-6 space-y-5">
+                    <div class="space-y-2">
+                        <label class="flex items-center gap-2">
+                            <span class="form-label text-sm font-medium text-gray-700 dark:text-gray-300">نوع الحضور</span><span class="text-red-500">*</span>
+                        </label>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            @{
+                                var attendanceModes = Model.Lookups.AttendanceModes.ToList();
+                                var isOnsiteFirst = attendanceModes.Count >= 2 && attendanceModes[0].NameEn?.ToLower().Contains("online") != true;
+                            }
+                            @for (var i = 0; i < attendanceModes.Count; i++)
+                            {
+                                var m = attendanceModes[i];
+                                var isOnsite = (attendanceModes.Count == 1) || (i == 0 && isOnsiteFirst) || (i == 1 && !isOnsiteFirst);
+                                <label class="flex items-center gap-3 cursor-pointer p-4 border-2 border-gray-200 dark:border-gray-600 rounded-lg hover:border-main-600 transition-all hover:shadow-md bg-white dark:bg-gray-700/50">
+                                    <input type="radio" name="Input.AttendanceModeId" class="w-4 h-4 text-main-600 focus:ring-main-600" value="@m.Id" @(Model.Input.AttendanceModeId == m.Id ? "checked" : "") />
+                                    @if (isOnsite)
+                                    {
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="lucide lucide-map-pin text-main-600"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                        <span class="text-gray-700 dark:text-gray-200 font-medium">حضوري</span>
+                                    }
+                                    else
+                                    {
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="lucide lucide-globe text-main-600"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg>
+                                        <span class="text-gray-700 dark:text-gray-200 font-medium">إلكتروني (أونلاين)</span>
+                                    }
+                                </label>
+                            }
+                        </div>
+                    </div>
+                    <div class="space-y-2" id="locationWrapper">
+                        <label class="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="lucide lucide-map-pin text-main-600"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                            <span>مكان النشاط</span><span class="text-red-500">*</span>
+                        </label>
+                        <input asp-for="Input.LocationEn" class="form-input" placeholder="أدخل مكان النشاط" />
+                    </div>
+                    <div class="space-y-2 hidden" id="linkWrapper">
+                        <label class="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="lucide lucide-globe text-main-600"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg>
+                            <span>رابط الاجتماع</span><span class="text-red-500">*</span>
+                        </label>
+                        <input asp-for="Input.OnlineLink" type="url" class="form-input" placeholder="أدخل رابط الاجتماع" />
+                    </div>
+                    <div class="space-y-2">
+                        <label class="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="lucide lucide-file-text text-main-600"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"></path><path d="M14 2v5a1 1 0 0 0 1 1h5"></path><path d="M10 9H8"></path><path d="M16 13H8"></path><path d="M16 17H8"></path></svg>
+                            <span class="form-label">دليل الترميز</span><span class="text-xs text-gray-500 font-normal">(اختياري)</span>
+                        </label>
+                        <input asp-for="Input.ActivityCode" class="form-input" placeholder="أدخل دليل الترميز" />
+                        <p class="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1.5 mr-1">
+                            <svg class="w-3.5 h-3.5 text-warning-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
+                            <span class="form-label">سيتم إضافة هذا الدليل في شهادات النشاط</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- الأدوار والمسؤوليات (نفس ترتيب AddActivity: منسق → مشرف → مشاهد) -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-200 dark:border-gray-700">
+                <div class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-lavender-600 p-2 rounded-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                 stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users text-white" aria-hidden="true">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                <path d="M16 3.128a4 4 0 0 1 0 7.744"></path>
+                                <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-medium text-gray-800 dark:text-gray-200">الأدوار والمسؤوليات</h3>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">تحديد المنسقين والمشرفين والمشاهدين</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-6 space-y-6">
+                    <div class="space-y-2">
+                        <label class="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="lucide lucide-briefcase text-main-600"><path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path><rect width="20" height="14" x="2" y="6" rx="2"></rect></svg>
+                            <span class="form-label">منسق النشاط</span><span class="text-xs text-gray-500 dark:text-gray-400">(يمكن اختيار أكثر من منسق)</span>
+                        </label>
+                        <select id="coordinatorsSelect" class="form-select">
+                            <option value="">اختر المنسقين</option>
+                        </select>
+                        <div class="mt-2" id="coordinatorsChips"></div>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="lucide lucide-award text-info-600"><path d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526"></path><circle cx="12" cy="8" r="6"></circle></svg>
+                            <span class="form-label">المشرف</span><span class="text-xs text-gray-500 dark:text-gray-400">(يمكن اختيار أكثر من مشرف)</span>
+                        </label>
+                        <select id="supervisorsSelect" class="form-select">
+                            <option value="">اختر المشرفين</option>
+                        </select>
+                        <div class="mt-2" id="supervisorsChips"></div>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="lucide lucide-user-check text-lavender-600"><path d="m16 11 2 2 4-4"></path><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+                            <span class="form-label">المشاهد</span><span class="text-xs text-gray-500 dark:text-gray-400">(يمكن اختيار أكثر من مشاهد)</span>
+                        </label>
+                        <select id="participantsSelect" class="form-select">
+                            <option value="">اختر المشاهدين</option>
+                        </select>
+                        <div class="mt-2" id="participantsChips"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- التاريخ والوقت -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-200 dark:border-gray-700">
+                <div class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-teal-600 p-2 rounded-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                 stroke-linejoin="round" class="lucide lucide-calendar text-white" aria-hidden="true">
+                                <path d="M8 2v4"></path>
+                                <path d="M16 2v4"></path>
+                                <rect width="18" height="18" x="3" y="4" rx="2"></rect>
+                                <path d="M3 10h18"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-medium text-gray-800 dark:text-gray-200">التاريخ والوقت</h3>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">حدد موعد بداية ونهاية النشاط</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-6 space-y-5">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="lucide lucide-calendar text-teal-600"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>
+                                <span>تاريخ ووقت البداية</span><span class="text-red-500">*</span>
+                            </label>
+                            <input type="datetime-local" asp-for="Input.StartDate" asp-format="{0:yyyy-MM-ddTHH:mm}" class="form-input" required />
+                        </div>
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="lucide lucide-calendar text-teal-600"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>
+                                <span>تاريخ ووقت النهاية</span><span class="text-red-500">*</span>
+                            </label>
+                            <input type="datetime-local" asp-for="Input.EndDate" asp-format="{0:yyyy-MM-ddTHH:mm}" class="form-input" required />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- العرض على الموقع الرسمي (نفس AddActivity) -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-200 dark:border-gray-700">
+                <div class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-lavender-600 p-2 rounded-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                 stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-globe text-white" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+                                <path d="M2 12h20"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-medium text-gray-800 dark:text-gray-200">العرض على الموقع الرسمي</h3>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">هل تريد عرض هذا النشاط على الموقع الرسمي للجامعة؟</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div class="space-y-2">
+                        <label class="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+                            <span>العرض على الموقع</span><span class="text-red-500">*</span>
+                        </label>
+                        <div class="space-y-3">
+                            <div class="relative">
+                                <select id="publishSelect" class="form-select" required>
+                                    <option value="">اختر</option>
+                                    @if (Model.Input.IsPublished)
+                                    {
+                                        <option value="true" selected>نعم</option>
+                                        <option value="false">لا</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="true">نعم</option>
+                                        <option value="false" selected>لا</option>
+                                    }
+                                </select>
+                                <input type="hidden" id="publishCheckbox" name="Input.IsPublished" value="@(Model.Input.IsPublished ? "true" : "false")" />
+                            </div>
+                            <div id="publishInfoBox" class="mt-1 p-4 rounded-lg border-2 @(Model.Input.IsPublished ? "bg-gradient-to-r from-main-50 to-main-100/50 border-main-200" : "bg-gray-50 border-gray-200")">
+                                <div class="flex items-start gap-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="flex-shrink-0 mt-0.5 @(Model.Input.IsPublished ? "text-main-600" : "text-gray-600")">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+                                        <path d="M2 12h20"></path>
+                                    </svg>
+                                    <div class="flex-1">
+                                        <p id="publishInfoTitle" class="text-sm font-semibold mb-1">@(Model.Input.IsPublished ? "سيتم نشر النشاط" : "لن يتم عرض النشاط")</p>
+                                        <p id="publishInfoDescription" class="text-xs">@(Model.Input.IsPublished ? "سيتم نشر النشاط على الموقع الرسمي للجامعة وسيكون مرئياً لجميع الزوار" : "لن يتم عرض النشاط على الموقع الرسمي وسيبقى داخلياً في النظام فقط")</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex gap-4">
+                <a href="/Admin/Activities/Index"
+                   class="px-6 py-2.5 border-2 border-gray-300 text-gray-700 dark:border-gray-600 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-all font-semibold text-sm">
+                    إلغاء
+                </a>
+                <button type="submit"
+                        class="px-6 py-2.5 rounded-lg transition-all font-bold text-sm bg-gradient-to-r from-main-600 to-main-700 text-white hover:shadow-xl">
+                    حفظ التغييرات
+                </button>
+            </div>
+        </form>
     </div>
-
-    <!-- ================= DATE & PUBLISH ================= -->
-    <div class="card shadow-sm mb-4">
-        <div class="card-header fw-semibold">
-            Date & Publish
-        </div>
-
-        <div class="card-body">
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <label class="form-label">Start Date</label>
-                    <input asp-for="Input.StartDate"
-                           type="date"
-                           class="form-control" />
-                </div>
-
-                <div class="col-md-6">
-                    <label class="form-label">End Date</label>
-                    <input asp-for="Input.EndDate"
-                           type="date"
-                           class="form-control" />
-                </div>
-            </div>
-
-            <div class="form-check form-switch">
-                <input asp-for="Input.IsPublished"
-                       class="form-check-input"
-                       type="checkbox" />
-                <label class="form-check-label">
-                    Publish Activity
-                </label>
-            </div>
-        </div>
-    </div>
-
-    <!-- ================= ROLES ================= -->
-    <div class="card shadow-sm mb-4">
-        <div class="card-header fw-semibold">
-            Activity Roles
-        </div>
-
-        <div class="card-body">
-            <div class="row g-3">
-
-                <div class="col-md-4">
-                    <label class="form-label">Supervisors</label>
-                    <select id="supervisorsSelect" class="form-select">
-                        <option value="">Select supervisor</option>
-                    </select>
-                    <div class="mt-2" id="supervisorsChips"></div>
-                </div>
-
-                <div class="col-md-4">
-                    <label class="form-label">Coordinators</label>
-                    <select id="coordinatorsSelect" class="form-select">
-                        <option value="">Select coordinator</option>
-                    </select>
-                    <div class="mt-2" id="coordinatorsChips"></div>
-                </div>
-
-                <div class="col-md-4">
-                    <label class="form-label">Participants</label>
-                    <select id="participantsSelect" class="form-select">
-                        <option value="">Select participant</option>
-                    </select>
-                    <div class="mt-2" id="participantsChips"></div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-</form>
-
-
+</section>
 
 <script>
     /* ================= IMAGE PREVIEW + FLAG ================= */
     const imageInput = document.getElementById("imageInput");
     const imagePreview = document.getElementById("imagePreview");
+    const imagePlaceholder = document.getElementById("imagePlaceholder");
     const isImageChangedInput = document.getElementById("isImageChanged");
 
     if (imageInput && imagePreview) {
         imageInput.addEventListener("change", function () {
             const file = this.files[0];
             if (!file) return;
-
             const reader = new FileReader();
-            reader.onload = e => imagePreview.src = e.target.result;
+            reader.onload = e => {
+                imagePreview.src = e.target.result;
+                imagePreview.style.display = "block";
+                if (imagePlaceholder) imagePlaceholder.style.display = "none";
+            };
             reader.readAsDataURL(file);
-
-            // 🔥 علّم إن الصورة اتغيرت
             isImageChangedInput.value = "true";
         });
     }
 
+    /* الفئة المستفيدة - multi-select (مثل AddActivity) */
+    (function () {
+        const btn = document.getElementById("btn-beneficiaryCategory");
+        const menu = document.getElementById("menu-beneficiaryCategory");
+        const label = document.getElementById("beneficiaryCategory-label");
+        const selectedContainer = document.getElementById("selected-beneficiaryCategory");
+        if (!btn || !menu) return;
+        function updateBeneficiaryUI() {
+            const checkboxes = document.querySelectorAll(".target-audience-checkbox:checked");
+            const ids = Array.from(checkboxes).map(cb => cb.value);
+            const names = Array.from(checkboxes).map(cb => menu.querySelector(`[data-value="${cb.value}"] span`)?.textContent?.trim() || cb.value);
+            if (label) label.textContent = ids.length === 0 ? "اختر الفئة المستفيدة" : (ids.length + (ids.length === 1 ? " فئة محددة" : " فئات محددة"));
+            if (selectedContainer) {
+                selectedContainer.innerHTML = "";
+                names.forEach((name, i) => {
+                    const tag = document.createElement("div");
+                    tag.className = "inline-flex items-center gap-1.5 px-3 py-1.5 bg-main-100 dark:bg-main-900/30 text-main-700 dark:text-main-300 rounded-lg text-sm";
+                    tag.innerHTML = `<span>${name}</span><button type="button" class="remove-tag text-main-600 hover:text-main-800" data-value="${ids[i]}" aria-label="إزالة">×</button>`;
+                    tag.querySelector("button").addEventListener("click", function (e) {
+                        e.preventDefault();
+                        const cb = document.getElementById("targetAudience_" + this.dataset.value);
+                        if (cb) { cb.checked = false; syncMenuCheckbox(this.dataset.value, false); updateBeneficiaryUI(); }
+                    });
+                    selectedContainer.appendChild(tag);
+                });
+            }
+        }
+        function syncMenuCheckbox(value, checked) {
+            const item = menu.querySelector(`[data-value="${value}"]`);
+            if (item) {
+                const chk = item.querySelector('input[type="checkbox"]');
+                if (chk) chk.checked = checked;
+                item.classList.toggle("bg-main-50", checked);
+                item.classList.toggle("dark:bg-main-900/20", checked);
+            }
+        }
+        btn.addEventListener("click", function (e) {
+            e.stopPropagation();
+            menu.classList.toggle("hidden");
+        });
+        menu.addEventListener("click", function (e) {
+            const item = e.target.closest(".multi-select-item");
+            if (!item) return;
+            e.stopPropagation();
+            const value = item.getAttribute("data-value");
+            const cb = document.getElementById("targetAudience_" + value);
+            if (cb) {
+                cb.checked = !cb.checked;
+                syncMenuCheckbox(value, cb.checked);
+                updateBeneficiaryUI();
+            }
+        });
+        document.addEventListener("click", function () { menu.classList.add("hidden"); });
+        updateBeneficiaryUI();
+    })();
 
-        /* Target audience cards */
-    document.querySelectorAll(".audience-card").forEach(c=>{
-     const cb=c.querySelector("input");
-     c.addEventListener("click",()=>{
-       cb.checked=!cb.checked;
-       c.classList.toggle("active",cb.checked);
-     });
-    });
-
-    /* Attendance toggle */
-    const attendance=document.getElementById("attendanceModeSelect");
-    const loc=document.getElementById("locationWrapper");
-    const link=document.getElementById("onlineLinkWrapper");
-
-    const ONLINE_ID=1;
-    const ONSITE_ID=2;
-
-    function toggleAttendance(){
-     if(attendance.value==ONLINE_ID){
-       link.style.display="block"; loc.style.display="none";
-     }else if(attendance.value==ONSITE_ID){
-       loc.style.display="block"; link.style.display="none";
-     }else{
-       loc.style.display="none"; link.style.display="none";
-     }
+    /* نوع الحضور - radio: حضوري → مكان النشاط، إلكتروني → رابط الاجتماع */
+    const ONSITE_ID = 1;  /* حضوري: إظهار مكان النشاط، إخفاء رابط الاجتماع */
+    const ONLINE_ID = 2;  /* إلكتروني: إظهار رابط الاجتماع، إخفاء مكان النشاط */
+    const loc = document.getElementById("locationWrapper");
+    const link = document.getElementById("linkWrapper");
+    function toggleAttendanceFromRadio() {
+        const radio = document.querySelector('input[name="Input.AttendanceModeId"]:checked');
+        const val = radio ? radio.value : "";
+        if (val == ONSITE_ID) {
+            /* حضوري */
+            if (loc) { loc.style.display = "block"; loc.classList.remove("hidden"); }
+            if (link) { link.style.display = "none"; link.classList.add("hidden"); }
+        } else if (val == ONLINE_ID) {
+            /* إلكتروني */
+            if (link) { link.style.display = "block"; link.classList.remove("hidden"); }
+            if (loc) { loc.style.display = "none"; loc.classList.add("hidden"); }
+        } else {
+            if (loc) { loc.style.display = "none"; loc.classList.add("hidden"); }
+            if (link) { link.style.display = "none"; link.classList.add("hidden"); }
+        }
     }
-    toggleAttendance();
-    attendance.addEventListener("change",toggleAttendance);
+    document.querySelectorAll('input[name="Input.AttendanceModeId"]').forEach(r => r.addEventListener("change", toggleAttendanceFromRadio));
+    toggleAttendanceFromRadio();
+
+    /* العرض على الموقع - select + صندوق المعلومات */
+    (function () {
+        const publishSelect = document.getElementById("publishSelect");
+        const publishCheckbox = document.getElementById("publishCheckbox");
+        const publishInfoBox = document.getElementById("publishInfoBox");
+        const publishInfoTitle = document.getElementById("publishInfoTitle");
+        const publishInfoDescription = document.getElementById("publishInfoDescription");
+        if (!publishSelect || !publishCheckbox) return;
+        function updatePublishUI(value) {
+            const v = value === "true" || value === "false" ? value : "";
+            publishCheckbox.value = v || "false";
+            if (!publishInfoBox) return;
+            if (v === "") {
+                publishInfoBox.style.display = "none";
+            } else {
+                publishInfoBox.style.display = "block";
+                if (v === "true") {
+                    publishInfoBox.className = "mt-1 p-4 rounded-lg border-2 bg-gradient-to-r from-main-50 to-main-100/50 border-main-200";
+                    if (publishInfoTitle) publishInfoTitle.textContent = "سيتم نشر النشاط";
+                    if (publishInfoDescription) publishInfoDescription.textContent = "سيتم نشر النشاط على الموقع الرسمي للجامعة وسيكون مرئياً لجميع الزوار";
+                } else {
+                    publishInfoBox.className = "mt-1 p-4 rounded-lg border-2 bg-gray-50 border-gray-200";
+                    if (publishInfoTitle) publishInfoTitle.textContent = "لن يتم عرض النشاط";
+                    if (publishInfoDescription) publishInfoDescription.textContent = "لن يتم عرض النشاط على الموقع الرسمي وسيبقى داخلياً في النظام فقط";
+                }
+            }
+        }
+        publishSelect.addEventListener("change", function () { updatePublishUI(this.value); });
+        // Initialize with current value from model
+        const initialValue = publishSelect.value;
+        updatePublishUI(initialValue);
+    })();
 
     document.addEventListener("DOMContentLoaded", async function () {
-
-        /* ================= ELEMENTS ================= */
         const form = document.getElementById("editForm");
-
         const managementTypeSelect = document.getElementById("managementTypeSelect");
         const managementSelect = document.getElementById("managementSelect");
         const clubSelect = document.getElementById("clubSelect");
-
         const supervisorsSelect = document.getElementById("supervisorsSelect");
         const coordinatorsSelect = document.getElementById("coordinatorsSelect");
         const participantsSelect = document.getElementById("participantsSelect");
-
         const supervisorsChips = document.getElementById("supervisorsChips");
         const coordinatorsChips = document.getElementById("coordinatorsChips");
         const participantsChips = document.getElementById("participantsChips");
 
-        /* ================= DATA FROM SERVER ================= */
-        const existingAssignments = @Html.Raw(
-                        System.Text.Json.JsonSerializer.Serialize(Model.Input.Assignments)
-                );
-
+        const existingAssignments = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Input.Assignments ?? new List<UniversityActivities.Application.DTOs.Activities.ActivityAssignmentDto>()));
         const usersMap = new Map();
 
-        /* ================= PRELOAD ================= */
         const selectedManagementTypeId = managementTypeSelect?.value;
         const selectedManagementId = "@Model.Input.ManagementId";
         const selectedClubId = "@Model.Input.ClubId";
 
+        // تحميل البيانات الأولية
         if (selectedManagementTypeId) {
             await loadManagements(selectedManagementTypeId);
-
             if (selectedManagementId) {
                 managementSelect.value = selectedManagementId;
                 await loadClubsAndUsers(selectedManagementId);
-
-                if (selectedClubId) {
-                    clubSelect.value = selectedClubId;
-                }
+                if (selectedClubId) clubSelect.value = selectedClubId;
             }
         }
 
-        /* ================= EVENTS ================= */
         managementTypeSelect?.addEventListener("change", async function () {
             resetAll();
             if (!this.value) return;
@@ -573,35 +734,23 @@
             await loadClubsAndUsers(this.value);
         });
 
-        supervisorsSelect?.addEventListener("change", () =>
-            handleRoleSelect(supervisorsSelect, supervisorsChips, 1)
-        );
-        coordinatorsSelect?.addEventListener("change", () =>
-            handleRoleSelect(coordinatorsSelect, coordinatorsChips, 2)
-        );
-        participantsSelect?.addEventListener("change", () =>
-            handleRoleSelect(participantsSelect, participantsChips, 3)
-        );
+        supervisorsSelect?.addEventListener("change", () => handleRoleSelect(supervisorsSelect, supervisorsChips, 1));
+        coordinatorsSelect?.addEventListener("change", () => handleRoleSelect(coordinatorsSelect, coordinatorsChips, 2));
+        participantsSelect?.addEventListener("change", () => handleRoleSelect(participantsSelect, participantsChips, 3));
 
-        /* ================= LOADERS ================= */
         async function loadManagements(typeId) {
-            resetSelect(managementSelect, "Select management");
-
+            resetSelect(managementSelect, "اختر الإدارة");
             const res = await fetch(`?handler=ManagementsByType&managementTypeId=${typeId}`);
             const data = await res.json();
-
             data.forEach(m => managementSelect.add(new Option(m.nameEn, m.id)));
         }
 
         async function loadClubsAndUsers(managementId) {
-
-            resetSelect(clubSelect, "Select club");
+            resetSelect(clubSelect, "اختر النادي");
             const clubs = await (await fetch(`?handler=ClubsByManagement&managementId=${managementId}`)).json();
             clubs.forEach(c => clubSelect.add(new Option(c.nameEn, c.id)));
-
             resetUsers();
             usersMap.clear();
-
             const users = await (await fetch(`?handler=UsersByManagement&managementId=${managementId}`)).json();
             users.forEach(u => {
                 usersMap.set(u.id, u.name);
@@ -609,33 +758,36 @@
                 coordinatorsSelect.add(new Option(u.name, u.id));
                 participantsSelect.add(new Option(u.name, u.id));
             });
-
             preloadAssignments();
         }
 
-        /* ================= ASSIGNMENTS ================= */
+        
         function preloadAssignments() {
-            if (!existingAssignments) return;
-
+            if (!existingAssignments || existingAssignments.length === 0) return;
+            
             existingAssignments.forEach(a => {
-                const name = usersMap.get(a.UserId);
+                // التعامل مع كل من PascalCase و camelCase
+                const userId = parseInt(a.UserId || a.userId);
+                const roleId = parseInt(a.ActivityRoleId || a.activityRoleId);
+                
+                if (!userId || !roleId) return;
+                
+                const name = usersMap.get(userId);
                 if (!name) return;
-
-                const container =
-                    a.ActivityRoleId === 1 ? supervisorsChips :
-                    a.ActivityRoleId === 2 ? coordinatorsChips :
-                    participantsChips;
-
-                addChip(container, a.UserId, name, a.ActivityRoleId);
+                
+                // Supervisor = 1, Coordinator = 2, Viewer = 3
+                const container = roleId === 1 ? supervisorsChips : roleId === 2 ? coordinatorsChips : roleId === 3 ? participantsChips : null;
+                
+                if (container && !container.querySelector(`[data-user-id="${userId}"]`)) {
+                    addChip(container, userId, name, roleId);
+                }
             });
         }
 
         function handleRoleSelect(select, container, roleId) {
             const userId = select.value;
             if (!userId) return;
-
             if (container.querySelector(`[data-user-id="${userId}"]`)) return;
-
             addChip(container, userId, select.options[select.selectedIndex].text, roleId);
             select.value = "";
         }
@@ -645,88 +797,68 @@
             chip.className = "role-chip";
             chip.dataset.userId = userId;
             chip.dataset.roleId = roleId;
-
             chip.innerHTML = `<span>${name}</span><button type="button">&times;</button>`;
             chip.querySelector("button").onclick = () => {
                 chip.remove();
                 restoreOption(roleId, userId, name);
             };
-
             removeOption(roleId, userId);
             container.appendChild(chip);
         }
 
-        /* ================= HELPERS ================= */
         function getSelect(roleId) {
-            return roleId === 1 ? supervisorsSelect :
-                   roleId === 2 ? coordinatorsSelect :
-                   participantsSelect;
+            return roleId === 1 ? supervisorsSelect : roleId === 2 ? coordinatorsSelect : participantsSelect;
         }
-
         function removeOption(roleId, userId) {
             const opt = getSelect(roleId).querySelector(`option[value="${userId}"]`);
             if (opt) opt.remove();
         }
-
         function restoreOption(roleId, userId, name) {
             const select = getSelect(roleId);
             if (!select.querySelector(`option[value="${userId}"]`))
                 select.add(new Option(name, userId));
         }
-
         function clearChips() {
             supervisorsChips.innerHTML = "";
             coordinatorsChips.innerHTML = "";
             participantsChips.innerHTML = "";
         }
-
         function resetSelect(select, text) {
             select.innerHTML = "";
             select.add(new Option(text, ""));
         }
-
         function resetUsers() {
-            resetSelect(supervisorsSelect, "Select supervisor");
-            resetSelect(coordinatorsSelect, "Select coordinator");
-            resetSelect(participantsSelect, "Select participant");
+            resetSelect(coordinatorsSelect, "اختر المنسقين");
+            resetSelect(supervisorsSelect, "اختر المشرفين");
+            resetSelect(participantsSelect, "اختر المشاهدين");
         }
-
         function resetAfterManagement() {
-            resetSelect(clubSelect, "Select club");
+            resetSelect(clubSelect, "اختر النادي");
             resetUsers();
         }
-
         function resetAll() {
-            resetSelect(managementSelect, "Select management");
+            clearChips();
+            resetSelect(managementSelect, "اختر الإدارة");
             resetAfterManagement();
         }
 
-        /* ================= BEFORE SUBMIT ================= */
         form.addEventListener("submit", function () {
-
-            // شيل أي hidden inputs قديمة
             document.querySelectorAll(".assignment-hidden").forEach(x => x.remove());
-
             const chips = document.querySelectorAll(".role-chip");
-
             chips.forEach((chip, index) => {
-
                 const userInput = document.createElement("input");
                 userInput.type = "hidden";
                 userInput.name = `Input.Assignments[${index}].UserId`;
                 userInput.value = chip.dataset.userId;
                 userInput.classList.add("assignment-hidden");
-
                 const roleInput = document.createElement("input");
                 roleInput.type = "hidden";
                 roleInput.name = `Input.Assignments[${index}].ActivityRoleId`;
                 roleInput.value = chip.dataset.roleId;
                 roleInput.classList.add("assignment-hidden");
-
                 form.appendChild(userInput);
                 form.appendChild(roleInput);
             });
         });
-
     });
 </script>

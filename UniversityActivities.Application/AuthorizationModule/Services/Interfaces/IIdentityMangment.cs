@@ -18,7 +18,7 @@ namespace UniversityActivities.Application.AuthorizationModule.Services.Interfac
 
         Task<(int UserId, string UserName, List<Claim> Claims)> GenerateClaimsAsync(int userId);
 
-        Task<(int UserId, string UserName)>LoginAsync(LoginDto loginDto);
+        Task<(int UserId, string UserName, bool isAdmin)>LoginAsync(LoginDto loginDto);
         Task LogoutAsync();
     }
 }

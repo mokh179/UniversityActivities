@@ -21,16 +21,16 @@ namespace UniversityActivities.Application.Implementation.ApplyUseCases.StudentA
         }
         public async Task<LoginResponseDto> ExecuteAsync(LoginDto dto)
         {
-            var (userId, user) =await _identityService.LoginAsync(dto);
+            var (userId, user,IsAdmin) =await _identityService.LoginAsync(dto);
             var (id, userName, claims) =
                 await _identityService.GenerateClaimsAsync(userId);
             var token = _jwtTokenGenerator.GenerateToken(claims);
-
             return new LoginResponseDto
             {
                 UserId = userId,
                 UserName = userName,
-                Token = token
+                Token = token,
+                IsAdmin= IsAdmin
             };
         }
     }

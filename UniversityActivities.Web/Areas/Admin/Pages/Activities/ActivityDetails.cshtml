@@ -4,43 +4,644 @@
     ViewData["Title"] = "Activity Details";
 }
 
-<style>
-    .header-card {
-        background: #1f7a4d;
-        color: #fff;
-    }
+<section class="animate-fade-in px-6 pb-8">
 
-    .section-header {
-        font-weight: 600;
-    }
 
-        .section-header.blue {
-            background: #e7f1ff;
-        }
+    <div class="space-y-6 pb-8">
+        <div class="bg-gradient-to-r from-main-700 to-main-600 rounded-xl shadow-xl overflow-hidden">
+            <div class="p-6">
+                <div class="flex items-center justify-between">
+                    <a asp-area="Admin" asp-page="/Activities/Index" class="p-2 bg-white/20 hover:bg-white/30 rounded-lg transition-all hover:scale-105">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                             stroke-linecap="round" stroke-linejoin="round"
+                             class="lucide lucide-arrow-right text-white" aria-hidden="true">
+                            <path d="M5 12h14"></path>
+                            <path d="m12 5 7 7-7 7"></path>
+                        </svg>
+                    </a>
+                    <h2 class="text-white font-bold text-2xl">
+                        @(Model.Activity?.TitleAr ?? "تفاصيل النشاط")
+                    </h2>
+                    <div class="flex items-center gap-3">
+                        <button class="flex items-center gap-2 bg-white text-main-700 px-3 py-2 rounded-lg hover:bg-white/90 transition-all hover:shadow-lg font-medium text-sm"
+                                title="رمز QR للتسجيل">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                 stroke-linecap="round" stroke-linejoin="round"
+                                 class="lucide lucide-qr-code" aria-hidden="true">
+                                <rect width="5" height="5" x="3" y="3" rx="1"></rect>
+                                <rect width="5" height="5" x="16" y="3" rx="1"></rect>
+                                <rect width="5" height="5" x="3" y="16" rx="1"></rect>
+                                <path d="M21 16h-3a2 2 0 0 0-2 2v3"></path>
+                                <path d="M21 21v.01"></path>
+                                <path d="M12 7v3a2 2 0 0 1-2 2H7"></path>
+                                <path d="M3 12h.01"></path>
+                                <path d="M12 3h.01"></path>
+                                <path d="M12 16v.01"></path>
+                                <path d="M16 12h1"></path>
+                                <path d="M21 12v.01"></path>
+                                <path d="M12 21v-1"></path>
+                            </svg><span>QR</span>
+                        </button>
+                        <a asp-area="Admin" asp-page="/Activities/EditActivity" asp-route-id="@Model.Activity?.Id" class="flex items-center gap-2 bg-info-600 text-white px-3 py-2 rounded-lg hover:bg-info-700 transition-all hover:shadow-lg font-medium text-sm"
+                           title="تعديل النشاط">
+                            <svg class="text-white dark:text-gray-200 lucide lucide-pen"
+                                 xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                 stroke-linecap="round" stroke-linejoin="round" 
+                                 aria-hidden="true">
+                                <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z">
+                                </path>
+                            </svg><span class="text-white dark:text-gray-200">تعديل</span>
+                        </a>
+                        <button type="button" id="deleteBtn" class="flex items-center gap-2 bg-red-600 text-white px-3 py-2 rounded-lg hover:bg-red-700 transition-all hover:shadow-lg font-medium text-sm"
+                                title="حذف النشاط">
+                            <svg class="text-white dark:text-gray-200 lucide lucide-trash2 lucide-trash-2"
+                                 xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                 stroke-linecap="round" stroke-linejoin="round"
+                                  aria-hidden="true">
+                                <path d="M10 11v6"></path>
+                                <path d="M14 11v6"></path>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path>
+                                <path d="M3 6h18"></path>
+                                <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            </svg><span class="text-white dark:text-gray-200">حذف</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-1 bg-white dark:bg-gray-800 rounded-xl shadow-lg border-2 border-gray-100 dark:border-gray-700 overflow-hidden"
+                 data-fg-bb2a26=":207.29176:/components/ActivityDetailsPage.tsx:149:11:6146:842:e:div:ete">
+                <div class="bg-gradient-to-r from-lavender-50 to-lavender-100 dark:from-gray-700 dark:to-gray-800 px-6 py-4 border-b-2 border-lavender-200 dark:border-gray-700">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-gradient-to-r from-lavender-600 to-lavender-700 p-2.5 rounded-lg shadow-md">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                 stroke-linecap="round" stroke-linejoin="round"
+                                 class="lucide lucide-image text-white" aria-hidden="true">
+                                <rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect>
+                                <circle cx="9" cy="9" r="2"></circle>
+                                <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path>
+                            </svg>
+                        </div>
+                        <h3 class="font-semibold text-gray-800 dark:text-gray-200">
+                            صورة النشاط
+                        </h3>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <div class="relative overflow-hidden rounded-lg shadow-md">
+                        @if (!string.IsNullOrEmpty(Model.Activity?.ImageUrl))
+                        {
+                            <img src="@Model.Activity.ImageUrl" alt="@Model.Activity.TitleAr" class="w-full h-80 object-cover">
+                        }
+                        else
+                        {
+                            <div class="w-full h-80 bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-400">
+                                    <rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect>
+                                    <circle cx="9" cy="9" r="2"></circle>
+                                    <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path>
+                                </svg>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="lg:col-span-2 bg-white dark:bg-gray-800 rounded-xl shadow-lg border-2 border-gray-100 dark:border-gray-700 overflow-hidden">
+                <div class="bg-gradient-to-r from-info-50 to-info-100 dark:from-gray-700 dark:to-gray-800 px-6 py-4 border-b-2 border-info-200 dark:border-gray-700">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-gradient-to-r from-info-600 to-info-700 p-2.5 rounded-lg shadow-md">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                 stroke-linecap="round" stroke-linejoin="round"
+                                 class="lucide lucide-info text-white" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M12 16v-4"></path>
+                                <path d="M12 8h.01"></path>
+                            </svg>
+                        </div>
+                        <h3 class="font-semibold text-gray-800 dark:text-gray-200 text-lg">
+                            المعلومات الأساسية
+                        </h3>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+                            <label class="form-label text-xs uppercase tracking-wide mb-2 block">
+                                عنوان
+                                النشاط (عربي)
+                            </label>
+                            <p class="text-gray-900 dark:text-gray-200 font-bold text-lg">
+                                @(Model.Activity?.TitleAr ?? "-")
+                            </p>
+                        </div>
+                        <div class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+                            <label class="form-label text-xs uppercase tracking-wide mb-2 block">
+                                عنوان
+                                النشاط (English)
+                            </label>
+                            <p class="text-gray-900 dark:text-gray-200 font-bold text-lg" dir="ltr">
+                                @(Model.Activity?.TitleEn ?? "-")
+                            </p>
+                        </div>
+                        <div class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+                            <label class="form-label text-xs uppercase tracking-wide mb-2 block">
+                                مجال
+                                النشاط
+                            </label>
+                            <p class="text-gray-900 dark:text-gray-200 font-medium text-base">
+                                @(Model.Activity?.ActivityTypeNameAr ?? "-")
+                            </p>
+                        </div>
+                        <div class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+                            <label class="form-label text-xs uppercase tracking-wide mb-2 block">
+                                نوع
+                                الشطر
+                            </label>
+                            <p class="text-gray-900 dark:text-gray-200 font-medium text-base">
+                                @(Model.Activity?.TargetAudiencesAr?.FirstOrDefault() ?? "-")
+                            </p>
+                        </div>
+                        <div class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+                            <label class="form-label text-xs uppercase tracking-wide mb-2 block">
+                                الجهة
+                                المنظمة
+                            </label>
+                            <p class="text-gray-900 dark:text-gray-200 font-bold text-base">
+                                @(Model.Activity?.ClubNameAr ?? Model.Activity?.ManagementNameAr ?? "-")
+                            </p>
+                        </div>
+                        <div class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+                            <label class="form-label text-xs uppercase tracking-wide mb-2 block">
+                                الفئة
+                                المستفيدة
+                            </label>
+                            <p class="text-gray-900 dark:text-gray-200 font-bold text-base">
+                                @if (Model.Activity?.TargetAudiencesAr != null && Model.Activity.TargetAudiencesAr.Any())
+                                {
+                                    @string.Join("، ", Model.Activity.TargetAudiencesAr)
+                                }
+                                else
+                                {
+                                    <text>-</text>
+                                }
+                            </p>
+                        </div>
+                        <div class="md:col-span-2 bg-gradient-to-r from-gray-50 to-gray-100 p-4 rounded-lg border border-gray-200">
+                            <label class="form-label text-xs uppercase tracking-wide mb-2 flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                     class="lucide lucide-file-text text-gray-600 dark:text-gray-400" aria-hidden="true"
+                                     data-fg-bb2a79=":207.29176:/components/ActivityDetailsPage.tsx:205:19:10220:48:e:FileText::::::B1i5">
+                                    <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
+                                    </path>
+                                    <path d="M14 2v5a1 1 0 0 0 1 1h5"></path>
+                                    <path d="M10 9H8"></path>
+                                    <path d="M16 13H8"></path>
+                                    <path d="M16 17H8"></path>
+                                </svg><span class="form-label">
+                                    وصف
+                                    النشاط
+                                </span>
+                            </label>
+                            <p class="text-gray-900 dark:text-gray-200 leading-relaxed text-base whitespace-pre-wrap">
+                                @(Model.Activity?.DescriptionAr ?? "-")
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border-2 border-gray-100 dark:border-gray-700 overflow-hidden">
+                <div class="bg-gradient-to-r from-warning-50 to-orange-100 dark:from-gray-700 dark:to-gray-800 px-6 py-4 border-b-2 border-orange-200 dark:border-gray-700">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-gradient-to-r from-orange-600 to-orange-700 p-2.5 rounded-lg shadow-md">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                 stroke-linecap="round" stroke-linejoin="round"
+                                 class="lucide lucide-calendar text-white" aria-hidden="true">
+                                <path d="M8 2v4"></path>
+                                <path d="M16 2v4"></path>
+                                <rect width="18" height="18" x="3" y="4" rx="2"></rect>
+                                <path d="M3 10h18"></path>
+                            </svg>
+                        </div>
+                        <h3 class="font-semibold text-gray-800 dark:text-gray-200 text-lg">
+                            التاريخ والوقت
+                        </h3>
+                    </div>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+                            <label class="form-label text-xs uppercase tracking-wide mb-2 flex items-center gap-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                     class="lucide lucide-calendar text-orange-600" aria-hidden="true">
+                                    <path d="M8 2v4"></path>
+                                    <path d="M16 2v4"></path>
+                                    <rect width="18" height="18" x="3" y="4" rx="2"></rect>
+                                    <path d="M3 10h18"></path>
+                                </svg><span class="form-label">
+                                    تاريخ
+                                    البداية
+                                </span>
+                            </label>
+                            <p class="text-gray-900 dark:text-gray-200 font-bold text-lg">
+                                @(Model.Activity?.StartDate.ToString("yyyy-MM-dd") ?? "-")
+                            </p>
+                        </div>
+                        <div class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+                            <label class="form-label text-xs uppercase tracking-wide mb-2  flex items-center gap-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                     class="lucide lucide-calendar text-orange-600" aria-hidden="true">
+                                    <path d="M8 2v4"></path>
+                                    <path d="M16 2v4"></path>
+                                    <rect width="18" height="18" x="3" y="4" rx="2"></rect>
+                                    <path d="M3 10h18"></path>
+                                </svg><span class="form-label">
+                                    تاريخ
+                                    النهاية
+                                </span>
+                            </label>
+                            <p class="text-gray-900 dark:text-gray-200 font-bold text-lg">
+                                @(Model.Activity?.EndDate.ToString("yyyy-MM-dd") ?? "-")
+                            </p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+                            <label class="form-label text-xs uppercase tracking-wide mb-2  flex items-center gap-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                     class="lucide lucide-clock text-orange-600" aria-hidden="true">
+                                    <path d="M12 6v6l4 2"></path>
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                </svg><span class="form-label">
+                                    وقت
+                                    البداية
+                                </span>
+                            </label>
+                            <p class="text-gray-900 dark:text-gray-200 font-bold text-lg">
+                                @(Model.Activity?.StartDate.ToString("HH:mm") ?? "-")
+                            </p>
+                        </div>
+                        <div class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+                            <label class="form-label text-xs uppercase tracking-wide mb-2  flex items-center gap-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                     class="lucide lucide-clock text-orange-600" aria-hidden="true">
+                                    <path d="M12 6v6l4 2"></path>
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                </svg><span class="form-label">
+                                    وقت
+                                    النهاية
+                                </span>
+                            </label>
+                            <p class="text-gray-900 dark:text-gray-200 font-bold text-lg">
+                                @(Model.Activity?.EndDate.ToString("HH:mm") ?? "-")
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border-2 border-gray-100 dark:border-gray-700 overflow-hidden">
+                <div class="bg-gradient-to-r from-pink-50 to-pink-100 dark:from-gray-700 dark:to-gray-800 px-6 py-4 border-b-2 border-pink-200 dark:border-gray-700">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-gradient-to-r from-pink-600 to-pink-700 p-2.5 rounded-lg shadow-md">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                 stroke-linecap="round" stroke-linejoin="round"
+                                 class="lucide lucide-map-pin text-white" aria-hidden="true">
+                                <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0">
+                                </path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                        </div>
+                        <h3 class="font-semibold text-gray-800 dark:text-gray-200 text-lg">
+                            تفاصيل الحضور
+                        </h3>
+                    </div>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+                        <label class="form-label text-xs uppercase tracking-wide mb-2 block">
+                            نوع
+                            الحضور
+                        </label>
+                        <p class="text-gray-900 dark:text-gray-200 font-bold text-lg flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                 stroke-linecap="round" stroke-linejoin="round"
+                                 class="lucide lucide-map-pin text-main-700" aria-hidden="true">
+                                <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0">
+                                </path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                            <span class="text-gray-950 dark:text-gray-200">@(Model.Activity?.AttendanceModeNameAr ?? "-")</span>
+                        </p>
+                    </div>
+                    <div class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+                        <label class="form-label text-xs uppercase tracking-wide mb-2 block">
+                            مكان
+                            النشاط
+                        </label>
+                        <p class="text-gray-900 dark:text-gray-200 font-bold text-lg">
+                            @if (!string.IsNullOrEmpty(Model.Activity?.LocationAr))
+                            {
+                                @Model.Activity.LocationAr
+                            }
+                            else if (!string.IsNullOrEmpty(Model.Activity?.OnlineLink))
+                            {
+                                <a href="@Model.Activity.OnlineLink" target="_blank" class="text-info-600 hover:text-info-700 underline">
+                                    @Model.Activity.OnlineLink
+                                </a>
+                            }
+                            else
+                            {
+                                <text>-</text>
+                            }
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-2 bg-white dark:bg-gray-800 rounded-xl shadow-lg border-2 border-gray-100 dark:border-gray-700 overflow-hidden">
+                <div class="bg-gradient-to-r from-info-50 to-info-100 dark:from-gray-700 dark:to-gray-800 px-6 py-4 border-b-2 border-info-200 dark:border-gray-700">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-gradient-to-r from-info-600 to-info-700 dark:from-gray-700 dark:to-gray-800 p-2.5 rounded-lg shadow-md">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                 stroke-linecap="round" stroke-linejoin="round"
+                                 class="lucide lucide-users text-white" aria-hidden="true">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                <path d="M16 3.128a4 4 0 0 1 0 7.744"></path>
+                                <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                            </svg>
+                        </div>
+                        <h3 class="font-semibold text-gray-800 dark:text-gray-200 text-lg">
+                            الأدوار والمسؤوليات
+                        </h3>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-gradient-to-br from-main-50 to-main-100  dark:from-gray-700 dark:to-gray-800 p-4 rounded-lg border-2 border-main-200 dark:border-gray-700">
+                            <div class="flex items-center gap-2 mb-3 pb-2 border-b-2 border-main-300 dark:border-gray-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                     class="lucide lucide-briefcase text-main-700" aria-hidden="true">
+                                    <path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                                    <rect width="20" height="14" x="2" y="6" rx="2"></rect>
+                                </svg>
+                                <h4 class="font-bold text-gray-800 dark:text-gray-200">
+                                    المنسق
+                                </h4>
+                            </div>
+                            <div class="space-y-2">
+                                @if (Model.Activity?.Coordinators != null && Model.Activity.Coordinators.Any())
+                                {
+                                    @Html.Partial("_UsersCard", ("Coordinators", "secondary", Model.Activity.Coordinators))
 
-        .section-header.purple {
-            background: #f3e8ff;
-        }
 
-        .section-header.pink {
-            background: #fde7f3;
-        }
+                                }
+                                else
+                                {
+                                    <div class="bg-white dark:bg-gray-700 px-3 py-2 rounded-lg text-sm font-medium text-gray-400 dark:text-gray-500 border border-main-300 dark:border-gray-600 text-center">
+                                        لا يوجد منسقين
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="bg-gradient-to-br from-info-50 to-info-100 dark:from-gray-700 dark:to-gray-800 p-4 rounded-lg border-2 border-info-200 dark:border-gray-700">
+                            <div class="flex items-center gap-2 mb-3 pb-2 border-b-2 border-info-300 dark:border-gray-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                     class="lucide lucide-award text-info-600" aria-hidden="true">
+                                    <path d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526">
+                                    </path>
+                                    <circle cx="12" cy="8" r="6"></circle>
+                                </svg>
+                                <h4 class="font-bold text-gray-800 dark:text-gray-200">
+                                    المعتمد
+                                </h4>
+                            </div>
+                            <div class="space-y-2">
+                                @if (Model.Activity?.Viewers != null && Model.Activity.Viewers.Any())
+                                {
+                                    @Html.Partial("_UsersCard", ("Reviewers", "success", Model.Activity.Viewers))
 
-        .section-header.orange {
-            background: #fff3cd;
-        }
+                                }
+                                else
+                                {
+                                    <div class="bg-white dark:bg-gray-700 px-3 py-2 rounded-lg text-sm font-medium text-gray-400 dark:text-gray-500 border border-info-300 dark:border-gray-600 text-center">
+                                        لا يوجد معتمدين
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="bg-gradient-to-br from-lavender-50 to-lavender-100 dark:from-gray-700 dark:to-gray-800 p-4 rounded-lg border-2 border-lavender-200 dark:border-gray-700">
+                            <div class="flex items-center gap-2 mb-3 pb-2 border-b-2 border-lavender-300 dark:border-gray-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                     class="lucide lucide-user-check text-lavender-600" aria-hidden="true">
+                                    <path d="m16 11 2 2 4-4"></path>
+                                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                </svg>
+                                <h4 class="font-bold text-gray-800 dark:text-gray-200">
+                                    المشارك
+                                </h4>
+                            </div>
+                            <div class="space-y-2">
+                                @if (Model.Activity?.Supervisors != null && Model.Activity.Supervisors.Any())
+                                {
+                                    @Html.Partial("_UsersCard", ("Supervisors", "primary", Model.Activity.Supervisors))
 
-        .section-header.info {
-            background: #e7f6f8;
-        }
+                                }
+                                else
+                                {
+                                    <div class="bg-white dark:bg-gray-700 px-3 py-2 rounded-lg text-sm font-medium text-gray-400 dark:text-gray-500 border border-lavender-300 dark:border-gray-600 text-center">
+                                        لا يوجد مشاركين
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="lg:col-span-1 bg-white  dark:bg-gray-800 rounded-xl shadow-lg border-2 border-gray-100 dark:border-gray-700 overflow-hidden h-fit">
+                <div class="bg-gradient-to-r from-gold-50 to-gold-100 dark:from-gray-700 dark:to-gray-800 px-6 py-4 border-b-2 border-gold-200 dark:border-gray-700">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-gradient-to-r from-gold-600 to-gold-700 p-2.5 rounded-lg shadow-md">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                 stroke-linecap="round" stroke-linejoin="round"
+                                 class="lucide lucide-globe text-white" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+                                <path d="M2 12h20"></path>
+                            </svg>
+                        </div>
+                        <h3 class="font-semibold text-gray-800 dark:text-gray-200">
+                            العرض على الموقع
+                        </h3>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <div class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+                        <div class="text-center space-y-3">
+                            @if (Model.Activity?.IsPublished == true)
+                            {
+                                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48"
+                                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                     stroke-linecap="round" stroke-linejoin="round"
+                                     class="lucide lucide-check text-green-600 mx-auto" aria-hidden="true">
+                                    <path d="M20 6 9 17l-5-5"></path>
+                                </svg>
+                                <p class="text-gray-900 dark:text-gray-200 font-bold text-lg">
+                                    نعم
+                                </p>
+                                <p class="text-gray-600 dark:text-gray-400 text-sm">
+                                    سيتم عرضه على الموقع
+                                </p>
+                            }
+                            else
+                            {
+                                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48"
+                                     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                     stroke-linecap="round" stroke-linejoin="round"
+                                     class="lucide lucide-x text-red-600 mx-auto" aria-hidden="true">
+                                    <path d="M18 6 6 18"></path>
+                                    <path d="m6 6 12 12"></path>
+                                </svg>
+                                <p class="text-gray-900 dark:text-gray-200 font-bold text-lg">
+                                    لا
+                                </p>
+                                <p class="text-gray-600 dark:text-gray-400 text-sm">
+                                    لن يتم عرضه على الموقع
+                                </p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @* <div class="flex justify-center pt-4">
+            <a asp-area="Admin" asp-page="/Activities/Index" class="flex items-center gap-2 px-8 py-3 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-all hover:shadow-lg font-semibold">
+                <svg class="text-gray-950 dark:text-gray-200 lucide lucide-arrow-right"
+                     xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                     stroke-linejoin="round" aria-hidden="true">
+                    <path d="M5 12h14"></path>
+                    <path d="m12 5 7 7-7 7"></path>
+                </svg><span class="text-gray-950 dark:text-gray-200">
+                    رجوع
+                    للقائمة
+                </span>
+            </a>
+        </div> *@
+    </div>
 
-    .card-header {
-        border-bottom: 1px solid #ddd;
-    }
 
-</style>
 
-<div class="container-fluid px-4 py-3">
+</section>
+
+
+
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-50">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-md w-full mx-4 transform transition-all">
+        <div class="p-6 border-b-2 border-gray-200 dark:border-gray-700">
+            <div class="flex items-center justify-between">
+                <h3 class="text-xl font-bold text-red-600 dark:text-red-500" id="deleteModalLabel">تأكيد الحذف</h3>
+                <button type="button" id="closeModalBtn" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 6 6 18"></path>
+                        <path d="m6 6 12 12"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div class="p-6">
+            <p class="text-gray-700 dark:text-gray-300 mb-4">هل أنت متأكد من حذف هذا النشاط؟</p>
+            <p class="text-lg font-bold text-gray-900 dark:text-gray-100">@(Model.Activity?.TitleAr ?? Model.Activity?.TitleEn ?? "النشاط")</p>
+        </div>
+        <div class="p-6 border-t-2 border-gray-200 dark:border-gray-700 flex items-center justify-end gap-3">
+            <button type="button" id="cancelDeleteBtn" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-all font-medium">
+                إلغاء
+            </button>
+            <form method="post" asp-page-handler="Delete" class="inline">
+                <input type="hidden" name="id" value="@Model.Activity?.Id" />
+                <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all font-medium">
+                    نعم، احذف
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const deleteBtn = document.getElementById('deleteBtn');
+        const deleteModal = document.getElementById('deleteModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+
+        // فتح المودال عند الضغط على زر الحذف
+        deleteBtn.addEventListener('click', function() {
+            deleteModal.classList.remove('hidden');
+            deleteModal.classList.add('flex');
+        });
+
+        // إغلاق المودال عند الضغط على زر الإغلاق
+        closeModalBtn.addEventListener('click', function() {
+            deleteModal.classList.add('hidden');
+            deleteModal.classList.remove('flex');
+        });
+
+        // إغلاق المودال عند الضغط على زر الإلغاء
+        cancelDeleteBtn.addEventListener('click', function() {
+            deleteModal.classList.add('hidden');
+            deleteModal.classList.remove('flex');
+        });
+
+        // إغلاق المودال عند الضغط خارج المودال
+        deleteModal.addEventListener('click', function(e) {
+            if (e.target === deleteModal) {
+                deleteModal.classList.add('hidden');
+                deleteModal.classList.remove('flex');
+            }
+        });
+
+        // إغلاق المودال عند الضغط على مفتاح ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && !deleteModal.classList.contains('hidden')) {
+                deleteModal.classList.add('hidden');
+                deleteModal.classList.remove('flex');
+            }
+        });
+    });
+</script>
+@* <div class="container-fluid px-4 py-3">
 
     <!-- HEADER -->
     <div class="card header-card mb-4">
@@ -218,7 +819,7 @@
 
         </div>
     </div>
-</div>
+</div> *@
 
 <div class="modal fade" id="qrModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">

@@ -27,9 +27,7 @@
                             Secure your seat by registering now
                         </p>
 
-                        <button class="btn btn-success w-100"
-                                data-bs-toggle="modal"
-                                data-bs-target="#registerModal">
+                        <button class="btn btn-success w-100" id="registerBtn">
                             Register
                         </button>
                     </div>
@@ -58,9 +56,7 @@
                         <h6 class="fw-bold">Rate this activity</h6>
                         <p class="small">Your feedback matters</p>
 
-                        <button class="btn btn-light w-100"
-                                data-bs-toggle="modal"
-                                data-bs-target="#rateModal">
+                        <button class="btn btn-light w-100" id="rateActivityBtn">
                             Rate Activity
                         </button>
                     </div>
@@ -316,13 +312,18 @@
             }
         }
 
-        rateModal.addEventListener("shown.bs.modal", function () {
+        // Rate Modal Control (Vanilla JavaScript - No Bootstrap JS)
+        const rateActivityBtn = document.getElementById("rateActivityBtn");
+        const rateModalElement = document.getElementById("rateModal");
+        const rateModalBackdrop = document.createElement("div");
+        rateModalBackdrop.className = "modal-backdrop fade";
+        rateModalBackdrop.id = "rateModalBackdrop";
 
+        function initializeStars() {
             if (starsInitialized) return;
             starsInitialized = true;
 
             document.querySelectorAll("#rateModal .stars").forEach(group => {
-
                 const criteriaId = group.dataset.id;
 
                 for (let i = 1; i <= 5; i++) {
@@ -350,10 +351,56 @@
                     group.appendChild(star);
                 }
             });
-        });
+        }
 
-           submitBtn?.addEventListener("click", () => {
+        function openRateModal() {
+            if (rateModalElement) {
+                rateModalElement.style.display = "block";
+                rateModalElement.classList.add("show");
+                document.body.appendChild(rateModalBackdrop);
+                rateModalBackdrop.classList.add("show");
+                document.body.style.overflow = "hidden";
+                
+                // Initialize stars when modal opens
+                initializeStars();
+            }
+        }
 
+        function closeRateModal() {
+            if (rateModalElement) {
+                rateModalElement.classList.remove("show");
+                rateModalBackdrop.classList.remove("show");
+                setTimeout(() => {
+                    rateModalElement.style.display = "none";
+                    if (rateModalBackdrop.parentNode) {
+                        rateModalBackdrop.parentNode.removeChild(rateModalBackdrop);
+                    }
+                    document.body.style.overflow = "";
+                }, 150);
+            }
+        }
+
+        // Open modal on button click
+        if (rateActivityBtn) {
+            rateActivityBtn.addEventListener("click", openRateModal);
+        }
+
+        // Close modal on backdrop click
+        if (rateModalElement) {
+            rateModalElement.addEventListener("click", (e) => {
+                if (e.target === rateModalElement) {
+                    closeRateModal();
+                }
+            });
+        }
+
+        // Close modal on Cancel button and close button
+        const cancelRateBtn = rateModalElement?.querySelector('[data-bs-dismiss="modal"]');
+        if (cancelRateBtn) {
+            cancelRateBtn.addEventListener("click", closeRateModal);
+        }
+
+        submitBtn?.addEventListener("click", () => {
             if (Object.keys(ratesMap).length !== totalCriteria) {
                 validationMsg.classList.remove("d-none");
                 return; // ⛔ امنع النداء
@@ -379,6 +426,7 @@
             .then(d => {
                 if (d.success) {
                     alert("Thank you for your feedback!");
+                    closeRateModal();
                     location.reload();
                 } else {
                     alert(d.message);
@@ -387,12 +435,67 @@
         });
     
 
+        // Register Modal Control (Vanilla JavaScript - No Bootstrap JS)
+        const registerBtn = document.getElementById("registerBtn");
+        const registerModalElement = document.getElementById("registerModal");
+        const registerModalBackdrop = document.createElement("div");
+        registerModalBackdrop.className = "modal-backdrop fade";
+        registerModalBackdrop.id = "registerModalBackdrop";
+
+        function openRegisterModal() {
+            if (registerModalElement) {
+                registerModalElement.style.display = "block";
+                registerModalElement.classList.add("show");
+                document.body.appendChild(registerModalBackdrop);
+                registerModalBackdrop.classList.add("show");
+                document.body.style.overflow = "hidden";
+            }
+        }
+
+        function closeRegisterModal() {
+            if (registerModalElement) {
+                registerModalElement.classList.remove("show");
+                registerModalBackdrop.classList.remove("show");
+                setTimeout(() => {
+                    registerModalElement.style.display = "none";
+                    if (registerModalBackdrop.parentNode) {
+                        registerModalBackdrop.parentNode.removeChild(registerModalBackdrop);
+                    }
+                    document.body.style.overflow = "";
+                }, 150);
+            }
+        }
+
+        // Open modal on button click
+        if (registerBtn) {
+            registerBtn.addEventListener("click", openRegisterModal);
+        }
+
+        // Close modal on backdrop click
+        if (registerModalElement) {
+            registerModalElement.addEventListener("click", (e) => {
+                if (e.target === registerModalElement) {
+                    closeRegisterModal();
+                }
+            });
+        }
+
+        // Close modal on Cancel button
+        const cancelRegisterBtn = registerModalElement?.querySelector('[data-bs-dismiss="modal"]');
+        if (cancelRegisterBtn) {
+            cancelRegisterBtn.addEventListener("click", closeRegisterModal);
+        }
+
+        // Confirm Registration
         document.getElementById("confirmRegisterBtn")
             ?.addEventListener("click", () => {
                 fetch(`?handler=Register&id=@Model.Activity.Id`)
                     .then(res => res.json())
                     .then(d => {
-                        if (d.success) location.reload();
+                        if (d.success) {
+                            closeRegisterModal();
+                            location.reload();
+                        }
                     });
             });
     </script>

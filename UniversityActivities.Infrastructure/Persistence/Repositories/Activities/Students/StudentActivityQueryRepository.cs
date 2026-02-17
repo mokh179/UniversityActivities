@@ -232,7 +232,7 @@ namespace UniversityActivities.Infrastructure.Persistence.Repositories.Activitie
                     paging.PageSize, paging.PageSize == 0 ? 1 : (int)Math.Ceiling(totalCount / (double)paging.PageSize));
             }
             return new PagedResult<StudentActivityListItemDto>(
-              null,
+              new List<StudentActivityListItemDto>(),
               totalCount,
               paging.PageNumber,
               paging.PageSize,0);

@@ -161,6 +161,28 @@ public static class IdentitySeed
             var Role = await userManager.AddToRoleAsync(superadmin, SystemRoles.SuperAdmin);
         } 
         #endregion
+        #region Employee
+        var Employee = new ApplicationUser
+        {
+            UserName = "EmployeeMK17",
+            FirstName = "Mohammed",
+            MiddleName = "Khaled",
+            LastName = "Ahmed",
+            Gender = Application.AuthorizationModule.Models.AuthModels.Gender.Male,
+            ManagementId = 1,
+            NationalId = "2628",
+            TargetaudienceId = 1,
+            Email = "Employee@ub.edu.sa",
+            EmailConfirmed = true
+        };
+        if (await userManager.FindByEmailAsync(Employee.Email) == null)
+        {
+            var result = await userManager.CreateAsync(Employee, superAdminPassword);
+            if (!result.Succeeded)
+                throw new Exception($"Failed to create user {viewer.Email}");
+            var Role = await userManager.AddToRoleAsync(Employee, SystemRoles.Employee);
+        } 
+        #endregion
 
 
 

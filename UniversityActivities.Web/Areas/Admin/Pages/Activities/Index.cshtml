@@ -2,61 +2,1625 @@
 @model UniversityActivities.Web.Areas.Admin.Pages.Activities.IndexModel
 @{
 }
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
 <style>
-    .stat-card {
-        border-radius: 10px;
-        padding: 20px;
-        color: #fff;
-        height: 110px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
+    /* تحسين عرض الجدول على التابلت */
+    @@media (min-width: 768px) and (max-width: 1024px) {
+        #dataTable
+
+    {
+        font-size: 0.813rem;
     }
 
-    .stat-title {
-        font-size: 13px;
-        opacity: .9;
+    #dataTable th,
+    #dataTable td {
+        padding: 0.5rem !important;
     }
 
-    .stat-number {
-        font-size: 26px;
-        font-weight: bold;
     }
 
-    .stat-sub {
-        font-size: 12px;
-        opacity: .8;
+    /* تصميم زر التوسيع (+) */
+    table.dataTable.dtr-inline.collapsed > tbody > tr > td.control:before,
+    table.dataTable.dtr-inline.collapsed > tbody > tr > th.control:before {
+        background-color: #198754 !important;
+        border: 2px solid #198754 !important;
+        box-shadow: 0 2px 4px rgba(25, 135, 84, 0.2);
+        width: 20px !important;
+        height: 20px !important;
+        line-height: 18px !important;
+        font-weight: bold !important;
+        transition: all 0.2s ease;
     }
 
-    .bg-blue {
-        background: #4e73df;
-    }
-
-    .bg-green {
-        background: #1cc88a;
-    }
-
-    .bg-orange {
-        background: #f6c23e;
-    }
-
-    .bg-red {
-        background: #e74a3b;
-    }
-
-    .btn-success {
-        transition: all .2s ease-in-out;
-    }
-
-        .btn-success:hover {
-            transform: translateY(-1px);
+        table.dataTable.dtr-inline.collapsed > tbody > tr > td.control:before:hover,
+        table.dataTable.dtr-inline.collapsed > tbody > tr > th.control:before:hover {
+            background-color: #146c43 !important;
+            border-color: #146c43 !important;
+            transform: scale(1.1);
         }
-</style>
 
-<div class="container mt-4">
+    table.dataTable.dtr-inline.collapsed > tbody > tr.parent > td.control:before,
+    table.dataTable.dtr-inline.collapsed > tbody > tr.parent > th.control:before {
+        background-color: #dc3545 !important;
+        border-color: #dc3545 !important;
+    }
+
+    /* Dark mode للزر */
+    .dark table.dataTable.dtr-inline.collapsed > tbody > tr > td.control:before,
+    .dark table.dataTable.dtr-inline.collapsed > tbody > tr > th.control:before {
+        background-color: #22c55e !important;
+        border-color: #22c55e !important;
+    }
+
+    /* تحسين عرض التفاصيل المخفية */
+    table.dataTable.dtr-inline.collapsed tbody tr.parent td.child {
+        padding: 1rem !important;
+        background-color: #f9fafb !important;
+    }
+
+    .dark table.dataTable.dtr-inline.collapsed tbody tr.parent td.child {
+        background-color: #1f2937 !important;
+    }
+
+    /* تحسين السكرول الأفقي على التابلت */
+    @@media (min-width: 640px) and (max-width: 1024px) {
+        .overflow-auto
+
+    {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .overflow-auto::-webkit-scrollbar {
+        height: 8px;
+    }
+
+    .overflow-auto::-webkit-scrollbar-track {
+        background: #f1f5f9;
+        border-radius: 4px;
+    }
+
+    .overflow-auto::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 4px;
+    }
+
+        .overflow-auto::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+    }
+
+    /* تحسين أزرار DataTable */
+    .dt-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    /* تحسين Info */
+    #dataTableInfo {
+        color: #6b7280;
+        font-size: 0.875rem;
+    }
+
+    .dark #dataTableInfo {
+        color: #9ca3af;
+    }
+
+    /* إخفاء أسهم DataTables الأصلية */
+    #dataTable thead th.sorting,
+    #dataTable thead th.sorting_asc,
+    #dataTable thead th.sorting_desc {
+        background-image: none !important;
+    }
+
+        #dataTable thead th.sorting:before,
+        #dataTable thead th.sorting:after,
+        #dataTable thead th.sorting_asc:before,
+        #dataTable thead th.sorting_asc:after,
+        #dataTable thead th.sorting_desc:before,
+        #dataTable thead th.sorting_desc:after {
+            display: none !important;
+        }
+
+    /* Custom sorting icons */
+    .sortable-header {
+        user-select: none;
+    }
+
+    .sort-icons {
+        margin-top: -2px;
+    }
+
+    .sort-up-icon,
+    .sort-down-icon {
+        transition: color 0.2s;
+    }
+
+        .sort-up-icon.text-main-600,
+        .sort-down-icon.text-main-600 {
+            color: #1B8354 !important;
+        }
+
+    /* Dark mode text color for headers */
+    .dark #dataTable thead th {
+        color: #E5E7EB !important;
+    }
+
+        .dark #dataTable thead th.sortable-header {
+            color: #E5E7EB !important;
+        }
+
+            .dark #dataTable thead th.sortable-header div {
+                color: #E5E7EB !important;
+            }
+
+    /* إصلاح القائمة لتظهر خارج الجدول */
+    #dataTable {
+        position: relative;
+    }
+
+    .action-menu {
+        position: fixed !important;
+        z-index: 9999 !important;
+        min-width: 160px;
+        max-height: 300px;
+        overflow-y: auto;
+    }
+
+    /* التأكد من أن القائمة تظهر بشكل صحيح */
+    .relative.inline-block {
+        position: relative;
+    }
+
+    /* إصلاح overflow للجدول - السماح للقائمة بالخروج */
+    .rounded-xl.overflow-hidden {
+        position: relative;
+    }
+
+    .w-full.overflow-auto {
+        position: relative;
+        overflow-x: auto;
+    }
+    
+    /* التأكد من أن القائمة لا تقطعها overflow */
+    #dataTable_wrapper {
+        position: relative;
+    }
+    
+    /* السماح للقائمة بالخروج من الجدول */
+    table.dataTable tbody td {
+        overflow: visible !important;
+    }
+    
+    table.dataTable tbody tr {
+        overflow: visible !important;
+    }
+</style>
+<section class="animate-fade-in px-6 pb-8">
+    <!-- Welcome + KPI Cards -->
+    <div class="mb-4 space-y-4">
+        <!-- Welcome banner -->
+        <div class="rounded-2xl border border-neutral-200 bg-gradient-green-2 p-5 shadow-sm dark:border-neutral-700 dark:bg-gray-900">
+            <div class="flex justify-between items-center">
+                <div class="flex flex-col justify-between gap-3">
+                    <h2 class="text-xl font-extrabold tracking-tight text-white sm:text-2xl lg:text-2xl">
+                        إدارة الأنشطة
+
+                    </h2>
+                    <p class="text-white text-sm">
+                        إضافة وعرض وتعديل الأنشطة الطلابية
+                    </p>
+
+                </div>
+                <a asp-area="Admin" asp-page="/Activities/AddActivity"
+                   class="flex items-center gap-2 bg-white text-main-600 px-5 py-2.5 rounded-lg font-medium shadow-md group hover:bg-main-600 hover:text-white hover:shadow-xl transition-all duration-300 hover:scale-105 border-2 border-white hover:border-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                         stroke-linejoin="round" class="lucide lucide-plus group-hover:text-white" aria-hidden="true">
+                        <path d="M5 12h14"></path>
+                        <path d="M12 5v14"></path>
+                    </svg><span class="group-hover:text-white">إضافة نشاط جديد</span>
+                </a>
+
+            </div>
+
+        </div>
+        <!-- KPI Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="bg-white dark:bg-gray-800 border-l-4 border-main-400 p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300">
+                <div class="flex items-center justify-between">
+                    <div class="flex-1">
+                        <p class="text-gray-600 dark:text-gray-400 text-sm mb-3">الأنشطة القادمة</p>
+                        <h3 class="text-gray-900 dark:text-white text-lg font-bold">@(Model.adminStatistics?.UpcomingActivities ?? 0)</h3>
+                    </div>
+                    <div class="bg-main-50 dark:bg-main-900/20 p-4 rounded-xl">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                             stroke-linecap="round" stroke-linejoin="round"
+                             class="lucide lucide-calendar text-main-600 dark:text-main-400" aria-hidden="true">
+                            <path d="M8 2v4"></path>
+                            <path d="M16 2v4"></path>
+                            <rect width="18" height="18" x="3" y="4" rx="2"></rect>
+                            <path d="M3 10h18"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white dark:bg-gray-800 border-l-4 border-gold-400 p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300">
+                <div class="flex items-center justify-between">
+                    <div class="flex-1">
+                        <p class="text-gray-600 dark:text-gray-400 text-sm mb-3">قيد التنفيذ</p>
+                        <h3 class="text-gray-900 dark:text-white text-lg font-bold">@(Model.adminStatistics?.InProgressActivities ?? 0)</h3>
+                    </div>
+                    <div class="bg-gold-50 dark:bg-gold-900/20 p-4 rounded-xl">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                             stroke-linecap="round" stroke-linejoin="round"
+                             class="lucide lucide-clock text-gold-600 dark:text-gold-400" aria-hidden="true">
+                            <path d="M12 6v6l4 2"></path>
+                            <circle cx="12" cy="12" r="10"></circle>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white dark:bg-gray-800 border-l-4 border-info-400 p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300">
+                <div class="flex items-center justify-between">
+                    <div class="flex-1">
+                        <p class="text-gray-600 dark:text-gray-400 text-sm mb-3">الأنشطة المكتملة</p>
+                        <h3 class="text-gray-900 dark:text-white text-lg font-bold">@(Model.adminStatistics?.CompletedActivities ?? 0)</h3>
+                    </div>
+                    <div class="bg-info-50 dark:bg-info-900/20 p-4 rounded-xl">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                             stroke-linecap="round" stroke-linejoin="round"
+                             class="lucide lucide-circle-check-big text-info-600 dark:text-info-400" aria-hidden="true">
+                            <path d="M21.801 10A10 10 0 1 1 17 3.335"></path>
+                            <path d="m9 11 3 3L22 4"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white dark:bg-gray-800 border-l-4 border-lavender-400 p-6 rounded-xl shadow-sm hover:shadow-md transition-all duration-300">
+                <div class="flex items-center justify-between">
+                    <div class="flex-1">
+                        <p class="text-gray-600 dark:text-gray-400 text-sm mb-3">إجمالي الأنشطة</p>
+                        <h3 class="text-gray-900 dark:text-white text-lg font-bold">@(Model.adminStatistics?.TotalActivities ?? 0)</h3>
+                    </div>
+                    <div class="bg-lavender-50 dark:bg-lavender-900/20 p-4 rounded-xl">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                             stroke-linecap="round" stroke-linejoin="round"
+                             class="lucide lucide-users text-lavender-600 dark:text-lavender-400" aria-hidden="true">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                            <path d="M16 3.128a4 4 0 0 1 0 7.744"></path>
+                            <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 ">
+            <div id="filter-toggle"
+                 class="bg-gradient-green-1 rounded-xl shadow-lg overflow-hidden cursor-pointer">
+                <div class="flex items-center justify-between p-4">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-white/20 backdrop-blur-sm p-2.5 rounded-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22"
+                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                 stroke-linecap="round" stroke-linejoin="round"
+                                 class="lucide lucide-funnel text-white" aria-hidden="true">
+                                <path d="M10 20a1 1 0 0 0 .553.895l2 1A1 1 0 0 0 14 21v-7a2 2 0 0 1 .517-1.341L21.74 4.67A1 1 0 0 0 21 3H3a1 1 0 0 0-.742 1.67l7.225 7.989A2 2 0 0 1 10 14z">
+                                </path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-medium">البحث والفلترة المتقدمة</h4>
+                            <p id="filter-toggle-text" class="text-white/80 text-xs mt-0.5">انقر لإظهار خيارات البحث والفلترة</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div id="filter-chevron" class="bg-white/20 backdrop-blur-sm p-2 rounded-lg transition-transform duration-300"
+                             style="transform: rotate(0deg);">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                 class="lucide lucide-chevron-down text-white" aria-hidden="true">
+                                <path d="m6 9 6 6 6-6"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="filter-content"
+                 class="transition-all duration-500 ease-in-out opacity-0 max-h-0 mt-0 overflow-hidden hidden">
+                <div class="relative bg-white dark:bg-gray-800 p-6 rounded-xl border-2 border-gray-200 dark:border-gray-700 shadow-inner">
+                    <form id="searchForm" onsubmit="return false;" onclick="event.stopPropagation();">
+                    <div class="relative z-10">
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                            <div>
+                                <label class="form-label">
+                                    البحث بإسم
+                                    النشاط
+                                </label>
+                                <div class="relative">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20"
+                                         height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                         class="lucide lucide-search absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400"
+                                         aria-hidden="true">
+                                        <path d="m21 21-4.34-4.34"></path>
+                                        <circle cx="11" cy="11" r="8"></circle>
+                                    </svg><input type="text" name="Title" placeholder="ابحث عن نشاط..."
+                                                 class="form-input pr-12 pl-10"
+                                                 value="@Model.Filter?.Title">
+                                </div>
+                            </div>
+                            <div class="relative">
+                                <label class="form-label">
+                                    تاريخ
+                                    النشاط
+                                </label>
+                                <div class="relative">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="19"
+                                         height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                         class="lucide lucide-calendar-days absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none z-10"
+                                         aria-hidden="true">
+                                        <path d="M8 2v4"></path>
+                                        <path d="M16 2v4"></path>
+                                        <rect width="18" height="18" x="3" y="4" rx="2"></rect>
+                                        <path d="M3 10h18"></path>
+                                        <path d="M8 14h.01"></path>
+                                        <path d="M12 14h.01"></path>
+                                        <path d="M16 14h.01"></path>
+                                        <path d="M8 18h.01"></path>
+                                        <path d="M12 18h.01"></path>
+                                        <path d="M16 18h.01"></path>
+                                    </svg><input type="date" name="StartDateFrom"
+                                                 class="form-input pr-11 pl-10 cursor-pointer"
+                                                 value="@(Model.Filter?.StartDateFrom?.ToString("yyyy-MM-dd"))">
+                                </div>
+                            </div>
+                            <div class="relative">
+                                <label class="form-label">
+                                    تاريخ
+                                    النشاط إلى
+                                </label>
+                                <div class="relative">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="19"
+                                         height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                         class="lucide lucide-calendar-days absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none z-10"
+                                         aria-hidden="true">
+                                        <path d="M8 2v4"></path>
+                                        <path d="M16 2v4"></path>
+                                        <rect width="18" height="18" x="3" y="4" rx="2"></rect>
+                                        <path d="M3 10h18"></path>
+                                        <path d="M8 14h.01"></path>
+                                        <path d="M12 14h.01"></path>
+                                        <path d="M16 14h.01"></path>
+                                        <path d="M8 18h.01"></path>
+                                        <path d="M12 18h.01"></path>
+                                        <path d="M16 18h.01"></path>
+                                    </svg><input type="date" name="StartDateTo"
+                                                 class="form-input pr-11 pl-10 cursor-pointer"
+                                                 value="@(Model.Filter?.StartDateTo?.ToString("yyyy-MM-dd"))">
+                                </div>
+                            </div>
+                            <div class="relative">
+                                <label class="form-label">
+                                    الجهة
+                                    المنظمة
+                                </label>
+                                <div class="relative">
+                                    <select id="managementtypeSelect" name="ManagementTypeId" class="form-select" onchange="loadManagements()">
+                                        <option value="">كل الجهات</option>
+                                        @foreach (var mt in Model.Lookups?.ManagementTypes ?? new List<UniversityActivities.Application.lookup.Dto.LookupDto>())
+                                        {
+                                            <option value="@mt.Id">@mt.NameEn</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="relative d-none" id="managementContainer">
+                                <label class="form-label">الإدارة</label>
+                                <div class="relative">
+                                    <select id="managementSelect" name="ManagementId" class="form-select" onchange="loadClubs()">
+                                        <option value="">كل الإدارات</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="relative d-none" id="clubContainer">
+                                <label class="form-label">النادي</label>
+                                <div class="relative">
+                                    <select id="clubSelect" name="ClubId" class="form-select">
+                                        <option value="">كل الأندية</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-5">
+                            <div class="relative">
+                                <label class="form-label">
+                                    حالة
+                                    النشاط
+                                </label>
+                                <div class="relative">
+                                    <select name="Status" class="form-select">
+                                        <option value="">جميع الحالات</option>
+                                        <option value="1">قيد التنفيذ</option>
+                                        <option value="2">مكتمل</option>
+                                        <option value="3">قريباً</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="relative">
+                                <label class="form-label">المشارك</label>
+                                <div class="relative">
+                                    <select name="ParticipantId" class="form-select">
+                                        <option value="">جميع المشاركين</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="relative">
+                                <label class="form-label">المنسق</label>
+                                <div class="relative">
+                                    <select name="CoordinatorId" class="form-select">
+                                        <option value="">جميع المنسقين</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="form-label">عرض</label>
+                                <div class="relative">
+                                    <select class="form-select">
+                                        <option value="10">10</option>
+                                        <option value="20">20</option>
+                                        <option value="30">30</option>
+                                        <option value="40">40</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                            <div class="relative">
+                                <label class="form-label">
+                                    نوع
+                                    الشطر
+                                </label>
+                                <div class="relative">
+                                    <select class="form-select">
+                                        <option value="">جميع الأقسام</option>
+                                        <option value="male">طلاب</option>
+                                        <option value="female">طالبات</option>
+                                        <option value="both">كلا الجنسين</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="relative">
+                                <label class="form-label">
+                                    نوع
+                                    النشاط
+                                </label>
+                                <div class="relative">
+                                    <select name="ActivityTypeId" class="form-select">
+                                        <option value="">جميع الأنواع</option>
+                                        @foreach (var at in Model.Lookups?.ActivityTypes ?? new List<UniversityActivities.Application.lookup.Dto.LookupDto>())
+                                        {
+                                            <option value="@at.Id">@at.NameEn</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="relative">
+                                <label class="form-label">
+                                    الفئة
+                                    المستفيدة
+                                </label>
+                                <div class="relative">
+                                    <select class="form-select">
+                                        <option value="">جميع الفئات</option>
+                                        <option value="students">طلاب</option>
+                                        <option value="faculty">أعضاء هيئة تدريس</option>
+                                        <option value="staff">موظفين</option>
+                                        <option value="all">كل المستفيدين</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="relative">
+                                <label class="form-label">
+                                    عرض على
+                                    الموقع
+                                </label>
+                                <div class="relative">
+                                    <select name="IsPublished" class="form-select">
+                                        <option value="">الكل</option>
+                                        <option value="true">نعم</option>
+                                        <option value="false">لا</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center mt-4">
+                            <button type="button" class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600" onclick="clearAllFilters()">
+                                مسح الكل
+                            </button>
+                            <button type="button" class="bg-success-500 text-white px-4 py-2 rounded-md hover:bg-success-600" onclick="searchActivities(1, document.getElementById('searchForm'))">
+                                بحث
+                            </button>
+                        </div>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Table -->
+        <div class="rounded-lg bg-white dark:bg-gray-800 text-card-foreground dark:text-gray-200 shadow-sm border border-gray-200 dark:border-gray-700">
+            <div class="p-4 sm:p-6 space-y-4">
+                <div id="dataTableControls" class="flex flex-col sm:flex-row justify-between gap-4">
+                    <div id="dataTableSearch"></div>
+                    <div id="dataTableLength"></div>
+                </div>
+
+                <div class="rounded-xl overflow-hidden">
+                    <div class="w-full overflow-auto">
+                        <table id="dataTable" class="w-full text-sm display nowrap" style="width:100%">
+                            <thead>
+                                <tr class="bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+                                    <th class="p-3 text-left font-semibold text-gray-700 dark:text-gray-200" data-priority="1"></th>
+                                    <th class="p-3 text-left font-semibold text-gray-700 dark:text-gray-200 sortable-header" data-column="1" data-priority="2">
+                                        <div class="flex items-center gap-2">
+                                            #
+                                            <div class="sort-icons flex flex-col">
+                                                <svg class="sort-up-icon h-2 w-2 text-gray-400 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="m18 15-6-6-6 6"></path>
+                                                </svg>
+                                                <svg class="sort-down-icon h-2 w-2 text-gray-400 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="m6 9 6 6 6-6"></path>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <th class="p-3 text-left font-semibold text-gray-700 dark:text-gray-200 sortable-header" data-column="2" data-priority="3">
+                                        <div class="flex items-center gap-2">
+                                            اسم النشاط
+                                            <div class="sort-icons flex flex-col">
+                                                <svg class="sort-up-icon h-2 w-2 text-gray-400 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="m18 15-6-6-6 6"></path>
+                                                </svg>
+                                                <svg class="sort-down-icon h-2 w-2 text-gray-400 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="m6 9 6 6 6-6"></path>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <th class="p-3 text-left font-semibold text-gray-700 dark:text-gray-200 sortable-header" data-column="3" data-priority="4">
+                                        <div class="flex items-center gap-2">
+                                            الجهة/ النادي
+                                            <div class="sort-icons flex flex-col">
+                                                <svg class="sort-up-icon h-2 w-2 text-gray-400 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="m18 15-6-6-6 6"></path>
+                                                </svg>
+                                                <svg class="sort-down-icon h-2 w-2 text-gray-400 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="m6 9 6 6 6-6"></path>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <th class="p-3 text-left font-semibold text-gray-700 dark:text-gray-200 sortable-header" data-column="4">
+                                        <div class="flex items-center gap-2">
+                                            التاريخ
+                                            <div class="sort-icons flex flex-col">
+                                                <svg class="sort-up-icon h-2 w-2 text-gray-400 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="m18 15-6-6-6 6"></path>
+                                                </svg>
+                                                <svg class="sort-down-icon h-2 w-2 text-gray-400 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="m6 9 6 6 6-6"></path>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <th class="p-3 text-left font-semibold text-gray-700 dark:text-gray-200 sortable-header" data-column="5">
+                                        <div class="flex items-center gap-2">
+                                            المكان
+                                            <div class="sort-icons flex flex-col">
+                                                <svg class="sort-up-icon h-2 w-2 text-gray-400 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="m18 15-6-6-6 6"></path>
+                                                </svg>
+                                                <svg class="sort-down-icon h-2 w-2 text-gray-400 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="m6 9 6 6 6-6"></path>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <th class="p-3 text-left font-semibold text-gray-700 dark:text-gray-200 sortable-header" data-column="6">
+                                        <div class="flex items-center gap-2">
+                                            المسجلين
+                                            <div class="sort-icons flex flex-col">
+                                                <svg class="sort-up-icon h-2 w-2 text-gray-400 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="m18 15-6-6-6 6"></path>
+                                                </svg>
+                                                <svg class="sort-down-icon h-2 w-2 text-gray-400 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="m6 9 6 6 6-6"></path>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <th class="p-3 text-left font-semibold text-gray-700 dark:text-gray-200 sortable-header" data-column="7">
+                                        <div class="flex items-center gap-2">
+                                            المشاركين
+                                            <div class="sort-icons flex flex-col">
+                                                <svg class="sort-up-icon h-2 w-2 text-gray-400 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="m18 15-6-6-6 6"></path>
+                                                </svg>
+                                                <svg class="sort-down-icon h-2 w-2 text-gray-400 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="m6 9 6 6 6-6"></path>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <th class="p-3 text-left font-semibold text-gray-700 dark:text-gray-200 sortable-header" data-column="8" data-priority="5">
+                                        <div class="flex items-center gap-2">
+                                            الحالة
+                                            <div class="sort-icons flex flex-col">
+                                                <svg class="sort-up-icon h-2 w-2 text-gray-400 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="m18 15-6-6-6 6"></path>
+                                                </svg>
+                                                <svg class="sort-down-icon h-2 w-2 text-gray-400 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="m6 9 6 6 6-6"></path>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <th class="p-3 text-start font-semibold text-gray-700 dark:text-gray-200" data-priority="6" style="text-align: start;">الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.Result?.Items != null && Model.Result.Items.Any())
+                                {
+                                    @foreach (var item in Model.Result.Items.Select((v, i) => new { v, i }))
+                                    {
+                                        var rowNumber = ((Model.PageNumber - 1) * Model.Result.PageSize) + item.i + 1;
+                                        var statusClass = item.v.status == UniversityActivities.Application.DTOs.Enums.StatusEnums.Inprogress ? "bg-warning-100 text-warning-700 dark:bg-warning-900/30 dark:text-warning-300" :
+                                                         item.v.status == UniversityActivities.Application.DTOs.Enums.StatusEnums.Completed ? "bg-main-100 text-main-700 dark:bg-main-900/30 dark:text-main-300" :
+                                                         "bg-info-100 text-info-700 dark:bg-info-900/30 dark:text-info-300";
+                                        var statusText = item.v.status == UniversityActivities.Application.DTOs.Enums.StatusEnums.Inprogress ? "قيد التنفيذ" :
+                                                        item.v.status == UniversityActivities.Application.DTOs.Enums.StatusEnums.Completed ? "مكتمل" : "قريباً";
+                                        <tr class="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/50">
+                                            <td class="p-3 text-center control"></td>
+                                            <td class="p-3 text-right text-gray-600 dark:text-gray-200">@rowNumber</td>
+                                            <td class="p-3 text-right text-gray-900 dark:text-gray-200">@item.v.TitleEn</td>
+                                            <td class="p-3 text-right text-gray-600 dark:text-gray-200">@item.v.ManagementNameEn</td>
+                                            <td class="p-3 text-right text-gray-600 dark:text-gray-200">@item.v.StartDate.ToString("yyyy-MM-dd")</td>
+                                            <td class="p-3 text-right text-gray-600 dark:text-gray-200">-</td>
+                                            <td class="p-3 text-right">
+                                                <span class="inline-flex items-center justify-center min-w-[2rem] px-2 py-1 rounded-full bg-info-100 text-info-700 dark:bg-info-900/30 dark:text-info-300 text-xs font-medium">@item.v.RegisteredCount</span>
+                                            </td>
+                                            <td class="p-3 text-right">
+                                                <span class="inline-flex items-center justify-center min-w-[2rem] px-2 py-1 rounded-full bg-lavender-100 text-lavender-700 dark:bg-lavender-900/30 dark:text-lavender-300 text-xs font-medium">@item.v.AttendedCount</span>
+                                            </td>
+                                            <td class="p-3 text-right">
+                                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium @statusClass">@statusText</span>
+                                            </td>
+                                            <td class="p-3 text-start" style="text-align: start;">
+                                                <div class="relative inline-block">
+                                                    <button class="action-menu-btn p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-600 dark:text-gray-400 transition-colors" data-menu-id="menu-@item.v.Id">
+                                                        <svg class="dark:invert" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                            <circle cx="12" cy="12" r="1"></circle>
+                                                            <circle cx="12" cy="5" r="1"></circle>
+                                                            <circle cx="12" cy="19" r="1"></circle>
+                                                        </svg>
+                                                    </button>
+                                                    <div id="menu-@item.v.Id" class="action-menu hidden absolute left-0 w-40 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-[1000]" style="top: calc(100% + 0.25rem); min-width: 160px;">
+                                                        <a href="/Admin/Activities/ActivityDetails/@item.v.Id" class="menu-item w-full text-right px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors border-b border-gray-200 dark:border-gray-700 block">
+                                                            <div class="flex items-center gap-2 justify-end">
+                                                                <span class="dark:text-gray-200">عرض التفاصيل</span>
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-600 dark:text-blue-400">
+                                                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                                                    <circle cx="12" cy="12" r="3"></circle>
+                                                                </svg>
+                                                            </div>
+                                                        </a>
+                                                        @*
+                                                        <a href="/Admin/Activities/EditActivity/@item.v.Id" class="menu-item w-full text-right px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors border-b border-gray-200 dark:border-gray-700 block">
+                                                            <div class="flex items-center gap-2 justify-end">
+                                                                <span class="dark:text-gray-200">تعديل</span>
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-yellow-600 dark:text-yellow-400">
+                                                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                                                </svg>
+                                                            </div>
+                                                        </a>
+                                                        *@
+                                                        <a href="/Admin/Activities/ActivityParticipationDetails/@item.v.Id" class="menu-item w-full text-right px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors block">
+                                                            <div class="flex items-center gap-2 justify-end">
+                                                                <span class="dark:text-gray-200">المشاركين</span>
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-main-600 dark:text-main-400">
+                                                                    <path d="M20 6L9 17l-5-5"></path>
+                                                                </svg>
+                                                            </div>
+                                                        </a>
+                                                        <a href="?handler=participants&activityId=@item.v.Id" onclick="return loadParticipants(event, @item.v.Id, '@item.v.TitleEn')" class="menu-item w-full text-right px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors border-b border-gray-200 dark:border-gray-700 block">
+                                                            <div class="flex items-center gap-2 justify-end">
+                                                                <span class="dark:text-gray-200">المسؤولين</span>
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-lavender-600 dark:text-lavender-400">
+                                                                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                                                    <circle cx="9" cy="7" r="4"></circle>
+                                                                    <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                                                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                                                </svg>
+                                                            </div>
+                                                        </a>
+                                                        
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="10" class="text-center text-muted py-4">
+                                            لا توجد بيانات
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-4 pt-4">
+                    <div class="flex flex-wrap justify-between items-center gap-4">
+                        <div id="dataTablePagination"></div>
+                        <div id="dataTableInfo"></div>
+                    </div>
+                    <div id="dataTableButtons" class="flex flex-wrap gap-2"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+    </div>
+</section>
+
+<!-- Modal المسؤولين -->
+<div id="participantsModal" class="fixed inset-0 z-[99999] hidden items-center justify-center">
+    <!-- Backdrop -->
+    <div id="participantsModalBackdrop" class="fixed inset-0 z-[99998] bg-black/50 transition-opacity duration-300 opacity-0"></div>
+    
+    <!-- Modal Container -->
+    <div class="relative z-[100000] w-full max-w-3xl mx-4 my-4 flex flex-col overflow-hidden bg-white dark:bg-gray-800 rounded-xl shadow-2xl transform transition-all duration-300 scale-95 opacity-0 max-h-[90vh] overflow-y-auto">
+        <!-- HEADER -->
+        <div class="bg-gradient-to-r from-main-500 to-main-600 text-white p-5">
+            <div class="flex items-center justify-between">
+                <div class="flex-1">
+                    <div class="flex items-center gap-3 mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield-check text-white">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                            <path d="m9 12 2 2 4-4"></path>
+                        </svg>
+                        <h5 class="text-xl font-bold text-white">المسؤولون عن النشاط</h5>
+                    </div>
+                    <p id="participantsActivityTitle" class="text-white/90 text-sm">جاري التحميل...</p>
+                </div>
+                <button type="button" id="closeParticipantsModalBtn" class="text-white hover:text-gray-200 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x text-white">
+                        <path d="m18 6-12 12"></path>
+                        <path d="m6 6 12 12"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- BODY -->
+        <div class="p-6 overflow-y-auto flex-1 max-h-[calc(90vh-140px)]">
+            <!-- Supervisors Section -->
+            <div class="mb-6 bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 rounded-xl p-4 border border-yellow-200 dark:border-yellow-800">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-yellow-500 p-2 rounded-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white lucide lucide-crown">
+                                <path d="M11.562 3.266a1 1 0 0 1 .876 0L16 4.652l2.562-1.386a1 1 0 0 1 .876 0L21.8 4.8a1 1 0 0 1 .2 1.4l-3.465 3.465a1 1 0 0 1-.332.206l-4.626 1.69a1 1 0 0 1-.954 0l-4.626-1.69a1 1 0 0 1-.332-.206L2.2 6.2a1 1 0 0 1 .2-1.4l1.362-.786Z"></path>
+                                <path d="M12 8v4"></path>
+                                <path d="M12 16h.01"></path>
+                            </svg>
+                        </div>
+                        <h6 class="text-yellow-700 dark:text-yellow-300 font-bold text-lg">المشرفين</h6>
+                    </div>
+                    <span id="supervisorsCount" class="text-yellow-600 dark:text-yellow-400 text-sm font-medium">(0 مشرف)</span>
+                </div>
+                <ul class="space-y-3" id="supervisorsList"></ul>
+            </div>
+
+            <!-- Coordinators Section -->
+            <div class="mb-6 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl p-4 border border-green-200 dark:border-green-800">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-green-500 p-2 rounded-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white lucide lucide-users">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            </svg>
+                        </div>
+                        <h6 class="text-green-700 dark:text-green-300 font-bold text-lg">المنسقين</h6>
+                    </div>
+                    <span id="coordinatorsCount" class="text-green-600 dark:text-green-400 text-sm font-medium">(0 منسق)</span>
+                </div>
+                <ul class="space-y-3" id="coordinatorsList"></ul>
+            </div>
+
+            <!-- Viewers Section -->
+            <div class="bg-gradient-to-br from-purple-50 to-violet-50 dark:from-purple-900/20 dark:to-violet-900/20 rounded-xl p-4 border border-purple-200 dark:border-purple-800">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-purple-500 p-2 rounded-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white lucide lucide-users-round">
+                                <path d="M18 21a8 8 0 0 0-16 0"></path>
+                                <circle cx="10" cy="8" r="5"></circle>
+                                <path d="M22 20c0-3.37-2-6.5-4-8a5 5 0 0 0-.46-1.3"></path>
+                            </svg>
+                        </div>
+                        <h6 class="text-purple-700 dark:text-purple-300 font-bold text-lg">المشاركين</h6>
+                    </div>
+                    <span id="viewersCount" class="text-purple-600 dark:text-purple-400 text-sm font-medium">(0 مشارك)</span>
+                </div>
+                <ul class="space-y-3" id="viewersList"></ul>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="flex justify-end gap-3 p-6 border-t border-gray-200 dark:border-gray-700">
+            <button id="closeParticipantsModalBtn2" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+                إغلاق
+            </button>
+        </div>
+    </div>
+</div> 
+<script src="~/js/Areas/Admin/IndexActivity.js"></script>
+<script>
+    window.participantsUrl = '@Url.Page("/Activities/Index", "Participants", new { area = "Admin" })';
+         $(document).ready(function () {
+        const tableElement = document.getElementById('dataTable');
+        if (!tableElement) return;
+
+        const table = $('#dataTable').DataTable({
+            responsive: {
+                details: {
+                    type: 'column',
+                    target: 0
+                }
+            },
+            dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+                 "<'row'<'col-sm-12'tr>>" +
+                 "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>" +
+                 "B",
+
+            autoWidth: false,
+            pageLength: 10,
+            lengthMenu: [[5, 10, 20, 50, -1], [5, 10, 20, 50, "الكل"]],
+            language: {
+                search: "",
+                searchPlaceholder: "ابحث...",
+                lengthMenu: "عرض _MENU_",
+                info: "عرض _START_ إلى _END_ من _TOTAL_",
+                infoEmpty: "لا توجد بيانات",
+                zeroRecords: "لم يتم العثور على نتائج",
+                infoFiltered: "(تمت التصفية من _MAX_)",
+                paginate: {
+                    previous: "السابق",
+                    next: "التالي"
+                }
+            },
+            columnDefs: [
+                {
+                    className: 'control',
+                    orderable: false,
+                    targets: 0,
+                    responsivePriority: 1
+                },
+                {
+                    orderable: false,
+                    targets: 9,
+                    responsivePriority: 6
+                },
+                { responsivePriority: 2, targets: 1 },
+                { responsivePriority: 3, targets: 2 },
+                { responsivePriority: 4, targets: 3 },
+                { responsivePriority: 5, targets: 8 }
+            ],
+            ordering: true,
+            order: [[1, 'asc']],
+            initComplete: function () {
+                const api = this.api();
+                const wrapper = $(api.table().container());
+
+                // Move controls
+                const lengthContainer = wrapper.find('.dataTables_length')[0];
+                const searchContainer = wrapper.find('.dataTables_filter')[0];
+                const infoContainer = wrapper.find('.dataTables_info')[0];
+                const paginationContainer = wrapper.find('.dataTables_paginate')[0];
+                const buttonsContainer = wrapper.find('.dt-buttons')[0];
+
+                // Add flex classes to length container
+                if (lengthContainer) {
+                    lengthContainer.classList.add('flex', 'items-center', 'gap-2');
+                }
+
+                if (infoContainer) {
+                    infoContainer.classList.add('dark:text-gray-200');
+                }
+
+                $('#dataTableLength').html('').append(lengthContainer);
+                $('#dataTableSearch').html('').append(searchContainer);
+                $('#dataTableInfo').html('').append(infoContainer);
+                $('#dataTablePagination').html('').append(paginationContainer);
+                $('#dataTableButtons').html('').append(buttonsContainer);
+
+                // Style search input
+                const searchInput = searchContainer?.querySelector('input');
+                if (searchInput) {
+                    searchInput.className = 'w-full sm:w-64 px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:ring-2 focus:ring-main-500 focus:border-main-500 dark:bg-gray-700 dark:text-white transition-all';
+                    searchInput.placeholder = 'ابحث في الجدول...';
+                }
+
+                // Replace select with custom dropdown
+                const lengthSelect = lengthContainer?.querySelector('select');
+                if (lengthSelect) {
+                    const options = Array.from(lengthSelect.querySelectorAll('option'));
+                    const currentValue = lengthSelect.value;
+                    const currentText = lengthSelect.options[lengthSelect.selectedIndex]?.text || currentValue;
+
+                    // Create custom dropdown HTML
+                    const customDropdown = document.createElement('div');
+                    customDropdown.className = 'custom-length-dropdown relative';
+                    customDropdown.style.cssText = 'width: 140px; min-width: 140px;';
+
+                    const isRTL = document.documentElement.dir === 'rtl' || document.documentElement.getAttribute('dir') === 'rtl';
+
+                    customDropdown.innerHTML = `
+                        <button type="button" class="custom-dropdown-btn form-select w-full text-left flex items-center justify-between dark:text-gray-200" style="padding-right: ${isRTL ? '0.75rem' : '2rem'}; padding-left: ${isRTL ? '2rem' : '0.75rem'};">
+                            <span class="dropdown-value text-gray-900 dark:text-gray-200">${currentText}</span>
+
+                        </button>
+                        <div class="custom-dropdown-menu hidden absolute z-50 w-full mt-1 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg overflow-hidden" style="top: 100%; ${isRTL ? 'right: 0' : 'left: 0'};">
+                            ${options.map((opt, index) => `
+                                <div class="custom-dropdown-item px-3 py-2 cursor-pointer transition-colors text-gray-900 dark:text-gray-200 hover:bg-main-600 hover:text-white" data-value="${opt.value}">
+                                    ${opt.text}
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+
+                    // Replace select with custom dropdown
+                    lengthSelect.style.display = 'none';
+                    lengthContainer.appendChild(customDropdown);
+
+                    const dropdownBtn = customDropdown.querySelector('.custom-dropdown-btn');
+                    const dropdownMenu = customDropdown.querySelector('.custom-dropdown-menu');
+                    const dropdownItems = customDropdown.querySelectorAll('.custom-dropdown-item');
+                    const dropdownValue = customDropdown.querySelector('.dropdown-value');
+
+                    // Toggle dropdown
+                    dropdownBtn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const isHidden = dropdownMenu.classList.contains('hidden');
+
+                        // Close all other dropdowns
+                        document.querySelectorAll('.custom-dropdown-menu').forEach(menu => {
+                            if (menu !== dropdownMenu) {
+                                menu.classList.add('hidden');
+                            }
+                        });
+
+                        if (isHidden) {
+                            dropdownMenu.classList.remove('hidden');
+                        } else {
+                            dropdownMenu.classList.add('hidden');
+                        }
+                    });
+
+                    // Handle item selection
+                    dropdownItems.forEach(item => {
+                        item.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            const value = this.getAttribute('data-value');
+                            const text = this.textContent.trim();
+
+                            // Update select value
+                            lengthSelect.value = value;
+                            lengthSelect.dispatchEvent(new Event('change', { bubbles: true }));
+
+                            // Update dropdown display
+                            dropdownValue.textContent = text;
+
+                            // No need to update selected state - keep all items with same styling
+
+                            // Close dropdown
+                            dropdownMenu.classList.add('hidden');
+                        });
+                    });
+
+                    // Close dropdown when clicking outside
+                    document.addEventListener('click', function(e) {
+                        if (!customDropdown.contains(e.target)) {
+                            dropdownMenu.classList.add('hidden');
+                        }
+                    });
+
+                    // Update on DataTables page length change
+                    api.on('length', function() {
+                        const newValue = api.page.len();
+                        const newText = newValue === -1 ? 'الكل' : newValue.toString();
+                        dropdownValue.textContent = newText;
+
+                        // No need to update selected state
+                    });
+                }
+
+                // Style length label
+                const lengthLabel = lengthContainer?.querySelector('label');
+                if (lengthLabel) {
+                    lengthLabel.className = 'flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300';
+                }
+
+                // Custom sorting functionality
+                const sortableHeaders = document.querySelectorAll('.sortable-header');
+                let currentSortColumn = null;
+                let currentSortDirection = null;
+
+                sortableHeaders.forEach(header => {
+                    header.style.cursor = 'pointer';
+                    header.addEventListener('click', function() {
+                        const columnIndex = parseInt(this.getAttribute('data-column'));
+                        const sortUpIcon = this.querySelector('.sort-up-icon');
+                        const sortDownIcon = this.querySelector('.sort-down-icon');
+
+                        // Hide all sort icons
+                        document.querySelectorAll('.sort-up-icon, .sort-down-icon').forEach(icon => {
+                            icon.classList.add('hidden');
+                            icon.classList.remove('text-main-600');
+                        });
+
+                        // Determine sort direction
+                        if (currentSortColumn === columnIndex) {
+                            // Toggle direction
+                            currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
+                        } else {
+                            // New column, start with ascending
+                            currentSortDirection = 'asc';
+                        }
+
+                        currentSortColumn = columnIndex;
+
+                        // Show appropriate icon
+                        if (currentSortDirection === 'asc') {
+                            sortUpIcon.classList.remove('hidden');
+                            sortUpIcon.classList.add('text-main-600');
+                        } else {
+                            sortDownIcon.classList.remove('hidden');
+                            sortDownIcon.classList.add('text-main-600');
+                        }
+
+                        // Perform sorting
+                        api.order([columnIndex, currentSortDirection]).draw();
+                    });
+
+                    // Show icons on hover
+                    header.addEventListener('mouseenter', function() {
+                        if (currentSortColumn !== parseInt(this.getAttribute('data-column'))) {
+                            const sortUpIcon = this.querySelector('.sort-up-icon');
+                            const sortDownIcon = this.querySelector('.sort-down-icon');
+                            sortUpIcon.classList.remove('hidden');
+                            sortDownIcon.classList.remove('hidden');
+                        }
+                    });
+
+                    header.addEventListener('mouseleave', function() {
+                        if (currentSortColumn !== parseInt(this.getAttribute('data-column'))) {
+                            const sortUpIcon = this.querySelector('.sort-up-icon');
+                            const sortDownIcon = this.querySelector('.sort-down-icon');
+                            sortUpIcon.classList.add('hidden');
+                            sortDownIcon.classList.add('hidden');
+                        }
+                    });
+                });
+
+                // Apply button styles
+                applyButtonStyles();
+
+                // Apply pagination styles
+                setTimeout(() => {
+                    applyPaginationStyles();
+                    api.columns.adjust().responsive.recalc();
+                }, 100);
+
+                api.on('draw', function() {
+                    setTimeout(() => {
+                        applyPaginationStyles();
+                        applyButtonStyles();
+                        // إعادة تهيئة القوائم بعد رسم الجدول
+                        document.querySelectorAll('.action-menu-btn').forEach(btn => {
+                            btn.removeAttribute('data-menu-initialized');
+                        });
+                        // إغلاق جميع القوائم المفتوحة
+                        document.querySelectorAll('.action-menu').forEach(menu => {
+                            menu.classList.add('hidden');
+                        });
+                        initActionMenus();
+                    }, 50);
+                });
+
+                // استدعاء initActionMenus بعد تحميل الجدول
+                setTimeout(() => {
+                    initActionMenus();
+                }, 100);
+            }
+        });
+
+        // Function to apply button styles
+        function applyButtonStyles() {
+            $('.dt-button-custom').each(function() {
+                $(this).removeClass('dt-button');
+                $(this).addClass('inline-flex items-center gap-2 px-4 py-2.5 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 hover:border-gray-400 dark:hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-main-500 focus:ring-offset-2 transition-all shadow-sm');
+            });
+        }
+
+        // Function to apply pagination styles
+        function applyPaginationStyles() {
+            $('#dataTablePagination .paginate_button').each(function() {
+                const isCurrent = $(this).hasClass('current');
+                const isDisabled = $(this).hasClass('disabled');
+
+                // Remove default classes
+                $(this).removeClass('paginate_button current disabled');
+
+                if (isCurrent) {
+                    $(this).addClass('inline-flex items-center justify-center px-4 py-2 mx-1 text-sm font-medium text-white bg-main-600 border border-main-600 rounded-lg hover:bg-main-700 transition-all shadow-sm');
+                } else if (isDisabled) {
+                    $(this).addClass('inline-flex items-center justify-center px-4 py-2 mx-1 text-sm font-medium text-gray-400 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg cursor-not-allowed opacity-60');
+                } else {
+                    $(this).addClass('inline-flex items-center justify-center px-4 py-2 mx-1 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-main-500 transition-all shadow-sm');
+                }
+            });
+
+
+            // Style pagination container
+            $('#dataTablePagination').addClass('flex items-center gap-1');
+        }
+
+        // Handle window resize
+        $(window).on('resize', function() {
+            table.columns.adjust().responsive.recalc();
+        });
+
+        // Toggle filter section - يتم استدعاؤه بعد تحميل الصفحة
+        function initFilterToggle() {
+            const filterToggle = document.getElementById('filter-toggle');
+            const filterContent = document.getElementById('filter-content');
+            const filterChevron = document.getElementById('filter-chevron');
+            const filterToggleText = document.getElementById('filter-toggle-text');
+
+            if (!filterToggle || !filterContent) {
+                console.warn('Filter toggle elements not found');
+                return false;
+            }
+
+            // التحقق من أن الـ listener غير موجود مسبقاً
+            if (filterToggle.hasAttribute('data-filter-initialized')) {
+                return true;
+            }
+
+            // إضافة علامة لتجنب إعادة التهيئة
+            filterToggle.setAttribute('data-filter-initialized', 'true');
+
+            // إضافة event listener مع استخدام capture phase لمنع التداخل
+            filterToggle.addEventListener('click', function(e) {
+                // منع propagation بشكل أقوى
+                e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation();
+                
+                const isHidden = filterContent.classList.contains('hidden');
+                if (isHidden) {
+                    filterContent.classList.remove('hidden');
+                    filterContent.classList.remove('opacity-0', 'max-h-0', 'mt-0');
+                    filterContent.classList.add('opacity-100', 'max-h-[2000px]', 'mt-4');
+                    if (filterChevron) {
+                        filterChevron.style.transform = 'rotate(180deg)';
+                    }
+                    if (filterToggleText) {
+                        filterToggleText.textContent = 'انقر لإخفاء خيارات البحث والفلترة';
+                    }
+                } else {
+                    filterContent.classList.add('opacity-0', 'max-h-0', 'mt-0');
+                    filterContent.classList.remove('opacity-100', 'max-h-[2000px]', 'mt-4');
+                    setTimeout(() => {
+                        filterContent.classList.add('hidden');
+                    }, 500);
+                    if (filterChevron) {
+                        filterChevron.style.transform = 'rotate(0deg)';
+                    }
+                    if (filterToggleText) {
+                        filterToggleText.textContent = 'انقر لإظهار خيارات البحث والفلترة';
+                    }
+                }
+                
+                return false;
+            }, true); // استخدام capture phase
+
+            return true;
+        }
+
+        // استدعاء الدالة بعد تحميل الصفحة - مع إعادة المحاولة إذا فشلت
+        function tryInitFilterToggle(retries = 5) {
+            if (initFilterToggle()) {
+                return;
+            }
+            if (retries > 0) {
+                setTimeout(() => {
+                    tryInitFilterToggle(retries - 1);
+                }, 100);
+            }
+        }
+
+        tryInitFilterToggle();
+
+        // Action menu toggle - يتم استدعاؤه بعد تحميل الجدول
+        function initActionMenus() {
+            // إضافة event listeners للقوائم
+            document.querySelectorAll('.action-menu-btn').forEach(btn => {
+                // تجنب إضافة event listener مكرر
+                if (btn.hasAttribute('data-menu-initialized')) {
+                    return;
+                }
+                btn.setAttribute('data-menu-initialized', 'true');
+
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const menuId = this.getAttribute('data-menu-id');
+                    const menu = document.getElementById(menuId);
+                    
+                    if (!menu) return;
+                    
+                    // Close all other menus
+                    document.querySelectorAll('.action-menu').forEach(m => {
+                        if (m.id !== menuId) {
+                            m.classList.add('hidden');
+                        }
+                    });
+                    
+                    // Toggle current menu
+                    menu.classList.toggle('hidden');
+                    
+                    // إصلاح موضع القائمة لتظهر خارج الجدول
+                    if (!menu.classList.contains('hidden')) {
+                        setTimeout(() => {
+                            const btnRect = this.getBoundingClientRect();
+                            const menuRect = menu.getBoundingClientRect();
+                            const viewportWidth = window.innerWidth;
+                            const viewportHeight = window.innerHeight;
+                            
+                            // حساب الموضع المثالي للقائمة
+                            let top = btnRect.bottom + 4;
+                            let left = btnRect.left;
+                            
+                            // التحقق من أن القائمة لا تخرج عن حدود الشاشة
+                            if (left + menuRect.width > viewportWidth) {
+                                left = viewportWidth - menuRect.width - 10;
+                            }
+                            if (left < 10) {
+                                left = 10;
+                            }
+                            
+                            // التحقق من أن القائمة لا تخرج من الأسفل
+                            if (top + menuRect.height > viewportHeight) {
+                                top = btnRect.top - menuRect.height - 4;
+                            }
+                            
+                            // تطبيق الموضع
+                            menu.style.position = 'fixed';
+                            menu.style.top = top + 'px';
+                            menu.style.left = left + 'px';
+                            menu.style.right = 'auto';
+                            menu.style.zIndex = '9999';
+                        }, 10);
+                    }
+                });
+            });
+        }
+
+        // Close menus when clicking outside (مرة واحدة فقط)
+        let menuCloseListenerAdded = false;
+        if (!menuCloseListenerAdded) {
+            menuCloseListenerAdded = true;
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.action-menu-btn') && !e.target.closest('.action-menu')) {
+                    document.querySelectorAll('.action-menu').forEach(menu => {
+                        menu.classList.add('hidden');
+                    });
+                }
+            });
+        }
+
+    });
+
+    // Functions for filtering and searching
+    function searchActivities(pageNumber, formElement) {
+        const form = formElement || document.getElementById('searchForm');
+        
+        if (!form) {
+            console.error("Form element not found");
+            return;
+        }
+
+        const formData = new FormData(form);
+        formData.append("pageNumber", pageNumber || 1);
+
+        const query = new URLSearchParams(formData).toString();
+        fetch(`?handler=Filter&${query}`)
+            .then(res => res.json())
+            .then(data => {
+                // Reload page with new data
+                window.location.href = `?${query}`;
+            })
+            .catch(err => console.error(err));
+    }
+
+    function clearAllFilters() {
+        const filterContent = document.getElementById('filter-content');
+        if (filterContent) {
+            const form = filterContent.querySelector('form') || filterContent;
+            if (form) {
+                form.reset();
+            }
+        }
+
+        document.getElementById("managementContainer")?.classList.add("d-none");
+        document.getElementById("clubContainer")?.classList.add("d-none");
+        document.getElementById("managementSelect").innerHTML = '<option value="">كل الإدارات</option>';
+        document.getElementById("clubSelect").innerHTML = '<option value="">كل الأندية</option>';
+
+        loadDefaultActivities(1);
+    }
+
+    function loadManagements() {
+        const organizationId = document.getElementById("managementtypeSelect")?.value;
+        const managementContainer = document.getElementById("managementContainer");
+        const managementSelect = document.getElementById("managementSelect");
+
+        if (!managementSelect || !managementContainer) return;
+
+        managementSelect.innerHTML = '<option value="">كل الإدارات</option>';
+        managementContainer.classList.add("d-none");
+
+        document.getElementById("clubSelect").innerHTML = '<option value="">كل الأندية</option>';
+        document.getElementById("clubContainer")?.classList.add("d-none");
+
+        if (!organizationId) return;
+
+        fetch(`?handler=ManagementsByType&managementTypeId=${organizationId}`)
+            .then(res => res.json())
+            .then(data => {
+                if (!data || data.length === 0) return;
+
+                data.forEach(item => {
+                    managementSelect.innerHTML += `<option value="${item.id}">${item.nameEn}</option>`;
+                });
+
+                managementContainer.classList.remove("d-none");
+            })
+            .catch(err => console.error(err));
+    }
+
+    function loadClubs() {
+        const managementId = document.getElementById("managementSelect")?.value;
+        const clubContainer = document.getElementById("clubContainer");
+        const clubSelect = document.getElementById("clubSelect");
+
+        if (!clubSelect || !clubContainer) return;
+
+        clubSelect.innerHTML = '<option value="">كل الأندية</option>';
+        clubContainer.classList.add("d-none");
+
+        if (!managementId) return;
+
+        fetch(`?handler=ClubsByManagement&managementId=${managementId}`)
+            .then(res => res.json())
+            .then(data => {
+                if (!data || data.length === 0) return;
+
+                data.forEach(item => {
+                    clubSelect.innerHTML += `<option value="${item.id}">${item.name || item.nameEn}</option>`;
+                });
+
+                clubContainer.classList.remove("d-none");
+            })
+            .catch(err => console.error(err));
+    }
+
+    function loadDefaultActivities(pageNumber) {
+        fetch(`?handler=Default&pageNumber=${pageNumber || 1}`)
+            .then(res => res.json())
+            .then(data => {
+                window.location.reload();
+            })
+            .catch(err => console.error(err));
+    }
+
+    // Participants Modal Functions
+    const participantsModal = document.getElementById("participantsModal");
+    const participantsModalBackdrop = document.getElementById("participantsModalBackdrop");
+    const participantsModalContent = participantsModal?.querySelector('.relative.w-full');
+
+    function openParticipantsModal() {
+        if (participantsModal && participantsModalBackdrop && participantsModalContent) {
+            participantsModal.classList.remove("hidden");
+            participantsModal.classList.add("flex");
+            document.body.style.overflow = "hidden";
+            
+            setTimeout(() => {
+                participantsModalBackdrop.classList.remove("opacity-0");
+                participantsModalBackdrop.classList.add("opacity-100");
+                participantsModalContent.classList.remove("scale-95", "opacity-0");
+                participantsModalContent.classList.add("scale-100", "opacity-100");
+            }, 10);
+        }
+    }
+
+    function closeParticipantsModal() {
+        if (participantsModal && participantsModalBackdrop && participantsModalContent) {
+            participantsModalBackdrop.classList.remove("opacity-100");
+            participantsModalBackdrop.classList.add("opacity-0");
+            participantsModalContent.classList.remove("scale-100", "opacity-100");
+            participantsModalContent.classList.add("scale-95", "opacity-0");
+            
+            setTimeout(() => {
+                participantsModal.classList.remove("flex");
+                participantsModal.classList.add("hidden");
+                document.body.style.overflow = "";
+            }, 300);
+        }
+    }
+
+    // Close buttons for Participants Modal
+    document.getElementById("closeParticipantsModalBtn")?.addEventListener("click", closeParticipantsModal);
+    document.getElementById("closeParticipantsModalBtn2")?.addEventListener("click", closeParticipantsModal);
+    participantsModalBackdrop?.addEventListener("click", closeParticipantsModal);
+
+    // Store activity data for modal
+    let currentActivityData = null;
+
+    function loadParticipants(e, activityId, activityTitle) {
+        e.preventDefault();
+
+        // Set activity title
+        document.getElementById("participantsActivityTitle").textContent = activityTitle || 'جاري التحميل...';
+
+        // Open modal first
+        openParticipantsModal();
+
+        // Clear previous data
+        document.getElementById("coordinatorsList").innerHTML = "";
+        document.getElementById("supervisorsList").innerHTML = "";
+        document.getElementById("viewersList").innerHTML = "";
+
+        fetch(`${window.participantsUrl}&activityId=${activityId}`)
+            .then(res => res.json())
+            .then(data => {
+                currentActivityData = data;
+                fillParticipants("supervisorsList", data.supervisors, "supervisor");
+                fillParticipants("coordinatorsList", data.coordinators, "coordinator");
+                fillParticipants("viewersList", data.viewer, "viewer");
+                
+                // Update counts
+                document.getElementById("supervisorsCount").textContent = `(${data.supervisors?.length || 0} مشرف)`;
+                document.getElementById("coordinatorsCount").textContent = `(${data.coordinators?.length || 0} منسق)`;
+                document.getElementById("viewersCount").textContent = `(${data.viewer?.length || 0} مشارك)`;
+            })
+            .catch(err => {
+                console.error(err);
+                alert("حدث خطأ أثناء تحميل البيانات");
+            });
+
+        return false;
+    }
+
+    function getFirstLetter(name) {
+        if (!name || name.length === 0) return '?';
+        // Get first Arabic or English letter
+        const firstChar = name.trim().charAt(0);
+        return firstChar;
+    }
+
+    function fillParticipants(listId, items, type) {
+        const list = document.getElementById(listId);
+        if (!list) return;
+
+        list.innerHTML = "";
+
+        if (!items || items.length === 0) {
+            list.innerHTML = '<li class="text-gray-500 dark:text-gray-400 text-sm py-2 text-center">لا يوجد</li>';
+            return;
+        }
+
+        // Define colors based on type
+        const colors = {
+            supervisor: {
+                bg: 'bg-warning-500',
+                text: 'text-warning-700 dark:text-warning-300'
+            },
+            coordinator: {
+                bg: 'bg-main-500',
+                text: 'text-main-700 dark:text-main-300'
+            },
+            viewer: {
+                bg: 'bg-lavender-500',
+                text: 'text-lavender-700 dark:text-lavender-300'
+            }
+        };
+
+        const colorScheme = colors[type] || colors.viewer;
+
+        items.forEach(p => {
+            const fullName = p.fullname ?? p.fullName ?? p.name ?? '';
+            const userName = p.username ?? p.useraname ?? p.userName ?? '';
+            const participantId = p.id;
+            const firstLetter = getFirstLetter(fullName);
+
+            // Icon based on type
+            let iconSvg = '';
+            if (type === 'supervisor') {
+                iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-badge-check">
+                    <path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"></path>
+                    <path d="m9 12 2 2 4-4"></path>
+                </svg>`;
+            } else if (type === 'coordinator') {
+                iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user">
+                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>`;
+            } else {
+                iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user">
+                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>`;
+            }
+
+            list.innerHTML += `
+                <li class="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex items-center gap-3">
+                        <div class="${colorScheme.bg} w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
+                            ${firstLetter}
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="font-semibold text-gray-900 dark:text-gray-200 text-base">${fullName}</div>
+                            ${userName ? `<div class="text-sm text-gray-500 dark:text-gray-400 mt-0.5">${userName}</div>` : ''}
+                        </div>
+                        <div class="${colorScheme.text} flex-shrink-0">
+                            ${iconSvg}
+                        </div>
+                    </div>
+                </li>`;
+        });
+    }
+</script>
+
+
+@* <div class="container mt-4">
    
     <div class="row g-3">
 
@@ -410,3 +1974,4 @@
         window.participantsUrl =
             '@Url.Page("/Activities/Index", "Participants", new { area = "Admin" })';
     </script>
+ *@
