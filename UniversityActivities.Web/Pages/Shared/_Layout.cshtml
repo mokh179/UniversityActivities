@@ -1,8 +1,13 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.Extensions.Localization
+@using UniversityActivities.Web.Resources
+@inject IStringLocalizer<SharedResource> L
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="utf-8" />
-    <title>@ViewData["Title"] - UniActivities</title>
+
+ 
+    <title>@ViewData["Title"] - @L["Navbar.Platform"]</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
@@ -28,12 +33,16 @@
 
     @* SideBar *@
     <partial name="_Sidebar" />
-
+  
     <div class="flex min-h-screen">
         <div class="flex flex-1 flex-col">
             <main id="main-content" class="mt-20 flex-1 py-6">
                 @RenderBody()
             </main>
+
+            <p style="color:red">
+                @System.Globalization.CultureInfo.CurrentUICulture.Name
+            </p>
         </div>
         <!-- Footer -->
         <partial name="_Footer" />
