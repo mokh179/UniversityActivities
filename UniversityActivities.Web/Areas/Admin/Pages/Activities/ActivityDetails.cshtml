@@ -655,7 +655,10 @@
                     Delete
                 </button>
                 <a class="btn btn-primary btn-sm" asp-area="Admin" asp-page="/EditActivity" asp-route-id="@Model.Activity.Id">Edit</a>
-                <a class="btn btn-light btn-sm">QR</a>
+                <button class="btn btn-light btn-sm"
+                        onclick="openQrModal(@Model.Activity.Id)">
+                    Generate QR
+                </button>
             </div>
         </div>
     </div>
@@ -818,3 +821,45 @@
     </div>
 </div> *@
 
+<div class="modal fade" id="qrModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center p-4">
+
+            <h5 class="mb-3">QR Code for Attendance</h5>
+
+            <img id="qrImage"
+                 src=""
+                 class="img-fluid mb-3"
+                 style="max-width:250px;" />
+
+            <button class="btn btn-success"
+                    onclick="printQr()">
+                Print
+            </button>
+
+        </div>
+    </div>
+</div>
+
+<script>
+        function openQrModal(activityId) {
+
+        const img = document.getElementById("qrImage");
+
+        img.src = `?handler=GenerateQR&activityId=${activityId}`;
+
+        const modal = new bootstrap.Modal(
+            document.getElementById('qrModal'));
+
+        modal.show();
+    }
+
+    function printQr() {
+        const content = document.getElementById("qrImage").outerHTML;
+        const win = window.open('', '', 'width=600,height=600');
+        win.document.write(content);
+        win.document.close();
+        win.print();
+    }
+
+</script>

@@ -433,73 +433,7 @@
                 }
             });
         });
-        //             let starsInitialized = false;
-        // const ratesMap = {};
-
-        // const rateModal = document.getElementById("rateModal");
-
-        // rateModal.addEventListener("shown.bs.modal", function () {
-
-        //     if (starsInitialized) return;
-        //     starsInitialized = true;
-
-        //     document.querySelectorAll("#rateModal .stars").forEach(group => {
-
-        //         const criteriaId = group.dataset.id;
-
-        //         for (let i = 1; i <= 5; i++) {
-        //             const star = document.createElement("i");
-        //             star.className = "bi bi-star";
-        //             star.dataset.value = i;
-        //             star.style.cursor = "pointer";
-        //             star.style.fontSize = "22px";
-        //             star.style.marginRight = "6px";
-
-        //             star.onclick = () => {
-        //                 ratesMap[criteriaId] = i;
-
-        //                 [...group.children].forEach(s => {
-        //                     s.className = "bi bi-star";
-        //                 });
-
-        //                 for (let j = 0; j < i; j++) {
-        //                     group.children[j].className =
-        //                         "bi bi-star-fill text-warning";
-        //                 }
-        //             };
-
-        //             group.appendChild(star);
-        //         }
-        //     });
-        // });
-
-        // document.getElementById("submitRateBtn")
-        //     ?.addEventListener("click", () => {
-
-        //         const dto = Object.keys(ratesMap).map(id => ({
-        //             evaluationCrieteriaId: parseInt(id),
-        //             value: ratesMap[id]
-        //         }));
-
-        //         const comment =
-        //             document.getElementById("rateComment").value;
-        //             console.log()
-        //         fetch(`?handler=Rate&id=@Model.Activity.Id&comment=${encodeURIComponent(comment)}`, {
-        //             method: "POST",
-        //             headers: { "Content-Type": "application/json" },
-        //             body: JSON.stringify(dto)
-        //         })
-        //         .then(async res => {
-        //             const text = await res.text();
-        //             return text ? JSON.parse(text) : {};
-        //         })
-        //         .then(d => {
-        //             if (d.success) {
-        //                 alert("Thank you for your feedback!");
-        //                 location.reload();
-        //             }
-        //         });
-        //     });
+    
 
         // Register Modal Control (Vanilla JavaScript - No Bootstrap JS)
         const registerBtn = document.getElementById("registerBtn");

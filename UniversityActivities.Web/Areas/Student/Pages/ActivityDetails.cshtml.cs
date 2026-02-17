@@ -18,12 +18,14 @@ namespace UniversityActivities.Web.Areas.Student.Pages
         private readonly IViewStudentActivitiesUseCase _viewStudentActivitiesUseCase;
         private readonly IRegisterStudentInActivityUseCase _registerStudentInActivityUseCase;
         private readonly ISubmitActivityEvaluationUseCase _studentActivityEvaluation;
+        private readonly IMarkStudentAttendanceUseCase _markStudentAttendanceUseCase;
 
-        public ActivityDetailsModel(IViewStudentActivitiesUseCase viewStudentActivitiesUseCase, ISubmitActivityEvaluationUseCase studentActivityEvaluation, IRegisterStudentInActivityUseCase registerStudentInActivityUseCase, IUiLookupsQuery lookupsQuery)
+        public ActivityDetailsModel(IMarkStudentAttendanceUseCase markStudentAttendanceUseCase, IViewStudentActivitiesUseCase viewStudentActivitiesUseCase, ISubmitActivityEvaluationUseCase studentActivityEvaluation, IRegisterStudentInActivityUseCase registerStudentInActivityUseCase, IUiLookupsQuery lookupsQuery)
         {
             _viewStudentActivitiesUseCase = viewStudentActivitiesUseCase;
             _registerStudentInActivityUseCase = registerStudentInActivityUseCase;
             _studentActivityEvaluation = studentActivityEvaluation;
+            _markStudentAttendanceUseCase = markStudentAttendanceUseCase;
         }
    
         public async Task OnGet(int id)
@@ -55,6 +57,13 @@ namespace UniversityActivities.Web.Areas.Student.Pages
             };  
             await _studentActivityEvaluation.ExecuteAsync(CurrentUserId,id, RateDto);
             return new JsonResult(new { success = true });
+        }
+
+
+        public async Task<IActionResult> OnGetAttendAsync(int id)
+        {
+            await _markStudentAttendanceUseCase.ExecuteAsync(CurrentUserId, id);
+            return new JsonResult(new { success = true, message = "Attended successfully" });
         }
 
     }
